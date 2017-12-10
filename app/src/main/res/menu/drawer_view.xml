@@ -2,16 +2,24 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
+            android:id="@+id/five_things_item"
             android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="First" />
+            android:title="Five Things" />
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/analytics_item"
             android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Second" />
+            android:title="Analytics" />
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/templates_item"
             android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Third" />
+            android:title="Print Designs" />
+        <item
+            android:id="@+id/settings_item"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:title="Settings" />
+        <item
+            android:id="@+id/logout_item"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:title="Log Out" />
     </group>
 </menu>
