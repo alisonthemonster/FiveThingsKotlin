@@ -55,19 +55,19 @@ class ContainerActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
-                    createFiveThingsFragment()
+                    loadFragment(FiveThingsFragment())
                     true
                 }
                 R.id.analytics_item -> {
-                    createAnalyticsFragment()
+                    loadFragment(AnalyticsFragment())
                     true
                 }
                 R.id.templates_item -> {
-                    createDesignsFragment()
+                    loadFragment(DesignsFragment())
                     true
                 }
                 R.id.settings_item -> {
-                    createSettingsFragment()
+                    loadFragment(SettingsFragment())
                     true
                 }
                 R.id.logout_item -> {
@@ -81,38 +81,7 @@ class ContainerActivity : AppCompatActivity() {
         }
     }
 
-    private fun createAnalyticsFragment() {
-        val fragment = AnalyticsFragment()
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out)
-        fragmentTransaction.replace(R.id.content_frame, fragment)
-        fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
-    }
-
-    private fun createDesignsFragment() {
-        val fragment = DesignsFragment()
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out)
-        fragmentTransaction.replace(R.id.content_frame, fragment)
-        fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
-    }
-
-    private fun createFiveThingsFragment() {
-        val fragment = FiveThingsFragment()
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out)
-        fragmentTransaction.replace(R.id.content_frame, fragment)
-        fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
-    }
-
-    private fun createSettingsFragment() {
-        val fragment = SettingsFragment()
+    private fun loadFragment(fragment: android.support.v4.app.Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out)
