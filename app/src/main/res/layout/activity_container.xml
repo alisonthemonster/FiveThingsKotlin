@@ -4,17 +4,16 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/grey"
-        tools:context="alison.fivethingskotlin.ContainerActivity">
+        android:orientation="vertical"
+        android:background="@color/grey">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -30,21 +29,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_launcher_background"/>
+                    android:src="@drawable/ic_launcher_background" />
 
             </android.support.v7.widget.Toolbar>
         </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!-- The main content view where fragments are loaded -->
+        <FrameLayout
+            android:id="@+id/content_frame"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="381dp"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="3dp" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/navigation_view"

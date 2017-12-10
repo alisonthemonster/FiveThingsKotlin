@@ -1,14 +1,18 @@
 package alison.fivethingskotlin
 
-import android.support.v7.app.AppCompatActivity
+import alison.fivethingskotlin.Fragments.AnalyticsFragment
+import alison.fivethingskotlin.Fragments.DesignsFragment
+import alison.fivethingskotlin.Fragments.FiveThingsFragment
+import alison.fivethingskotlin.Fragments.SettingsFragment
 import android.os.Bundle
 import android.support.design.widget.NavigationView
+import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.view.View
-import android.support.v4.view.GravityCompat
 import android.view.MenuItem
+import android.view.View
 
 
 class ContainerActivity : AppCompatActivity() {
@@ -51,18 +55,23 @@ class ContainerActivity : AppCompatActivity() {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
+                    createFiveThingsFragment()
                     true
                 }
                 R.id.analytics_item -> {
+                    createAnalyticsFragment()
                     true
                 }
                 R.id.templates_item -> {
+                    createDesignsFragment()
                     true
                 }
                 R.id.settings_item -> {
+                    createSettingsFragment()
                     true
                 }
                 R.id.logout_item -> {
+                    logOut()
                     true
                 }
                 else -> {
@@ -70,5 +79,49 @@ class ContainerActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun createAnalyticsFragment() {
+        val fragment = AnalyticsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out)
+        fragmentTransaction.replace(R.id.content_frame, fragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        drawerLayout.closeDrawers()
+    }
+
+    private fun createDesignsFragment() {
+        val fragment = DesignsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out)
+        fragmentTransaction.replace(R.id.content_frame, fragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        drawerLayout.closeDrawers()
+    }
+
+    private fun createFiveThingsFragment() {
+        val fragment = FiveThingsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out)
+        fragmentTransaction.replace(R.id.content_frame, fragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        drawerLayout.closeDrawers()
+    }
+
+    private fun createSettingsFragment() {
+        val fragment = SettingsFragment()
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out)
+        fragmentTransaction.replace(R.id.content_frame, fragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        drawerLayout.closeDrawers()
+    }
+
+    private fun logOut() {
+        //TODO
     }
 }
