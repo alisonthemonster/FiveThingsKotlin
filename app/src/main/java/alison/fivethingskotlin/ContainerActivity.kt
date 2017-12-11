@@ -49,6 +49,7 @@ class ContainerActivity : AppCompatActivity() {
                 R.string.drawer_open,
                 R.string.drawer_close)
         drawerLayout.addDrawerListener(drawerToggle)
+        title = ""
         drawerToggle.syncState()
 
         val navigationView = findViewById<NavigationView>(R.id.navigation_view)
