@@ -24,14 +24,14 @@
                 android:layout_height="wrap_content"
                 android:background="@color/darker_grey"
                 android:minHeight="@dimen/abc_action_bar_default_height_material">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_launcher_background" />
-
             </android.support.v7.widget.Toolbar>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:contentDescription="Five Things Logo"
+                android:src="@drawable/ic_launcher_background" />
         </FrameLayout>
 
         <!-- The main content view where fragments are loaded -->
