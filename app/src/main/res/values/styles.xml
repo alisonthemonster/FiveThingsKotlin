@@ -4,7 +4,6 @@
         <item name="colorPrimary">#673AB7</item>
         <item name="colorPrimaryDark">#512DA8</item>
         <item name="colorAccent">#FF4081</item>
+        <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
     </style>
-
-    <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
 </resources>
