@@ -45,6 +45,14 @@ class ContainerActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun setUpNavigationDrawer() {
         //TODO come back and replace with view binding?
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar

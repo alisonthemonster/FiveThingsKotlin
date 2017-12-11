@@ -3,6 +3,7 @@ package alison.fivethingskotlin
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 import android.support.test.espresso.Espresso.onView
+import android.support.test.espresso.Espresso.pressBack
 import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.espresso.matcher.ViewMatchers.isDisplayed
 import android.support.test.espresso.assertion.ViewAssertions.matches
@@ -34,6 +35,13 @@ class ContainerActivityInstrumentedTestInstrumentedTest {
     fun userCanOpenAppDrawer() {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
         onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isOpen()))
+    }
+
+    @Test
+    fun userCanCloseAppDrawerWithBackButton() {
+        onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
+        pressBack()
+        onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isClosed()))
     }
 
     @Test
