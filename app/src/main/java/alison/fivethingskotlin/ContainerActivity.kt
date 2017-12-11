@@ -25,11 +25,13 @@ class ContainerActivity : AppCompatActivity() {
 
         setUpNavigationDrawer()
 
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out)
-        fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
-        fragmentTransaction.commitAllowingStateLoss()
+        if (savedInstanceState == null) {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out)
+            fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
+            fragmentTransaction.commitAllowingStateLoss()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
