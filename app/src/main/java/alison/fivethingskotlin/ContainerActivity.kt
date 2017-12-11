@@ -24,6 +24,14 @@ class ContainerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_container)
 
         setUpNavigationDrawer()
+
+        if (savedInstanceState == null) {
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
+            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                    android.R.anim.fade_out)
+            fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
+            fragmentTransaction.commitAllowingStateLoss()
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -35,6 +43,14 @@ class ContainerActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     private fun setUpNavigationDrawer() {

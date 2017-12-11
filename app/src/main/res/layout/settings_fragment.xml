@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="alison.fivethingskotlin.Fragments.SettingsFragment">
+    tools:context="alison.fivethingskotlin.Fragments.SettingsFragment"
+    android:id="@+id/settings_container">
 
     <TextView
         android:layout_width="match_parent"
