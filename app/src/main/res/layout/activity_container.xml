@@ -37,9 +37,9 @@
         <!-- The main content view where fragments are loaded -->
         <FrameLayout
             android:id="@+id/content_frame"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="381dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:layout_editor_absoluteX="3dp" />
 
     </LinearLayout>

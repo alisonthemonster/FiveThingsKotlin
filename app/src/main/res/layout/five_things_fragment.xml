@@ -1,13 +1,148 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/five_things_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="alison.fivethingskotlin.Fragments.FiveThingsFragment"
-    android:id="@+id/five_things_container">
+    android:layout_gravity="center_horizontal"
+    android:background="@color/grey"
+    tools:context="alison.fivethingskotlin.Fragments.FiveThingsFragment">
 
-    <TextView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Five things will be here shortly" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/current_date"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="5dp"
+                android:text="Wednesday September 22nd, 2017"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ONE"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/one"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="4dp"
+                android:text="Woke up and went into work feeling sleepy and went to standup"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TWO"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="4dp"
+                android:text="Had a yummy lunch at Il Corvo with Nagkumar, Tim, Tony and Deepak and then went back to the office for a boring meeting"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="THREE"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/three"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="4dp"
+                android:text="Wrote a bunch of unit tests and then did a bunch of PR reviews"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FOUR"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/four"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="4dp"
+                android:text="Took the light rail home where I made a yummy pasta dinner and then watched a bit of netflix"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="FIVE"
+                android:textColor="@android:color/white"
+                android:textSize="17sp" />
+
+            <EditText
+                android:id="@+id/five"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@color/white"
+                android:gravity="top"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="4"
+                android:minLines="4"
+                android:padding="4dp"
+                android:text="Worked a bit on my Five Things app and then took a shower and went to bed"
+                android:textSize="15sp" />
+
+            <Button
+                android:id="@+id/save_button"
+                android:layout_width="70dp"
+                android:layout_height="30dp"
+                android:layout_gravity="right"
+                android:layout_margin="5dp"
+                android:background="@color/bluegreen"
+                android:text="Save"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </ScrollView>
 
 </FrameLayout>
