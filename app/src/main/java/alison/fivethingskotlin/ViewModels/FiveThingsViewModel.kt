@@ -1,10 +1,10 @@
 package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import java.text.SimpleDateFormat
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.*
@@ -18,8 +18,7 @@ class FiveThingsViewModel(): ViewModel() {
     private val fiveThingsData = MutableLiveData<FiveThings>()
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
-        //TODO utils to get date into string format
-        val formattedDate = SimpleDateFormat("MM-dd-yy").format(date).toString()
+        val formattedDate = getDatabaseStyleDate(date)
 
         fiveThingsData.value = FiveThings(Date(), "Hello", "Hello","Hello","Hello","Hello")
 
@@ -56,8 +55,7 @@ class FiveThingsViewModel(): ViewModel() {
         things.add(fiveThings.four)
         things.add(fiveThings.five)
 
-        val formattedDate = SimpleDateFormat("MM-dd-yy").format(fiveThings.date).toString()
-        //TODO use date util to convert to string
+        val formattedDate = getDatabaseStyleDate(fiveThings.date)
 
 //        database.child("users").child(user.uid).child(formattedDate).setValue(things) { error, ref ->
 //            println("Value was set. Error = " + error)
