@@ -48,3 +48,6 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0"
 
 }
+
+
+apply plugin: 'com.google.gms.google-services'
