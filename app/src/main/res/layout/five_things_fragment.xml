@@ -43,7 +43,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_weight="1"
                     android:paddingBottom="5dp"
-                    android:text="Wednesday September 22nd, 2017"
+                    android:text="@{fiveThings.fullDateString}"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
 

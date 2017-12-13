@@ -71,4 +71,22 @@ class DatesTest: FreeSpec( {
         getNextDate(date) shouldEqual newDate
     }
 
+    "builds a pretty date" - {
+        "for 12/12/17" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 12)
+            val date = cal.time
+            getFullDateFormat(date) shouldEqual "Tuesday December 12th, 2017"
+        }
+        "for 01/31/16" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2016)
+            cal.set(Calendar.MONTH, Calendar.JANUARY)
+            cal.set(Calendar.DAY_OF_MONTH, 31)
+            val date = cal.time
+            getFullDateFormat(date) shouldEqual "Sunday January 31st, 2016"
+        }
+    }
 })
