@@ -40,16 +40,18 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
                             things[3],
                             things[4])
                     fiveThingsData.value = fiveThings
+                    Log.d("fivethings", "data set!")
                 } else {
                     Log.d("fivethings", "no data found for this day")
-                    fiveThingsData.value = FiveThings(Date(), "", "","","","")
+                    fiveThingsData.value = FiveThings(date, "", "","","","")
                 }
             }
         })
         return fiveThingsData
     }
 
-    fun writeFiveThings(user: FirebaseUser, fiveThings: FiveThings) {
+    fun writeFiveThings(fiveThings: FiveThings) {
+        Log.d("fivethings", "about to write the data: " + fiveThings)
         val things = ArrayList<String>()
         things.add(fiveThings.one)
         things.add(fiveThings.two)
@@ -60,7 +62,9 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
         val formattedDate = getDatabaseStyleDate(fiveThings.date)
 
         database.child("users").child(user.uid).child(formattedDate).setValue(things) { error, ref ->
-            println("Value was set. Error = " + error)
+            if (error != null) {
+                Log.d("fivethings", "No error: " + ref)
+            }
         }
     }
 
