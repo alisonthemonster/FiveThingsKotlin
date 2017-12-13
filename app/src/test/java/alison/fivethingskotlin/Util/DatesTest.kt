@@ -10,13 +10,13 @@ import java.util.*
 
 class DatesTest: FreeSpec( {
     "converts from Date object" - {
-        "to DD-MM-YY" {
+        "to YY-MM-DD" {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
             cal.set(Calendar.MONTH, Calendar.JANUARY)
             cal.set(Calendar.DAY_OF_MONTH, 22)
             val date = cal.time
-            getDatabaseStyleDate(date) shouldEqual "22-01-17"
+            getDatabaseStyleDate(date) shouldEqual "17-01-22"
         }
     }
 

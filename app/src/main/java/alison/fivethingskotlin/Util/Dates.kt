@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 fun getDatabaseStyleDate(date: Date): String {
-    return SimpleDateFormat("dd-MM-yy").format(date).toString()
+    return SimpleDateFormat("yy-MM-dd").format(date).toString()
 }
 
 fun getDayOfWeek(date: Date): String {

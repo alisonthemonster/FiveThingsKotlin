@@ -45,6 +45,7 @@ class LogInActivity : AppCompatActivity() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
          if (firebase.currentUser != null) {
+             Log.d("auth", "user is already logged in!")
             val intent = Intent(this, ContainerActivity::class.java)
             startActivity(intent)
         }

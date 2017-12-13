@@ -16,7 +16,7 @@ import java.util.*
 class FiveThingsFragment : Fragment() {
 
     var currentDate = Date()
-//    val user = FirebaseAuth.getInstance().currentUser
+    val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +25,8 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-//        if (user != null) {
-            val viewModel = FiveThingsViewModel()
+        if (user != null) {
+            val viewModel = FiveThingsViewModel(user)
 
             val binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
@@ -36,7 +36,7 @@ class FiveThingsFragment : Fragment() {
             })
 
             return binding.root
-//        }
+        }
         //TODO handle case where user get here without logging in
         // Inflate the layout for this fragment
         return inflater!!.inflate(R.layout.five_things_fragment, container, false)
