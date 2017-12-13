@@ -28,4 +28,17 @@ fun getOrdinalDate(day: Int): String{
         return day.toString() + "th"
 }
 
+fun getPreviousDate(date: Date): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, -1)
+    return cal.time
+}
+
+fun getNextDate(date: Date): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, 1)
+    return cal.time
+}
 

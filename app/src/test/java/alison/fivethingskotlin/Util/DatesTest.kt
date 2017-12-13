@@ -49,4 +49,26 @@ class DatesTest: FreeSpec( {
         }
     }
 
+    "gets previous date object given a date" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        cal.set(Calendar.DAY_OF_MONTH, 21)
+        val newDate = cal.time
+        getPreviousDate(date) shouldEqual newDate
+    }
+
+    "gets previous date object given a date" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        cal.set(Calendar.DAY_OF_MONTH, 23)
+        val newDate = cal.time
+        getNextDate(date) shouldEqual newDate
+    }
+
 })
