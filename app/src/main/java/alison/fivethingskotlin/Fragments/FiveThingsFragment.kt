@@ -15,7 +15,6 @@ import java.util.*
 
 class FiveThingsFragment : Fragment() {
 
-    var currentDate = Date()
     val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +30,7 @@ class FiveThingsFragment : Fragment() {
             val binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
 
-            viewModel.getFiveThings(currentDate).observe(this, Observer<FiveThings> { fiveThings ->
+            viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
 

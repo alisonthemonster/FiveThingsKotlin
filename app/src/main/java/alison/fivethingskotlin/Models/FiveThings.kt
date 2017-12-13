@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.Models
 
+import alison.fivethingskotlin.Util.getFullDateFormat
 import java.util.*
 
 /**
@@ -20,5 +21,9 @@ data class FiveThings(
                     !three.isNullOrEmpty() &&
                     !four.isNullOrEmpty() &&
                     !five.isNullOrEmpty()
+        }
+    val fullDateString: String
+        get() {
+            return getFullDateFormat(date)
         }
 }

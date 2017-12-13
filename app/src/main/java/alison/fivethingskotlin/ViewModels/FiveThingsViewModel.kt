@@ -2,6 +2,8 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
+import alison.fivethingskotlin.Util.getNextDate
+import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
@@ -61,4 +63,15 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
             println("Value was set. Error = " + error)
         }
     }
+
+    fun getPreviousDay(date: Date): LiveData<FiveThings> {
+        val prevDate = getPreviousDate(date)
+        return getFiveThings(prevDate)
+    }
+
+    fun getNextDay(date: Date): LiveData<FiveThings>  {
+        val nextDate = getNextDate(date)
+        return getFiveThings(nextDate)
+    }
+
 }

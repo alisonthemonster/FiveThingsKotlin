@@ -3,6 +3,8 @@ package alison.fivethingskotlin.Util
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+//TODO convert all Date objects to be something else like JodaTime or DateTime
 fun getDatabaseStyleDate(date: Date): String {
     return SimpleDateFormat("yy-MM-dd").format(date).toString()
 }
@@ -28,4 +30,45 @@ fun getOrdinalDate(day: Int): String{
         return day.toString() + "th"
 }
 
+fun getPreviousDate(date: Date): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, -1)
+    return cal.time
+}
+
+fun getNextDate(date: Date): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, 1)
+    return cal.time
+}
+
+fun getFullDateFormat(date: Date): String {
+    val dayOfWeek = getDayOfWeek(date)
+    val day = getOrdinalDate(getDay(date))
+    val month = getMonth(date)
+    val year = getYear(date)
+    return "$dayOfWeek $month $day, $year"
+}
+
+private fun getDay(date: Date): Int {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    return cal.get(Calendar.DATE)
+}
+
+private fun getMonth(date: Date): String {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    val monthNumber = cal.get(Calendar.MONTH)
+    val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+    return monthNames[monthNumber]
+}
+
+private fun getYear(date: Date): Int {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    return cal.get(Calendar.YEAR)
+}
 
