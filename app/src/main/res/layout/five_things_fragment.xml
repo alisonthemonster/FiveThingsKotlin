@@ -30,15 +30,28 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="previous day"
+                    android:onClick="@{() -> viewModel.getPreviousDay(fiveThings.date)}"/>
+
                 <TextView
                     android:id="@+id/current_date"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
                     android:paddingBottom="5dp"
                     android:text="Wednesday September 22nd, 2017"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="next day"
+                    android:onClick="@{() -> viewModel.getNextDay(fiveThings.date)}"/>
 
                 <TextView
                     android:layout_width="match_parent"
@@ -153,8 +166,7 @@
                     android:layout_margin="5dp"
                     android:background="@color/bluegreen"
                     android:text="Save"
-                    android:textColor="@color/white"
-                    android:onClick="@{viewModel::writeFiveThings"/>
+                    android:textColor="@color/white"/>
             </LinearLayout>
 
         </ScrollView>
