@@ -30,6 +30,7 @@ class FiveThingsFragment : Fragment() {
             val binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
 
+            //TODO move this code, this is happening after rotation!!!
             viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
