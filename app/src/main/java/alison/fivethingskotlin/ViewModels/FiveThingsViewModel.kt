@@ -61,4 +61,13 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
             println("Value was set. Error = " + error)
         }
     }
+
+    fun getPreviousDay() {
+
+    }
+
+    fun getNextDay() {
+
+    }
+
 }
