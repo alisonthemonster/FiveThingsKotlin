@@ -31,8 +31,6 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
                 val results= dataSnapshot.value
                 if (results != null) {
                     val things = results as ArrayList<String>
-                    Log.d("fivethings", "results: " + results)
-                    Log.d("fivethings", "things: " + things)
                     val fiveThings = FiveThings(date,
                             things[0],
                             things[1],
