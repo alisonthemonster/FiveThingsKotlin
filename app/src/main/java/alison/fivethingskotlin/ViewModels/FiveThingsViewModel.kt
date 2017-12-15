@@ -18,6 +18,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     private var database = FirebaseDatabase.getInstance().reference
     private val fiveThingsData = MutableLiveData<FiveThings>()
+    private val fiveThingsDates = MutableLiveData<List<Date>>()
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
         val formattedDate = getDatabaseStyleDate(date)
@@ -76,6 +77,26 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
     fun getNextDay(date: Date): LiveData<FiveThings>  {
         val nextDate = getNextDate(date)
         return getFiveThings(nextDate)
+    }
+
+    fun changeDate(date: Date): LiveData<FiveThings> {
+        return getFiveThings(date)
+    }
+
+    fun getWrittenDays(): LiveData<List<Date>> {
+        val query = database.child("users").child(user.uid)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                Log.e("fivethings", p0.toString())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val results= dataSnapshot.value
+                Log.d("blerg", "results: " + results)
+//                fiveThingsDates.value =
+            }
+        })
+        return fiveThingsDates
     }
 
 }

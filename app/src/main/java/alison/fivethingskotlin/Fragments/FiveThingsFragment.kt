@@ -7,15 +7,19 @@ import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
+import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.github.sundeepk.compactcalendarview.domain.Event
 
 class FiveThingsFragment : Fragment() {
 
     val user = FirebaseAuth.getInstance().currentUser
+    lateinit var viewModel: FiveThingsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,12 +29,11 @@ class FiveThingsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
 
         if (user != null) {
-            val viewModel = FiveThingsViewModel(user)
+            viewModel = FiveThingsViewModel(user)
 
             val binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
 
-            //TODO move this code, this is happening after rotation!!!
             viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
@@ -40,5 +43,29 @@ class FiveThingsFragment : Fragment() {
         //TODO handle case where user get here without logging in
         // Inflate the layout for this fragment
         return inflater!!.inflate(R.layout.five_things_fragment, container, false)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val compactCalendarView = view?.findViewById<CompactCalendarView>(R.id.compactcalendar_view)
+        if (compactCalendarView != null) {
+//                viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
+//                    val events = convertDaysToEvents(days)
+//                    compactCalendarView.addEvents(events)
+//                })
+
+            compactCalendarView.setListener(object : CompactCalendarView.CompactCalendarViewListener {
+                override fun onDayClick(dateClicked: Date) {
+                    val events = compactCalendarView.getEvents(dateClicked)
+                    Log.d("blerg", "Day was clicked: $dateClicked with events $events")
+                    viewModel.changeDate(dateClicked)
+                }
+
+                override fun onMonthScroll(firstDayOfNewMonth: Date) {
+                    Log.d("blerg", "Month was scrolled to: " + firstDayOfNewMonth)
+                    //todo fetch new months events?
+                }
+            })
+        }
     }
 }
