@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
@@ -20,6 +21,7 @@ class FiveThingsFragment : Fragment() {
 
     val user = FirebaseAuth.getInstance().currentUser
     lateinit var viewModel: FiveThingsViewModel
+    lateinit var binding: FiveThingsFragmentBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +33,14 @@ class FiveThingsFragment : Fragment() {
         if (user != null) {
             viewModel = FiveThingsViewModel(user)
 
-            val binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
+            binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
 
             viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
+
+            binding.calendarVisible = false
 
             return binding.root
         }
@@ -59,6 +63,7 @@ class FiveThingsFragment : Fragment() {
                     val events = compactCalendarView.getEvents(dateClicked)
                     Log.d("blerg", "Day was clicked: $dateClicked with events $events")
                     viewModel.changeDate(dateClicked)
+                    binding.calendarVisible = false
                 }
 
                 override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -66,6 +71,14 @@ class FiveThingsFragment : Fragment() {
                     //todo fetch new months events?
                 }
             })
+        }
+
+        val date = view?.findViewById<TextView>(R.id.current_date)
+        date?.setOnClickListener {
+            val currentVisibility = binding.calendarVisible
+            if (currentVisibility != null) {
+                binding.calendarVisible = !currentVisibility
+            }
         }
     }
 }
