@@ -22,6 +22,7 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 class FiveThingsFragment : Fragment() {
 
     val user = FirebaseAuth.getInstance().currentUser
+    var eventsLoaded = false
     lateinit var viewModel: FiveThingsViewModel
     lateinit var binding: FiveThingsFragmentBinding
 
@@ -44,6 +45,8 @@ class FiveThingsFragment : Fragment() {
 
             binding.calendarVisible = false
 
+            binding.month = getMonth(Date()) + " " + getYear(Date())
+
             return binding.root
         }
         //TODO handle case where user get here without logging in
@@ -56,10 +59,17 @@ class FiveThingsFragment : Fragment() {
         val compactCalendarView = view?.findViewById<CompactCalendarView>(R.id.compactcalendar_view)
         if (compactCalendarView != null) {
 
+            binding.loading = true
+
+            //TODO only pull in for current month?
             viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
                 days?.let{
-                    val events = convertDaysToEvents(days)
-                    compactCalendarView.addEvents(events)
+                    binding.loading = false
+                    if (!eventsLoaded) {
+                        val events = convertDaysToEvents(days)
+                        compactCalendarView.addEvents(events)
+                        eventsLoaded = true
+                    }
                 }
             })
 
@@ -72,9 +82,7 @@ class FiveThingsFragment : Fragment() {
                 }
 
                 override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                    Log.d("blerg", "Month was scrolled to: " + firstDayOfNewMonth)
                     binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
-                    //todo fetch new months events?
                 }
             })
         }
@@ -84,8 +92,12 @@ class FiveThingsFragment : Fragment() {
             val currentVisibility = binding.calendarVisible
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
-
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        eventsLoaded = false
     }
 }

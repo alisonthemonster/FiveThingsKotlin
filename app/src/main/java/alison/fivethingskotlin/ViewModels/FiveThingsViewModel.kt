@@ -93,8 +93,6 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val results= dataSnapshot.value as Map<String, List<String>>
-
-                Log.d("blerg", "results: " + results)
                 val dayStrings = results.keys
                 Log.d("blerg", "dayStrings: " + dayStrings)
                 val days = dayStrings.map { getDateFromDatabaseStyle(it) }
