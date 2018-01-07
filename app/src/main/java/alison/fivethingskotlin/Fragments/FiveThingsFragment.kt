@@ -56,6 +56,7 @@ class FiveThingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
         val compactCalendarView = view?.findViewById<CompactCalendarView>(R.id.compactcalendar_view)
         if (compactCalendarView != null) {
 
@@ -100,4 +101,6 @@ class FiveThingsFragment : Fragment() {
         super.onDestroyView()
         eventsLoaded = false
     }
+
+    //TODO handle when user tries to leave fragment with un-saved changes
 }
