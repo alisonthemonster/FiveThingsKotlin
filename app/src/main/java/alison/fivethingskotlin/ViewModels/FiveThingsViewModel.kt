@@ -2,6 +2,7 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
+import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
@@ -91,9 +92,13 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val results= dataSnapshot.value
+                val results= dataSnapshot.value as Map<String, List<String>>
+
                 Log.d("blerg", "results: " + results)
-//                fiveThingsDates.value =
+                val dayStrings = results.keys
+                Log.d("blerg", "dayStrings: " + dayStrings)
+                val days = dayStrings.map { getDateFromDatabaseStyle(it) }
+                fiveThingsDates.value = days
             }
         })
         return fiveThingsDates

@@ -20,6 +20,21 @@ class DatesTest: FreeSpec( {
         }
     }
 
+    "converts from yy-MM-dd" - {
+        "to Date object" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.JANUARY)
+            cal.set(Calendar.DAY_OF_MONTH, 22)
+            cal.set(Calendar.HOUR_OF_DAY, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+            val date = cal.time
+            getDateFromDatabaseStyle("17-01-22") shouldEqual date
+        }
+    }
+
     "gets day of week" - {
         "from a date object" {
             val cal = Calendar.getInstance()

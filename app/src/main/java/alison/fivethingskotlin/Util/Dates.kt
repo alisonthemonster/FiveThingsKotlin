@@ -1,12 +1,18 @@
 package alison.fivethingskotlin.Util
 
+import android.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.*
+import com.github.sundeepk.compactcalendarview.domain.Event
 
 
 //TODO convert all Date objects to be something else like JodaTime or DateTime
 fun getDatabaseStyleDate(date: Date): String {
     return SimpleDateFormat("yy-MM-dd").format(date).toString()
+}
+
+fun getDateFromDatabaseStyle(dateString: String): Date {
+    return SimpleDateFormat("yy-MM-dd").parse(dateString)
 }
 
 fun getDayOfWeek(date: Date): String {
@@ -58,7 +64,7 @@ private fun getDay(date: Date): Int {
     return cal.get(Calendar.DATE)
 }
 
-private fun getMonth(date: Date): String {
+fun getMonth(date: Date): String {
     val cal = Calendar.getInstance()
     cal.time = date
     val monthNumber = cal.get(Calendar.MONTH)
@@ -66,9 +72,14 @@ private fun getMonth(date: Date): String {
     return monthNames[monthNumber]
 }
 
-private fun getYear(date: Date): Int {
+fun getYear(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
     return cal.get(Calendar.YEAR)
+}
+
+//TODO write unit tests
+fun convertDaysToEvents(dates: List<Date>): List<Event> {
+    return dates.map { Event(Color.WHITE, it.time) }
 }
 

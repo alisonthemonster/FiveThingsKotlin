@@ -3,6 +3,9 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.Models.FiveThings
 import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.Util.convertDaysToEvents
+import alison.fivethingskotlin.Util.getMonth
+import alison.fivethingskotlin.Util.getYear
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.os.Bundle
@@ -15,7 +18,6 @@ import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import com.github.sundeepk.compactcalendarview.domain.Event
 
 class FiveThingsFragment : Fragment() {
 
@@ -30,7 +32,7 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-        if (user != null) {
+        user?.let {
             viewModel = FiveThingsViewModel(user)
 
             binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
@@ -53,10 +55,13 @@ class FiveThingsFragment : Fragment() {
         super.onStart()
         val compactCalendarView = view?.findViewById<CompactCalendarView>(R.id.compactcalendar_view)
         if (compactCalendarView != null) {
-//                viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
-//                    val events = convertDaysToEvents(days)
-//                    compactCalendarView.addEvents(events)
-//                })
+
+            viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
+                days?.let{
+                    val events = convertDaysToEvents(days)
+                    compactCalendarView.addEvents(events)
+                }
+            })
 
             compactCalendarView.setListener(object : CompactCalendarView.CompactCalendarViewListener {
                 override fun onDayClick(dateClicked: Date) {
@@ -68,6 +73,7 @@ class FiveThingsFragment : Fragment() {
 
                 override fun onMonthScroll(firstDayOfNewMonth: Date) {
                     Log.d("blerg", "Month was scrolled to: " + firstDayOfNewMonth)
+                    binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
                     //todo fetch new months events?
                 }
             })
@@ -76,8 +82,9 @@ class FiveThingsFragment : Fragment() {
         val date = view?.findViewById<TextView>(R.id.current_date)
         date?.setOnClickListener {
             val currentVisibility = binding.calendarVisible
-            if (currentVisibility != null) {
+            currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
+
             }
         }
     }

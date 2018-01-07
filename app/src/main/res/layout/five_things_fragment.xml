@@ -16,6 +16,10 @@
         <variable
             name="calendarVisible"
             type="Boolean"/>
+
+        <variable
+            name="month"
+            type="String"/>
     </data>
 
     <FrameLayout
@@ -51,26 +55,43 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                    android:id="@+id/compactcalendar_view"
-                    android:layout_width="fill_parent"
-                    android:layout_height="250dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
+                <LinearLayout
+                    android:id="@+id/calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/bluegreen"
+                    android:orientation="vertical"
                     android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
-                    app:compactCalendarBackgroundColor="@color/bluegreen"
-                    app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
-                    app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
-                    app:compactCalendarMultiEventIndicatorColor="#fff"
-                    app:compactCalendarTargetHeight="250dp"
-                    app:compactCalendarTextColor="#fff"
-                    app:compactCalendarTextSize="12sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/current_date" />
+                    app:layout_constraintTop_toBottomOf="@+id/current_date">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/white"
+                        android:text="@{month}" />
+
+                    <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                        android:id="@+id/compactcalendar_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="250dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        app:compactCalendarBackgroundColor="@color/bluegreen"
+                        app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+                        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
+                        app:compactCalendarMultiEventIndicatorColor="#fff"
+                        app:compactCalendarTargetHeight="250dp"
+                        app:compactCalendarTextColor="#fff"
+                        app:compactCalendarTextSize="12sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        />
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -81,7 +102,7 @@
                     android:padding="20dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/compactcalendar_view">
+                    app:layout_constraintTop_toBottomOf="@+id/calendar">
 
                     <TextView
                         android:layout_width="match_parent"
