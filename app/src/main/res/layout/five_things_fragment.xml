@@ -101,6 +101,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/things"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="0dp"
@@ -122,6 +123,7 @@
 
                     <EditText
                         android:id="@+id/one"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -132,8 +134,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.one}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -144,6 +145,7 @@
 
                     <EditText
                         android:id="@+id/two"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -154,8 +156,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.two}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -166,6 +167,7 @@
 
                     <EditText
                         android:id="@+id/three"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -176,8 +178,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.three}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -188,6 +189,7 @@
 
                     <EditText
                         android:id="@+id/four"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -198,8 +200,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.four}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -210,6 +211,7 @@
 
                     <EditText
                         android:id="@+id/five"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -220,8 +222,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.five}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/save_button"

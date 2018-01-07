@@ -3,9 +3,7 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.Models.FiveThings
 import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.convertDateToEvent
-import alison.fivethingskotlin.Util.getMonth
-import alison.fivethingskotlin.Util.getYear
+import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.os.Bundle
@@ -14,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
@@ -23,6 +22,7 @@ class FiveThingsFragment : Fragment() {
 
     val user = FirebaseAuth.getInstance().currentUser
     var eventsLoaded = false
+    var date = Date()
     lateinit var viewModel: FiveThingsViewModel
     lateinit var binding: FiveThingsFragmentBinding
 
@@ -45,12 +45,11 @@ class FiveThingsFragment : Fragment() {
 
             binding.calendarVisible = false
 
-            binding.month = getMonth(Date()) + " " + getYear(Date())
+            binding.month = getMonth(date) + " " + getYear(date)
 
             return binding.root
         }
         //TODO handle case where user get here without logging in
-        // Inflate the layout for this fragment
         return inflater!!.inflate(R.layout.five_things_fragment, container, false)
     }
 
@@ -76,8 +75,7 @@ class FiveThingsFragment : Fragment() {
 
             compactCalendarView.setListener(object : CompactCalendarView.CompactCalendarViewListener {
                 override fun onDayClick(dateClicked: Date) {
-                    val events = compactCalendarView.getEvents(dateClicked)
-                    Log.d("blerg", "Day was clicked: $dateClicked with events $events")
+                    date = dateClicked
                     viewModel.changeDate(dateClicked)
                     binding.calendarVisible = false
                 }
@@ -88,13 +86,29 @@ class FiveThingsFragment : Fragment() {
             })
         }
 
-        val date = view?.findViewById<TextView>(R.id.current_date)
-        date?.setOnClickListener {
+        val dateView = view?.findViewById<TextView>(R.id.current_date)
+        dateView?.setOnClickListener {
             val currentVisibility = binding.calendarVisible
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
             }
         }
+
+        val things = view?.findViewById<LinearLayout>(R.id.things)
+        things?.setOnTouchListener(object : OnSwipeTouchListener(context){
+            override fun onSwipeRight() {
+                Log.d("swipe", "swiped right!")
+                date = getPreviousDate(date)
+                compactCalendarView?.setCurrentDate(date)
+                viewModel.changeDate(date)
+            }
+            override fun onSwipeLeft() {
+                Log.d("swipe", "swiped left!")
+                date = getNextDate(date)
+                compactCalendarView?.setCurrentDate(date)
+                viewModel.changeDate(date)
+            }
+        })
     }
 
     override fun onDestroyView() {
