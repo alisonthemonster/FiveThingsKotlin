@@ -1,5 +1,6 @@
 package alison.fivethingskotlin
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -13,6 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 class LogInActivity : AppCompatActivity() {
@@ -67,6 +69,10 @@ class LogInActivity : AppCompatActivity() {
             }
 
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
