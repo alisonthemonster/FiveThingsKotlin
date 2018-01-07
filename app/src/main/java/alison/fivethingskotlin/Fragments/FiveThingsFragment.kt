@@ -18,6 +18,9 @@ import android.widget.TextView
 import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import android.graphics.Typeface
+
+
 
 class FiveThingsFragment : Fragment() {
 
@@ -56,6 +59,11 @@ class FiveThingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        val myTextView = view?.findViewById<TextView>(R.id.current_date)
+        val typeface = Typeface.createFromAsset(context.assets, "fonts/Larsseit-Medium.ttf")
+        myTextView?.typeface = typeface
+
         val compactCalendarView = view?.findViewById<CompactCalendarView>(R.id.compactcalendar_view)
         if (compactCalendarView != null) {
 

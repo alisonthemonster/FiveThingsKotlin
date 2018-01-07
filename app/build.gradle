@@ -47,6 +47,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation "android.arch.lifecycle:extensions:1.0.0"
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
+    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
 }
 
 

@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/five_things_item"
-            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:icon="@drawable/ic_five"
             android:title="Five Things" />
         <item
             android:id="@+id/analytics_item"

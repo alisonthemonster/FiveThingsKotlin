@@ -54,11 +54,11 @@
                     android:paddingBottom="5dp"
                     android:text="@{fiveThings.fullDateString}"
                     android:textColor="@color/white"
-                    android:textSize="20sp"
+                    android:textSize="22sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Monday January 1st, 2017" />
+                    tools:text="Wednesday December 55st, 2017" />
 
                 <LinearLayout
                     android:id="@+id/calendar"
@@ -132,7 +132,8 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.one}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        fontPath="fonts/Larsseit.ttf"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -153,7 +154,8 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.two}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        fontPath="fonts/Larsseit.ttf" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -174,7 +176,8 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.three}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        fontPath="fonts/Larsseit.ttf" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -195,7 +198,8 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.four}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        fontPath="fonts/Larsseit.ttf" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -216,7 +220,8 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.five}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        fontPath="fonts/Larsseit.ttf" />
 
                     <Button
                         android:id="@+id/save_button"

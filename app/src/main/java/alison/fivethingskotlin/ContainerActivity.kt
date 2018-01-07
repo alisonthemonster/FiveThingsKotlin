@@ -4,6 +4,7 @@ import alison.fivethingskotlin.Fragments.AnalyticsFragment
 import alison.fivethingskotlin.Fragments.DesignsFragment
 import alison.fivethingskotlin.Fragments.FiveThingsFragment
 import alison.fivethingskotlin.Fragments.SettingsFragment
+import android.content.Context
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -13,6 +14,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+
+
 
 
 class ContainerActivity : AppCompatActivity() {
@@ -52,6 +56,10 @@ class ContainerActivity : AppCompatActivity() {
             finish()
             //TODO on back pressed behavior needs to be further addressed
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     private fun setUpNavigationDrawer() {
