@@ -3,7 +3,7 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.Models.FiveThings
 import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.convertDaysToEvents
+import alison.fivethingskotlin.Util.convertDateToEvent
 import alison.fivethingskotlin.Util.getMonth
 import alison.fivethingskotlin.Util.getYear
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
@@ -66,7 +66,7 @@ class FiveThingsFragment : Fragment() {
                 days?.let{
                     binding.loading = false
                     if (!eventsLoaded) {
-                        val events = convertDaysToEvents(days)
+                        val events = days.map { convertDateToEvent(it) }
                         compactCalendarView.addEvents(events)
                         eventsLoaded = true
                     }

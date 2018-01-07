@@ -78,8 +78,7 @@ fun getYear(date: Date): Int {
     return cal.get(Calendar.YEAR)
 }
 
-//TODO write unit tests
-fun convertDaysToEvents(dates: List<Date>): List<Event> {
-    return dates.map { Event(Color.WHITE, it.time) }
+fun convertDateToEvent(date: Date): Event  {
+    return Event(Color.WHITE, date.time)
 }
 
