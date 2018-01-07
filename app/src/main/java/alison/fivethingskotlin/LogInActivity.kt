@@ -3,8 +3,10 @@ package alison.fivethingskotlin
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -76,11 +78,12 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        //showProgressDialog()
+        showLoading()
 
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         firebase.signInWithCredential(credential)
                 .addOnCompleteListener(this, { task ->
+                    hideLoading()
                     if (task.isSuccessful) {
                         val intent = Intent(this, ContainerActivity::class.java)
                         startActivity(intent)
@@ -88,12 +91,21 @@ class LogInActivity : AppCompatActivity() {
                         Toast.makeText(this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show()
                     }
-                    //hideProgressDialog()
                 })
     }
 
     private fun logIn() {
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun showLoading() {
+        val loadingView = findViewById<ConstraintLayout>(R.id.loadingLayout)
+        loadingView.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        val loadingView = findViewById<ConstraintLayout>(R.id.loadingLayout)
+        loadingView.visibility = View.GONE
     }
 }
