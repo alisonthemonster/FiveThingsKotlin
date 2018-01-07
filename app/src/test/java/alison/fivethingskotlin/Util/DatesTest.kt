@@ -1,5 +1,7 @@
 package alison.fivethingskotlin.Util
 
+import android.graphics.Color
+import com.github.sundeepk.compactcalendarview.domain.Event
 import io.kotlintest.properties.forAll
 import io.kotlintest.properties.headers
 import io.kotlintest.properties.row
@@ -18,6 +20,39 @@ class DatesTest: FreeSpec( {
             val date = cal.time
             getDatabaseStyleDate(date) shouldEqual "17-01-22"
         }
+    }
+
+    "converts from yy-MM-dd" - {
+        "to Date object" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.JANUARY)
+            cal.set(Calendar.DAY_OF_MONTH, 22)
+            cal.set(Calendar.HOUR_OF_DAY, 0)
+            cal.set(Calendar.MINUTE, 0)
+            cal.set(Calendar.SECOND, 0)
+            cal.set(Calendar.MILLISECOND, 0)
+            val date = cal.time
+            getDateFromDatabaseStyle("17-01-22") shouldEqual date
+        }
+    }
+
+    "gets the month from a date object" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        getMonth(date) shouldEqual "January"
+    }
+
+    "gets the year from a date object" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        getYear(date) shouldEqual 2017
     }
 
     "gets day of week" - {
@@ -89,4 +124,16 @@ class DatesTest: FreeSpec( {
             getFullDateFormat(date) shouldEqual "Sunday January 31st, 2016"
         }
     }
+
+    "builds an event object from a Date" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.DECEMBER)
+        cal.set(Calendar.DAY_OF_MONTH, 12)
+        val date = cal.time
+        val event = Event(Color.WHITE, date.time)
+        convertDateToEvent(date) shouldEqual event
+    }
+
+
 })

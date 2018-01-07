@@ -1,9 +1,9 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#673AB7</item>
-        <item name="colorPrimaryDark">#512DA8</item>
-        <item name="colorAccent">#FF4081</item>
+        <item name="colorPrimary">#3AAFAB</item>
+        <item name="colorPrimaryDark">#277976</item>
+        <item name="colorAccent">#3aafab</item>
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
         <item name="colorControlNormal">@color/white</item>
     </style>

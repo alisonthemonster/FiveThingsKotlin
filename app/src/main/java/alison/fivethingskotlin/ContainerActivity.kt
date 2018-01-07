@@ -50,6 +50,7 @@ class ContainerActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             finish()
+            //TODO on back pressed behavior needs to be further addressed
         }
     }
 

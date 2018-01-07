@@ -2,6 +2,7 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
+import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
@@ -18,6 +19,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     private var database = FirebaseDatabase.getInstance().reference
     private val fiveThingsData = MutableLiveData<FiveThings>()
+    private val fiveThingsDates = MutableLiveData<List<Date>>()
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
         val formattedDate = getDatabaseStyleDate(date)
@@ -76,6 +78,28 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
     fun getNextDay(date: Date): LiveData<FiveThings>  {
         val nextDate = getNextDate(date)
         return getFiveThings(nextDate)
+    }
+
+    fun changeDate(date: Date): LiveData<FiveThings> {
+        return getFiveThings(date)
+    }
+
+    fun getWrittenDays(): LiveData<List<Date>> {
+        val query = database.child("users").child(user.uid)
+        query.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError?) {
+                Log.e("fivethings", p0.toString())
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val results= dataSnapshot.value as Map<String, List<String>>
+                val dayStrings = results.keys
+                Log.d("blerg", "dayStrings: " + dayStrings)
+                val days = dayStrings.map { getDateFromDatabaseStyle(it) }
+                fiveThingsDates.value = days
+            }
+        })
+        return fiveThingsDates
     }
 
 }
