@@ -5,9 +5,9 @@
     tools:context="alison.fivethingskotlin.Fragments.DesignsFragment"
     android:id="@+id/designs_container">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/imagegallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Designs coming sooooooooon" />
+        android:layout_height="match_parent"/>
 
 </FrameLayout>
