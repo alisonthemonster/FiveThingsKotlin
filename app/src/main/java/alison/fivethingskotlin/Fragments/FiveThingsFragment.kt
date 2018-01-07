@@ -75,8 +75,6 @@ class FiveThingsFragment : Fragment() {
 
             compactCalendarView.setListener(object : CompactCalendarView.CompactCalendarViewListener {
                 override fun onDayClick(dateClicked: Date) {
-                    val events = compactCalendarView.getEvents(dateClicked)
-                    Log.d("blerg", "Day was clicked: $dateClicked with events $events")
                     date = dateClicked
                     viewModel.changeDate(dateClicked)
                     binding.calendarVisible = false
@@ -101,11 +99,13 @@ class FiveThingsFragment : Fragment() {
             override fun onSwipeRight() {
                 Log.d("swipe", "swiped right!")
                 date = getPreviousDate(date)
+                compactCalendarView?.setCurrentDate(date)
                 viewModel.changeDate(date)
             }
             override fun onSwipeLeft() {
                 Log.d("swipe", "swiped left!")
                 date = getNextDate(date)
+                compactCalendarView?.setCurrentDate(date)
                 viewModel.changeDate(date)
             }
         })
