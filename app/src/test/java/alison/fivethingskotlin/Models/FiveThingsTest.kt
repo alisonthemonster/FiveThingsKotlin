@@ -41,6 +41,42 @@ class DatesTest: FreeSpec( {
         }
     }
 
+    "detects if Five things is empty" - {
+        "with complete things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    true)
+            completeThings.isEmpty shouldEqual false
+        }
+        "with some empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    false)
+            completeThings.isEmpty shouldEqual false
+        }
+        "with more empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    false)
+            completeThings.isEmpty shouldEqual true
+        }
+    }
+
     "returns correct string for boolean" - {
         "with saved == true" {
             val things = FiveThings(

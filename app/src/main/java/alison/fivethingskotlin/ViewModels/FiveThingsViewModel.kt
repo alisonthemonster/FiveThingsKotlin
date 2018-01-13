@@ -61,7 +61,6 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     fun writeFiveThings(fiveThings: FiveThings) {
         Log.d("fivethings", "about to write the data: " + fiveThings)
-
         val things = ArrayList<String>()
         things.add(fiveThings.one)
         things.add(fiveThings.two)
@@ -71,11 +70,17 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
         val formattedDate = getDatabaseStyleDate(fiveThings.date)
 
-        database.child("users").child(user.uid).child(formattedDate).setValue(things) { error, ref ->
-            if (error != null) {
-                Log.d("fivethings", "No error: " + ref)
-                fiveThings.saved = true
-                fiveThingsData.value = fiveThings
+        val child = database.child("users").child(user.uid).child(formattedDate)
+        if (fiveThings.isEmpty) {
+            //user hasn't written or has deleted a whole day
+            child.setValue(null)
+        } else {
+            child.setValue(things) { error, ref ->
+                if (error != null) {
+                    fiveThings.saved = true
+                    fiveThingsData.value = fiveThings
+                    Log.d("fivethings", "No error: " + ref)
+                }
             }
         }
     }

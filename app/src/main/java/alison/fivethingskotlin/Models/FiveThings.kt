@@ -24,6 +24,14 @@ data class FiveThings(
         get() {
             return getFullDateFormat(date)
         }
+    val isEmpty: Boolean
+        get() {
+            return one.isNullOrEmpty() &&
+                    two.isNullOrEmpty() &&
+                    three.isNullOrEmpty() &&
+                    four.isNullOrEmpty() &&
+                    five.isNullOrEmpty()
+        }
     val savedString: String
         get() {
             return if (saved) "Saved" else "Save"
