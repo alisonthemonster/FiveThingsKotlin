@@ -38,13 +38,11 @@ class FiveThingsFragment : Fragment() {
 
             binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
-
             viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
 
             binding.calendarVisible = false
-
             binding.month = getMonth(Date()) + " " + getYear(Date())
 
             return binding.root

@@ -13,7 +13,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    true)
             completeThings.isComplete shouldEqual true
         }
         "with some empty things" {
@@ -23,7 +24,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    true)
             completeThings.isComplete shouldEqual false
         }
         "with more empty things" {
@@ -33,7 +35,8 @@ class DatesTest: FreeSpec( {
                     "",
                     "",
                     "",
-                    "")
+                    "",
+                    false)
             completeThings.isComplete shouldEqual false
         }
     }
@@ -68,6 +71,31 @@ class DatesTest: FreeSpec( {
                     "",
                     "")
             completeThings.isEmpty shouldEqual true
+        }
+    }
+
+    "returns correct string for boolean" - {
+        "with saved == true" {
+            val things = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    true)
+            things.savedString shouldEqual "Saved"
+        }
+        "with saved == false" {
+            val things = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    false)
+            things.savedString shouldEqual "Save"
         }
     }
 })
