@@ -62,10 +62,15 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
         things.add(fiveThings.five)
 
         val formattedDate = getDatabaseStyleDate(fiveThings.date)
-
-        database.child("users").child(user.uid).child(formattedDate).setValue(things) { error, ref ->
-            if (error != null) {
-                Log.d("fivethings", "No error: " + ref)
+        val child = database.child("users").child(user.uid).child(formattedDate)
+        if (fiveThings.isEmpty) {
+            //user hasn't written or has deleted a whole day
+            child.setValue(null)
+        } else {
+            child.setValue(things) { error, ref ->
+                if (error != null) {
+                    Log.d("fivethings", "No error: " + ref)
+                }
             }
         }
     }
