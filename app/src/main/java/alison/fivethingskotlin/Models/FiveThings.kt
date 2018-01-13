@@ -9,7 +9,8 @@ data class FiveThings(
         var two: String,
         var three: String,
         var four: String,
-        var five: String
+        var five: String,
+        var saved: String
 ) {
     val isComplete: Boolean
         get() {

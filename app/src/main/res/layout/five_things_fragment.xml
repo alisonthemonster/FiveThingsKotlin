@@ -132,6 +132,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.one}"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:textSize="15sp"
                         fontPath="fonts/Larsseit.ttf"/>
 
@@ -154,6 +155,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.two}"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:textSize="15sp"
                         fontPath="fonts/Larsseit.ttf" />
 
@@ -176,6 +178,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.three}"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:textSize="15sp"
                         fontPath="fonts/Larsseit.ttf" />
 
@@ -198,6 +201,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.four}"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:textSize="15sp"
                         fontPath="fonts/Larsseit.ttf" />
 
@@ -220,6 +224,7 @@
                         android:minLines="4"
                         android:padding="4dp"
                         android:text="@={fiveThings.five}"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:textSize="15sp"
                         fontPath="fonts/Larsseit.ttf" />
 
@@ -231,7 +236,7 @@
                         android:layout_margin="5dp"
                         android:background="@color/bluegreen"
                         android:onClick="@{() -> viewModel.writeFiveThings(fiveThings)}"
-                        android:text="Save"
+                        android:text="@{fiveThings.saved}"
                         android:textColor="@color/white" />
                 </LinearLayout>
 
