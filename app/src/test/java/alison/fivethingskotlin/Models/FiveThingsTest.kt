@@ -49,7 +49,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    true)
             completeThings.isEmpty shouldEqual false
         }
         "with some empty things" {
@@ -59,7 +60,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    false)
             completeThings.isEmpty shouldEqual false
         }
         "with more empty things" {
@@ -69,7 +71,8 @@ class DatesTest: FreeSpec( {
                     "",
                     "",
                     "",
-                    "")
+                    "",
+                    false)
             completeThings.isEmpty shouldEqual true
         }
     }
