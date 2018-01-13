@@ -10,7 +10,7 @@ data class FiveThings(
         var three: String,
         var four: String,
         var five: String,
-        var saved: String
+        var saved: Boolean
 ) {
     val isComplete: Boolean
         get() {
@@ -23,5 +23,9 @@ data class FiveThings(
     val fullDateString: String
         get() {
             return getFullDateFormat(date)
+        }
+    val savedString: String
+        get() {
+            return if (saved) "Saved" else "Save"
         }
 }

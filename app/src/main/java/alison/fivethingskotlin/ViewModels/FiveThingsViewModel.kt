@@ -41,12 +41,12 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
                             things[2],
                             things[3],
                             things[4],
-                            "Saved")
+                            true)
                     fiveThingsData.value = fiveThings
                     Log.d("fivethings", "data set!")
                 } else {
                     Log.d("fivethings", "no data found for this day")
-                    fiveThingsData.value = FiveThings(date, "", "","","","", "Save")
+                    fiveThingsData.value = FiveThings(date, "", "","","","", false)
                 }
             }
         })
@@ -55,7 +55,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     fun onEditText() {
         val fiveThings = fiveThingsData.value
-        fiveThings?.saved = "Save"
+        fiveThings?.saved = false
         fiveThingsData.value = fiveThings
     }
 
@@ -74,7 +74,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
         database.child("users").child(user.uid).child(formattedDate).setValue(things) { error, ref ->
             if (error != null) {
                 Log.d("fivethings", "No error: " + ref)
-                fiveThings.saved = "Saved"
+                fiveThings.saved = true
                 fiveThingsData.value = fiveThings
             }
         }
