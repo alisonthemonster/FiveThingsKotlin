@@ -63,12 +63,13 @@ class FiveThingsFragment : Fragment() {
             //TODO only pull in for current month?
             viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
                 days?.let{
+                    Log.d("blerg", "updating cal")
                     binding.loading = false
-                    if (!eventsLoaded) {
-                        val events = days.map { convertDateToEvent(it) }
-                        compactCalendarView.addEvents(events)
-                        eventsLoaded = true
-                    }
+                    compactCalendarView.removeAllEvents()
+                    val events = days.map { convertDateToEvent(it) }
+                    compactCalendarView.addEvents(events)
+                    eventsLoaded = true
+
                 }
             })
 
