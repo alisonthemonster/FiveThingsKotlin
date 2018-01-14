@@ -21,10 +21,11 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 
 class FiveThingsFragment : Fragment() {
 
-    val user = FirebaseAuth.getInstance().currentUser
-    var eventsLoaded = false
-    lateinit var viewModel: FiveThingsViewModel
-    lateinit var binding: FiveThingsFragmentBinding
+    private val user = FirebaseAuth.getInstance().currentUser
+    private var eventsLoaded = false
+    private lateinit var viewModel: FiveThingsViewModel
+    private lateinit var binding: FiveThingsFragmentBinding
+    private var date = Date()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +44,7 @@ class FiveThingsFragment : Fragment() {
             })
 
             binding.calendarVisible = false
-            binding.month = getMonth(Date()) + " " + getYear(Date())
+            binding.month = getMonth(date) + " " + getYear(date)
 
             return binding.root
         }

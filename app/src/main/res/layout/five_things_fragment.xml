@@ -42,33 +42,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <Button
+                    android:id="@+id/previous_day"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="0dp"
+                    android:background="@drawable/arrow_left"
+                    app:layout_constraintBottom_toTopOf="@+id/calendar"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/current_date"
+                    android:onClick="@{() -> viewModel.getPreviousDay(fiveThings.date)}" />
+
                 <TextView
                     android:id="@+id/current_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginEnd="0dp"
                     android:layout_marginStart="0dp"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1"
-                    android:paddingBottom="5dp"
                     android:text="@{fiveThings.fullDateString}"
                     android:textColor="@color/white"
                     android:textSize="22sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Wednesday December 55st, 2017" />
+                    tools:text="Friday May 7th, 2017" />
+
+                <Button
+                    android:id="@+id/next_day"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/arrow_right"
+                    app:layout_constraintBottom_toTopOf="@+id/calendar"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/current_date"
+                    android:onClick="@{() -> viewModel.getNextDay(fiveThings.date)}" />
 
                 <LinearLayout
                     android:id="@+id/calendar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:background="@color/bluegreen"
                     android:orientation="vertical"
                     android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
-                    tools:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/current_date">
+                    app:layout_constraintTop_toBottomOf="@+id/current_date"
+                    tools:layout_editor_absoluteX="0dp">
 
                     <TextView
                         android:id="@+id/textView"
@@ -90,7 +117,7 @@
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         app:compactCalendarBackgroundColor="@color/bluegreen"
-                        app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+                        app:compactCalendarCurrentDayBackgroundColor="@color/darker_grey"
                         app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
                         app:compactCalendarMultiEventIndicatorColor="#fff"
                         app:compactCalendarTargetHeight="250dp"
