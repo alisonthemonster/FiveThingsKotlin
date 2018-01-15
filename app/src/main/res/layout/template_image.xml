@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
     <ImageView
-        android:id="@+id/iv_photo"
+        android:id="@+id/design_photo"
         android:adjustViewBounds="true"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
