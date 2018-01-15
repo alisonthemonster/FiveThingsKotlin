@@ -9,7 +9,8 @@ data class FiveThings(
         var two: String,
         var three: String,
         var four: String,
-        var five: String
+        var five: String,
+        var saved: Boolean
 ) {
     val isComplete: Boolean
         get() {
@@ -22,5 +23,17 @@ data class FiveThings(
     val fullDateString: String
         get() {
             return getFullDateFormat(date)
+        }
+    val isEmpty: Boolean
+        get() {
+            return one.isNullOrEmpty() &&
+                    two.isNullOrEmpty() &&
+                    three.isNullOrEmpty() &&
+                    four.isNullOrEmpty() &&
+                    five.isNullOrEmpty()
+        }
+    val savedString: String
+        get() {
+            return if (saved) "Saved" else "Save"
         }
 }

@@ -13,7 +13,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    true)
             completeThings.isComplete shouldEqual true
         }
         "with some empty things" {
@@ -23,7 +24,8 @@ class DatesTest: FreeSpec( {
                     "two",
                     "three",
                     "four",
-                    "five")
+                    "five",
+                    true)
             completeThings.isComplete shouldEqual false
         }
         "with more empty things" {
@@ -33,8 +35,70 @@ class DatesTest: FreeSpec( {
                     "",
                     "",
                     "",
-                    "")
+                    "",
+                    false)
             completeThings.isComplete shouldEqual false
+        }
+    }
+
+    "detects if Five things is empty" - {
+        "with complete things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    true)
+            completeThings.isEmpty shouldEqual false
+        }
+        "with some empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    false)
+            completeThings.isEmpty shouldEqual false
+        }
+        "with more empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    false)
+            completeThings.isEmpty shouldEqual true
+        }
+    }
+
+    "returns correct string for boolean" - {
+        "with saved == true" {
+            val things = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    true)
+            things.savedString shouldEqual "Saved"
+        }
+        "with saved == false" {
+            val things = FiveThings(
+                    Date(),
+                    "one",
+                    "two",
+                    "three",
+                    "four",
+                    "five",
+                    false)
+            things.savedString shouldEqual "Save"
         }
     }
 })
