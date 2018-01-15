@@ -5,6 +5,7 @@ import alison.fivethingskotlin.R
 import alison.fivethingskotlin.ViewModels.DesignsViewModel
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.graphics.Rect
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -22,8 +23,6 @@ import com.google.firebase.storage.FirebaseStorage
 class DesignsFragment : Fragment() {
 
     lateinit var viewModel: DesignsViewModel
-    lateinit var imageNames: ArrayList<String>
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,9 +32,9 @@ class DesignsFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         viewModel = DesignsViewModel()
 
-        viewModel.getDesignImageResources().observe(this, Observer<ArrayList<String>> { images ->
-            images?.let {
-                imageNames = images
+        viewModel.getDesignImageResources().observe(this, Observer<ArrayList<String>> { imageNames ->
+            imageNames?.let {
+                loadImages(imageNames)
             }
         })
 
@@ -45,11 +44,9 @@ class DesignsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        loadImages()
-
     }
 
-    private fun loadImages() {
+    private fun loadImages(imageNames: ArrayList<String>) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.imagegallery)
         recyclerView?.setHasFixedSize(true)
 
@@ -57,6 +54,35 @@ class DesignsFragment : Fragment() {
         recyclerView?.layoutManager = layoutManager
         val adapter = GalleryAdapter(imageNames)
         recyclerView?.adapter = adapter
+        val spanCount = 2
+        val spacing = 30
+        val includeEdge = false
+        recyclerView?.addItemDecoration(ImageDecoration(spanCount, spacing, includeEdge))
+
+    }
+}
+
+class ImageDecoration(private val spanCount: Int, private val spacing: Int, private val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
+
+    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
+        val position = parent.getChildAdapterPosition(view) // item position
+        val column = position % spanCount // item column
+
+        if (includeEdge) {
+            outRect.left = spacing - column * spacing / spanCount // spacing - column * ((1f / spanCount) * spacing)
+            outRect.right = (column + 1) * spacing / spanCount // (column + 1) * ((1f / spanCount) * spacing)
+
+            if (position < spanCount) { // top edge
+                outRect.top = spacing
+            }
+            outRect.bottom = spacing // item bottom
+        } else {
+            outRect.left = column * spacing / spanCount // column * ((1f / spanCount) * spacing)
+            outRect.right = spacing - (column + 1) * spacing / spanCount // spacing - (column + 1) * ((1f /    spanCount) * spacing)
+            if (position >= spanCount) {
+                outRect.top = spacing // item top
+            }
+        }
     }
 }
 
@@ -102,4 +128,6 @@ class GalleryAdapter(images: ArrayList<String>): RecyclerView.Adapter<MyViewHold
            Toast.makeText(context, "ya clicked one yay", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 }
