@@ -16,7 +16,7 @@ import android.view.ViewGroup
 
 class DesignsFragment : Fragment() {
 
-    lateinit var viewModel: DesignsViewModel
+    var viewModel: DesignsViewModel = DesignsViewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +24,6 @@ class DesignsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        viewModel = DesignsViewModel()
-
         viewModel.getDesignImageResources().observe(this, Observer<ArrayList<String>> { imageNames ->
             imageNames?.let {
                 loadImages(imageNames)
