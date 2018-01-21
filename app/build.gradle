@@ -22,32 +22,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-
-        dev {
-            minifyEnabled true
-        }
     }
     dataBinding {
         enabled = true
-    }
-}
-
-
-def build_param = "${build}";
-
-if (build_param != "dev") {
-    //exclude production build
-    android.variantFilter { variant ->
-        if (variant.buildType.name == 'dev') {
-            variant.setIgnore(true)
-        }
-    }
-} else {
-    //exclude all except production build
-    android.variantFilter { variant ->
-        if (variant.buildType.name != 'dev') {
-            variant.setIgnore(true)
-        }
     }
 }
 
