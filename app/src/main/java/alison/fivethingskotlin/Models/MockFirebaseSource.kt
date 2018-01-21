@@ -9,6 +9,8 @@ import java.util.*
 
 class MockFirebaseSource(private val user: FirebaseUser) {
 
+    //TODO find a way to wire this up for testing
+
     fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<FiveThings>): LiveData<FiveThings> {
         val fiveThings = FiveThings(date,
                 "The entry for the first thing",
