@@ -1,14 +1,18 @@
 language: android
 android:
-        components:
-                - platform-tools
-                - build-tools-27.0.1
-                - android-26
-                - extra-android-m2repository
+  components:
+  - platform-tools
+  - build-tools-23.0.1
+  - android-23
+  - extra-android-m2repository
+install:
+- chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
 script:
-        - ./gradlew build
+- ./gradlew build
 before_install:
-        - chmod +x gradlew
+- openssl aes-256-cbc -K $encrypted_5b0e5eaedfc3_key -iv $encrypted_5b0e5eaedfc3_iv
+  -in google-services.json.enc -out app/google-services.json -d
+- chmod +x gradlew
 branches:
-        only:
-                - master
+  only:
+  - master
