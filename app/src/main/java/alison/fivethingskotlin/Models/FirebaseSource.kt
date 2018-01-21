@@ -16,8 +16,7 @@ class FirebaseSource(private val user: FirebaseUser) {
 
     private var database = FirebaseDatabase.getInstance().reference
 
-    fun getFiveThings(date: Date): LiveData<FiveThings> {
-        val fiveThingsData = MutableLiveData<FiveThings>()
+    fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<FiveThings>): LiveData<FiveThings> {
         val formattedDate = getDatabaseStyleDate(date)
         val dateQuery = database.child("users").child(user.uid).child(formattedDate)
         Log.d("fivethings", "date query: " + dateQuery)

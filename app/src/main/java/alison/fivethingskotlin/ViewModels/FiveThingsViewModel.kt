@@ -17,13 +17,11 @@ import java.util.*
 
 class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
-    private var database = FirebaseDatabase.getInstance().reference
     private val fiveThingsData = MutableLiveData<FiveThings>()
-    private val fiveThingsDates = MutableLiveData<List<Date>>()
     private val firebaseSource = FirebaseSource(user)
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
-        return firebaseSource.getFiveThings(date)
+        return firebaseSource.getFiveThings(date, fiveThingsData)
     }
 
     fun onEditText() {
@@ -34,39 +32,8 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     fun writeFiveThings(fiveThings: FiveThings) {
         Log.d("fivethings", "about to write the data: " + fiveThings)
-        val things = ArrayList<String>()
-        things.add(fiveThings.one)
-        things.add(fiveThings.two)
-        things.add(fiveThings.three)
-        things.add(fiveThings.four)
-        things.add(fiveThings.five)
-
-        val formattedDate = getDatabaseStyleDate(fiveThings.date)
-
-        val child = database.child("users").child(user.uid).child(formattedDate)
-        if (fiveThings.isEmpty) {
-            //user hasn't written or has deleted a whole day
-            child.setValue(null)
-        } else {
-            child.setValue(things) { error, ref ->
-                if (error != null) {
-                    fiveThings.saved = true
-                    fiveThingsData.value = fiveThings
-                    Log.d("fivethings", "No error: " + ref)
-                }
-            }
-        }
+        firebaseSource.saveFiveThings(fiveThings, fiveThingsData)
     }
-
-
-//    fun writeFiveThings(fiveThings: FiveThings) {
-//        Log.d("fivethings", "about to write the data: " + fiveThings)
-//
-//
-//        firebaseSource.saveFiveThings(fiveThings, fiveThingsData)
-//
-//
-//    }
 
     fun getPreviousDay(date: Date): LiveData<FiveThings> {
         val prevDate = getPreviousDate(date)
