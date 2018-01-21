@@ -2,8 +2,8 @@ language: android
 android:
   components:
   - platform-tools
-  - build-tools-23.0.1
-  - android-23
+  - build-tools-27.0.1
+  - android-26
   - extra-android-m2repository
 install:
 - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
