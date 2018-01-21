@@ -48,8 +48,6 @@ class FirebaseSource(private val user: FirebaseUser) {
     }
 
     fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<FiveThings>) {
-        val fiveThingsData = MutableLiveData<FiveThings>()
-
         val things = ArrayList<String>()
         things.add(fiveThings.one)
         things.add(fiveThings.two)
