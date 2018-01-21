@@ -5,8 +5,11 @@ android:
                 - build-tools-23.0.1
                 - android-23
                 - extra-android-m2repository
+install:
+  # Ensure Gradle wrapper is executable, download wrapper and show version
+  - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
 script:
-        - ./gradlew build
+        - ./gradlew clean build -Pbuild=dev
 before_install:
         - chmod +x gradlew
 branches:
