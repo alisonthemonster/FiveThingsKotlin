@@ -27,7 +27,7 @@ class DatesTest: FreeSpec( {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
             cal.set(Calendar.MONTH, Calendar.JANUARY)
-            cal.set(Calendar.DAY_OF_MONTH, 25)
+            cal.set(Calendar.DAY_OF_MONTH, 22)
             cal.set(Calendar.HOUR_OF_DAY, 0)
             cal.set(Calendar.MINUTE, 0)
             cal.set(Calendar.SECOND, 0)
