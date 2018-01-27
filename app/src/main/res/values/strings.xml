@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FiveThingsKotlin</string>
+    <string name="app_name">Five Things</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="loading">Loading</string>
