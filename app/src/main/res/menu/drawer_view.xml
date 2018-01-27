@@ -3,23 +3,23 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/five_things_item"
-            android:icon="@drawable/ic_five"
-            android:title="Five Things" />
+            android:icon="@drawable/ic_hand"
+            android:title="@string/five_things" />
         <item
             android:id="@+id/analytics_item"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Analytics" />
+            android:icon="@drawable/ic_analytics"
+            android:title="@string/analytics" />
         <item
             android:id="@+id/templates_item"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Print Designs" />
+            android:icon="@drawable/ic_book"
+            android:title="@string/print_designs" />
         <item
             android:id="@+id/settings_item"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Settings" />
+            android:icon="@drawable/ic_settings"
+            android:title="@string/settings" />
         <item
             android:id="@+id/logout_item"
-            android:icon="@android:drawable/ic_menu_my_calendar"
-            android:title="Log Out" />
+            android:icon="@drawable/ic_signout"
+            android:title="@string/log_out" />
     </group>
 </menu>
