@@ -106,6 +106,7 @@ class ContainerActivity : AppCompatActivity() {
                 }
             }
         }
+        navigationView.setCheckedItem(R.id.five_things_item)
     }
 
     private fun loadFragment(fragment: android.support.v4.app.Fragment) {
