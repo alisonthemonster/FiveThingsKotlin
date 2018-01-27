@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="10dp">
 
     <data>
+
         <import type="android.view.View" />
+
         <variable
             name="viewModel"
-            type="alison.fivethingskotlin.ViewModels.FiveThingsViewModel"/>
+            type="alison.fivethingskotlin.ViewModels.FiveThingsViewModel" />
 
         <variable
             name="fiveThings"
-            type="alison.fivethingskotlin.Models.FiveThings"/>
+            type="alison.fivethingskotlin.Models.FiveThings" />
 
         <variable
             name="date"
@@ -19,15 +22,15 @@
 
         <variable
             name="calendarVisible"
-            type="Boolean"/>
+            type="Boolean" />
 
         <variable
             name="loading"
-            type="Boolean"/>
+            type="Boolean" />
 
         <variable
             name="month"
-            type="String"/>
+            type="String" />
     </data>
 
     <FrameLayout
@@ -53,26 +56,23 @@
                     android:layout_height="20dp"
                     android:layout_marginBottom="0dp"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="0dp"
                     android:background="@drawable/arrow_left"
-                    app:layout_constraintBottom_toTopOf="@+id/calendar"
+                    android:onClick="@{() -> viewModel.getPreviousDay(date)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/current_date"
-                    android:onClick="@{() -> viewModel.getPreviousDay(date)}" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/current_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginStart="0dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="0dp"
                     android:layout_weight="1"
                     android:text="@{fiveThings.fullDateString}"
                     android:textColor="@color/white"
                     android:textSize="22sp"
+                    app:layout_constraintBottom_toTopOf="@+id/calendar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -82,14 +82,13 @@
                     android:id="@+id/next_day"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="0dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="8dp"
                     android:background="@drawable/arrow_right"
-                    app:layout_constraintBottom_toTopOf="@+id/calendar"
+                    android:onClick="@{() -> viewModel.getNextDay(date)}"
+                    app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/current_date"
-                    android:onClick="@{() -> viewModel.getNextDay(date)}" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <LinearLayout
                     android:id="@+id/calendar"
@@ -154,6 +153,7 @@
 
                     <EditText
                         android:id="@+id/one"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -162,11 +162,10 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="4"
                         android:minLines="4"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.one}"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -177,6 +176,7 @@
 
                     <EditText
                         android:id="@+id/two"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -185,11 +185,10 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="4"
                         android:minLines="4"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.two}"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -200,6 +199,7 @@
 
                     <EditText
                         android:id="@+id/three"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -208,11 +208,10 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="4"
                         android:minLines="4"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.three}"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -223,6 +222,7 @@
 
                     <EditText
                         android:id="@+id/four"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -231,11 +231,10 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="4"
                         android:minLines="4"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.four}"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -246,6 +245,7 @@
 
                     <EditText
                         android:id="@+id/five"
+                        fontPath="fonts/Larsseit.ttf"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
@@ -254,11 +254,10 @@
                         android:inputType="textCapSentences|textMultiLine"
                         android:maxLines="4"
                         android:minLines="4"
+                        android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.five}"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:textSize="15sp"
-                        fontPath="fonts/Larsseit.ttf" />
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/save_button"
