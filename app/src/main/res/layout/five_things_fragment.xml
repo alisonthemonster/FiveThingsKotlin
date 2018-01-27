@@ -67,12 +67,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="0dp"
                     android:layout_weight="1"
                     android:text="@{fiveThings.fullDateString}"
                     android:textColor="@color/white"
                     android:textSize="22sp"
-                    app:layout_constraintBottom_toTopOf="@+id/calendar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -90,25 +88,44 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <LinearLayout
+                <android.support.constraint.ConstraintLayout
                     android:id="@+id/calendar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="0dp"
                     android:layout_marginTop="8dp"
                     android:background="@color/bluegreen"
-                    android:orientation="vertical"
                     android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
-                    app:layout_constraintTop_toBottomOf="@+id/current_date"
-                    tools:layout_editor_absoluteX="0dp">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/current_date">
 
                     <TextView
-                        android:id="@+id/textView"
-                        android:layout_width="match_parent"
+                        android:id="@+id/todayButton"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="0dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginTop="10dp"
+                        android:onClick="@{() -> viewModel.getToday()}"
+                        android:text="Today"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="@+id/monthYear"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/monthYear"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="18dp"
+                        android:layout_marginTop="8dp"
                         android:gravity="center_horizontal"
                         android:text="@{month}"
                         android:textColor="@color/white"
+                        android:textSize="20sp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
                         tools:text="Month YEAR" />
 
                     <com.github.sundeepk.compactcalendarview.CompactCalendarView
@@ -117,7 +134,7 @@
                         android:layout_height="250dp"
                         android:layout_marginEnd="8dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         app:compactCalendarBackgroundColor="@color/bluegreen"
@@ -128,19 +145,21 @@
                         app:compactCalendarTextColor="#fff"
                         app:compactCalendarTextSize="12sp"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent" />
-                </LinearLayout>
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/monthYear" />
+                </android.support.constraint.ConstraintLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="0dp"
-                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="8dp"
                     android:orientation="vertical"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/calendar">
 

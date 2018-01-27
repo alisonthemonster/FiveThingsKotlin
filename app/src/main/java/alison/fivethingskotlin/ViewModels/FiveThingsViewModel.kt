@@ -40,6 +40,10 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
         firebaseSource.saveFiveThings(fiveThings, fiveThingsData)
     }
 
+    fun getToday(): LiveData<FiveThings> {
+        return getFiveThings(Date())
+    }
+
     fun getPreviousDay(date: Date): LiveData<FiveThings> {
         val prevDate = getPreviousDate(date)
         return getFiveThings(prevDate)
