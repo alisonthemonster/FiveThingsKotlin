@@ -11,17 +11,22 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
 import java.util.*
 
 
 class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     private val fiveThingsData = MutableLiveData<FiveThings>()
+    private val dateData = MutableLiveData<Date>()
     private val firebaseSource = FirebaseSource(user)
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
+        dateData.value = date
         return firebaseSource.getFiveThings(date, fiveThingsData)
+    }
+
+    fun getDate(): LiveData<Date> {
+        return dateData
     }
 
     fun onEditText() {
