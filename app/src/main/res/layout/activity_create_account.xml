@@ -17,39 +17,40 @@
 
 
         <TextView
-            android:id="@+id/username_label"
+            android:id="@+id/email_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:text="Username"
+            android:layout_marginStart="0dp"
+            android:text="Email"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/create_username"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/create_email"
+            tools:layout_editor_absoluteY="90dp" />
 
         <EditText
-            android:id="@+id/create_username"
+            android:id="@+id/create_email"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:ems="10"
+            android:inputType="textEmailAddress"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/username_label" />
+            app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
         <TextView
-            android:id="@+id/password_label"
+            android:id="@+id/password_label1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
             android:text="Password"
             android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="@+id/create_password"
-            app:layout_constraintTop_toBottomOf="@+id/create_username" />
+            app:layout_constraintStart_toStartOf="@+id/create_password1"
+            app:layout_constraintTop_toBottomOf="@+id/create_email" />
 
         <EditText
-            android:id="@+id/create_password"
+            android:id="@+id/create_password1"
             android:layout_width="270dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -59,22 +60,45 @@
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/password_label" />
+            app:layout_constraintTop_toBottomOf="@+id/password_label1" />
 
+        <TextView
+            android:id="@+id/password_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="4dp"
+            android:text="Password"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="@+id/create_password2"
+            app:layout_constraintTop_toBottomOf="@+id/create_password1" />
+
+        <EditText
+            android:id="@+id/create_password2"
+            android:layout_width="270dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/password_label2" />
 
         <Button
-            android:id="@+id/logInButton"
+            android:id="@+id/getStartedButton2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@color/bluegreen"
             android:padding="6dp"
-            android:text="Log In"
+            android:text="Get Started"
             android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/create_password"
-            app:layout_constraintStart_toStartOf="@+id/create_password"
-            app:layout_constraintTop_toBottomOf="@+id/create_password" />
+            app:layout_constraintEnd_toEndOf="@+id/create_password2"
+            app:layout_constraintStart_toStartOf="@+id/create_password2"
+            app:layout_constraintTop_toBottomOf="@+id/create_password2" />
 
     </android.support.constraint.ConstraintLayout>
 

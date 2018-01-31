@@ -120,7 +120,7 @@ class ContainerActivity : AppCompatActivity() {
 
     private fun logOut() {
         FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, LogInActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         startActivity(intent)
         finish()
