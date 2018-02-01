@@ -1,10 +1,7 @@
-package alison.fivethingskotlin.Models
+package alison.fivethingskotlin.API
 
 import retrofit2.Retrofit
-
-/**
- * Created by Alison on 1/30/18.
- */
+import retrofit2.converter.gson.GsonConverterFactory
 
 class RetrofitHelper {
     companion object {
@@ -14,6 +11,7 @@ class RetrofitHelper {
         fun build(): Retrofit {
             return Retrofit.Builder()
                     .baseUrl(baseUrl)
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build()
 
         }

@@ -1,5 +1,6 @@
-package alison.fivethingskotlin.Models
+package alison.fivethingskotlin.API
 
+import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData

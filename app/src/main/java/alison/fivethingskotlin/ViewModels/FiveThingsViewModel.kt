@@ -1,9 +1,7 @@
 package alison.fivethingskotlin.ViewModels
 
-import alison.fivethingskotlin.Models.FirebaseSource
+import alison.fivethingskotlin.API.FirebaseSource
 import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Util.getDatabaseStyleDate
-import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData

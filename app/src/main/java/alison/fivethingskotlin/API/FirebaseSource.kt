@@ -1,5 +1,6 @@
-package alison.fivethingskotlin.Models
+package alison.fivethingskotlin.API
 
+import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import android.arch.lifecycle.LiveData
@@ -40,7 +41,7 @@ class FirebaseSource(private val user: FirebaseUser) {
                     Log.d("fivethings", "data set!")
                 } else {
                     Log.d("fivethings", "no data found for this day")
-                    fiveThingsData.value = FiveThings(date, "", "","","","", false)
+                    fiveThingsData.value = FiveThings(date, "", "", "", "", "", false)
                 }
             }
         })
