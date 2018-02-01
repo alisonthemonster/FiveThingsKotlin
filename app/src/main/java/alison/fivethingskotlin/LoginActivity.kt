@@ -1,6 +1,8 @@
 package alison.fivethingskotlin
 
+import android.accounts.Account
 import android.accounts.AccountManager
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -28,14 +30,14 @@ class LoginActivity : AppCompatActivity() {
     private fun logIn() {
         email = login_email.text.toString()
         password = login_password.text.toString()
-        //TODO
-        //call nagkumar's service with username and password
-    }
-
-    private fun finishLogin() {
+        //TODO call nagkumar's service with username and password
+        val token = "blahblah fake token"
         val accountManager = AccountManager.get(this)
-//        val acctName = intent.getString(AccountManager.KEY_ACCOUNT_NAME)
-//        accountManager.setPassword(password)
+        val account = Account(email, "FIVE_THINGS")
+        //update password in case it has changed
+        accountManager.setPassword(account, password)
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
 }

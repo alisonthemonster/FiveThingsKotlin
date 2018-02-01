@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 
 
 class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticator(mContext) {
@@ -36,12 +37,16 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
     @Throws(NetworkErrorException::class) //TODO is this needed?
     override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, bundle: Bundle): Bundle {
 
+        Log.d("blerg", "inside getAuthToken")
+
         val accountManager = AccountManager.get(mContext)
         var authToken = accountManager.peekAuthToken(account, authTokenType)
 
         if (TextUtils.isEmpty(authToken)) {
-            //TODO make request to service with saved password and username
+            Log.d("blerg", "no auth token found on device")
+            //TODO make request to nagkumar's service with saved password and username
             //authToken = login(account.name, accountManager.getPassword(account))
+            authToken = "blahblah fake token"
         }
 
         if (!TextUtils.isEmpty(authToken)) {
@@ -49,10 +54,13 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
             result.putString(AccountManager.KEY_AUTHTOKEN, authToken)
+            Log.d("blerg", "built the bundle with found token")
             return result
         }
 
         // If we get here, then we couldn't access the user's password
+        Log.d("blerg", "auth token wasn't retrieved from service, could be bad token")
+        //TODO call invalidateAuthToken here?
         val intent = Intent(mContext, LoginActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra("FIVE_THINGS", account.type)
