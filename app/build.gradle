@@ -52,6 +52,8 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0"
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation "com.squareup.retrofit2:retrofit:2.0.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.0.0"
 }
 
 

@@ -86,7 +86,7 @@
             app:layout_constraintTop_toBottomOf="@+id/password_label2" />
 
         <Button
-            android:id="@+id/getStartedButton2"
+            android:id="@+id/getStartedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
