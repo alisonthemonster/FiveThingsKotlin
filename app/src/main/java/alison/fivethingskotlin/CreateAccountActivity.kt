@@ -100,6 +100,7 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private fun passwordsAreSame(): Boolean {
         //TODO
+        //TODO are there minimums for password length?
         return true
     }
 

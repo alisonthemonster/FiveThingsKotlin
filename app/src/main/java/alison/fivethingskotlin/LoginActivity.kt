@@ -47,10 +47,12 @@ class LoginActivity : AppCompatActivity() {
             resource?.let {
                 if (resource.status == SUCCESS) {
                     Log.d("blerg", "login was successful and token was passed back")
-                    val authToken = resource.data?.tokenString
+                    //val authToken = resource.data?.tokenString //TODO get nagkumar to pass back token
+                    val authToken = "blahblahsomerandomtoken"
                     val accountManager = AccountManager.get(this)
                     val account = Account(email, "FIVE_THINGS")
-                    accountManager.setAuthToken(account, "full_access", authToken)
+                    accountManager.addAccountExplicitly(account, password, null)
+                    accountManager.setAuthToken(account, "FIVE_THINGS", authToken)
                     val intent = Intent(this, ContainerActivity::class.java)
                     //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     //TODO check backstack here

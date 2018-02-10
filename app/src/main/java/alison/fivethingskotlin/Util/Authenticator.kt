@@ -37,7 +37,7 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
     @Throws(NetworkErrorException::class) //TODO is this needed?
     override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, bundle: Bundle): Bundle {
 
-        Log.d("blerg", "inside getAuthToken")
+        Log.d("blerg", "inside getAuthToken with authTokenType: " + authTokenType)
 
         val accountManager = AccountManager.get(mContext)
         val authToken = accountManager.peekAuthToken(account, authTokenType)
@@ -52,7 +52,7 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
         }
 
         // If we get here, then we couldn't get a token
-        Log.d("blerg", "auth token wasn't retrieved from service, could be bad token")
+        Log.d("blerg", "auth token wasn't retrieved from cache")
         //TODO call invalidateAuthToken here?
         val intent = Intent(mContext, LoginActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
