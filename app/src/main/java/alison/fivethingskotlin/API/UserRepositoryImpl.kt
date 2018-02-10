@@ -18,11 +18,11 @@ class UserRepositoryImpl: UserRepository {
     val retrofit = RetrofitHelper.build().create(AuthService::class.java)
 
     override fun createUser(userData: CreateUserRequest): LiveData<Resource<Token>> {
+
         val liveData = MutableLiveData<Resource<Token>>()
         Log.d("blerg", "about to make request")
 
         //TODO is email validation being done on server, or should client do it?
-
 
         val call = retrofit.createUser(userData)
         call.enqueue(object : Callback<Token> {

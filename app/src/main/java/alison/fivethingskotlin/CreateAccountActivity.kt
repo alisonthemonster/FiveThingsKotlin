@@ -38,17 +38,8 @@ class CreateAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
 
-        name = create_name.text.toString()
-        email = create_email.text.toString()
-        password1 = create_password1.text.toString()
-        password2 = create_password2.text.toString()
 
-//        create_name.addTextChangedListener(watcher)
-//        create_email.addTextChangedListener(watcher)
-//        create_password1.addTextChangedListener(watcher)
-//        create_password2.addTextChangedListener(watcher)
-//
-//        checkValidation()
+
 
         getStartedButton.setOnClickListener{
             createAccount()
@@ -61,7 +52,10 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     private fun createAccount() {
-
+        name = create_name.text.toString()
+        email = create_email.text.toString()
+        password1 = create_password1.text.toString()
+        password2 = create_password2.text.toString()
 
         //TODO change appearance of disabled button
         //TODO add loading indicator
@@ -72,7 +66,7 @@ class CreateAccountActivity : AppCompatActivity() {
             val userRepository = UserRepositoryImpl()
             //binding.loading = true
 
-            userRepository.createUser(CreateUserRequest( name, email, password1)).observe(this, Observer<Resource<Token>> { resource ->
+            userRepository.createUser(CreateUserRequest(name, password1, email)).observe(this, Observer<Resource<Token>> { resource ->
                 resource?.let {
                     //binding.loading = false
                     if (resource.status == Status.SUCCESS) {
