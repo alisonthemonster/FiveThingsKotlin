@@ -35,7 +35,10 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
         }
     }
 
+    //TODO a back press crashes the app
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        Log.d("blerg", "request code: " + requestCode)
         when (requestCode) {
             CREATE_ACCOUNT -> {
                 Log.d("blerg", "onActivityResult with CREATE_ACCOUNT")
@@ -68,15 +71,14 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
             val bundle = result.result
             if (bundle.getString(AccountManager.KEY_INTENT) != null) {
                 Log.d("blerg", "About to launch login activity, bc no good token found")
-                //no token found on device and a reattempt for log in didn't work
-                //show log in screen to force manual entry
+                //no token found on device, show log in screen to force manual entry
                 val intent = Intent(applicationContext, LoginActivity::class.java) //TODO double check this is right context
                 startActivityForResult(intent, SIGN_IN)
                 return
             }
             Log.d("blerg", "BLESSED TOKEN HAS BEEN RECEIVED! About to fully open app")
             val token = bundle.getString(AccountManager.KEY_AUTHTOKEN)
-            val intent = Intent(applicationContext, ContainerActivity::class.java) //TODO double check this is right context
+            val intent = Intent(applicationContext, ContainerActivity::class.java)
             startActivity(intent)
         }
 

@@ -5,7 +5,6 @@ import alison.fivethingskotlin.Fragments.DesignsFragment
 import alison.fivethingskotlin.Fragments.FiveThingsFragment
 import alison.fivethingskotlin.Fragments.SettingsFragment
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -15,11 +14,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import com.google.firebase.auth.FirebaseAuth
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-
-
-
 
 class ContainerActivity : AppCompatActivity() {
 
@@ -97,10 +92,6 @@ class ContainerActivity : AppCompatActivity() {
                     loadFragment(SettingsFragment())
                     true
                 }
-                R.id.logout_item -> {
-                    logOut()
-                    true
-                }
                 else -> {
                     true
                 }
@@ -118,11 +109,4 @@ class ContainerActivity : AppCompatActivity() {
         drawerLayout.closeDrawers()
     }
 
-    private fun logOut() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, LoginActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-        startActivity(intent)
-        finish()
-    }
 }

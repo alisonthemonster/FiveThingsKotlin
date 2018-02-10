@@ -40,14 +40,7 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
         Log.d("blerg", "inside getAuthToken")
 
         val accountManager = AccountManager.get(mContext)
-        var authToken = accountManager.peekAuthToken(account, authTokenType)
-
-        if (TextUtils.isEmpty(authToken)) {
-            Log.d("blerg", "no auth token found on device")
-            //TODO make request to nagkumar's service with saved password and username
-            //authToken = login(account.name, accountManager.getPassword(account))
-            authToken = "blahblah fake token"
-        }
+        val authToken = accountManager.peekAuthToken(account, authTokenType)
 
         if (!TextUtils.isEmpty(authToken)) {
             val result = Bundle()
@@ -58,7 +51,7 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
             return result
         }
 
-        // If we get here, then we couldn't access the user's password
+        // If we get here, then we couldn't get a token
         Log.d("blerg", "auth token wasn't retrieved from service, could be bad token")
         //TODO call invalidateAuthToken here?
         val intent = Intent(mContext, LoginActivity::class.java)

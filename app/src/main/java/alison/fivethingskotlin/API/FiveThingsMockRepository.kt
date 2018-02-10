@@ -8,11 +8,11 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseUser
 import java.util.*
 
-class MockFirebaseSource(private val user: FirebaseUser) {
+class FiveThingsMockRepository(private val user: FirebaseUser): FiveThingsRepository {
 
     //TODO find a way to wire this up for testing
 
-    fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<FiveThings>): LiveData<FiveThings> {
+    override fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<FiveThings>): LiveData<FiveThings> {
         val fiveThings = FiveThings(date,
                 "The entry for the first thing",
                 "The entry for the second thing",
@@ -26,12 +26,12 @@ class MockFirebaseSource(private val user: FirebaseUser) {
         return fiveThingsData
     }
 
-    fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<FiveThings>) {
+    override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<FiveThings>) {
         fiveThings.saved = true
         fiveThingsData.value = fiveThings
     }
 
-    fun getWrittenDates(): MutableLiveData<List<Date>> {
+    override fun getWrittenDates(): MutableLiveData<List<Date>> {
         val fiveThingsDates = MutableLiveData<List<Date>>()
 
         val yesterday = getPreviousDate(Date())

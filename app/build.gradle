@@ -40,7 +40,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage:11.8.0'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -52,9 +51,12 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.0.0"
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.google.firebase:firebase-database:11.8.0'
     implementation "com.squareup.retrofit2:retrofit:2.3.0"
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.google.code.gson:gson:2.8.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
+    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
 
 }
 

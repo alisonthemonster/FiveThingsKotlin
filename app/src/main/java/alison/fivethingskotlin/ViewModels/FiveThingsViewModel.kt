@@ -1,6 +1,6 @@
 package alison.fivethingskotlin.ViewModels
 
-import alison.fivethingskotlin.API.FirebaseSource
+import alison.fivethingskotlin.API.FiveThingsFirebaseRepository
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
@@ -16,7 +16,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     private val fiveThingsData = MutableLiveData<FiveThings>()
     private val dateData = MutableLiveData<Date>()
-    private val firebaseSource = FirebaseSource(user)
+    private val firebaseSource = FiveThingsFirebaseRepository(user)
 
     fun getFiveThings(date: Date): LiveData<FiveThings> {
         dateData.value = date
