@@ -48,16 +48,17 @@ dependencies {
     testCompile 'io.kotlintest:kotlintest:2.0.5'
     kapt 'com.android.databinding:compiler:3.1.0-alpha05'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "android.arch.lifecycle:extensions:1.0.0"
+    implementation 'android.arch.lifecycle:extensions:1.0.0'
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.google.firebase:firebase-database:11.8.0'
-    implementation "com.squareup.retrofit2:retrofit:2.3.0"
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
-    implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"
-    implementation "io.reactivex.rxjava2:rxandroid:2.0.1"
-
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'com.squareup.okhttp3:okhttp:3.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
 }
 
 
