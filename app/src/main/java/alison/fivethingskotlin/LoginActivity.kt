@@ -28,6 +28,8 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+        //TODO add loading screen
+
         logInButton.setOnClickListener{
             logIn()
         }
@@ -41,32 +43,43 @@ class LoginActivity : AppCompatActivity() {
         email = login_email.text.toString()
         password = login_password.text.toString()
 
-        val userRepository = UserRepositoryImpl()
+        if (allFieldsAreFilledOut()) {
 
-        userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
-            resource?.let {
-                if (resource.status == SUCCESS) {
-                    Log.d("blerg", "login was successful and token was passed back")
-                    //val authToken = resource.data?.tokenString //TODO get nagkumar to pass back token
-                    val authToken = "blahblahsomerandomtoken"
-                    val accountManager = AccountManager.get(this)
-                    val account = Account(email, "FIVE_THINGS")
-                    accountManager.addAccountExplicitly(account, password, null)
-                    accountManager.setAuthToken(account, "FIVE_THINGS", authToken)
-                    val intent = Intent(this, ContainerActivity::class.java)
-                    //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                    //TODO check backstack here
-                    startActivity(intent)
-                    setResult(Activity.RESULT_OK)
-                    finish()
-                } else {
-                    Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                    Log.d("blerg", "error response found by activity")
+            val userRepository = UserRepositoryImpl()
+
+            userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
+                resource?.let {
+                    if (resource.status == SUCCESS) {
+                        Log.d("blerg", "login was successful and token was passed back")
+                        //val authToken = resource.data?.tokenString //TODO get nagkumar to pass back token
+                        val authToken = "blahblahsomerandomtoken"
+                        val accountManager = AccountManager.get(this)
+                        val account = Account(email, "FIVE_THINGS")
+                        accountManager.addAccountExplicitly(account, password, null)
+                        accountManager.setAuthToken(account, "FIVE_THINGS", authToken)
+                        val intent = Intent(this, ContainerActivity::class.java)
+                        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                        //TODO check backstack here
+                        startActivity(intent)
+                        setResult(Activity.RESULT_OK)
+                        finish()
+                    } else {
+                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+                        Log.d("blerg", "error response found by activity")
+                    }
+
                 }
+            })
+        }
+    }
 
-            }
-        })
-
+    private fun allFieldsAreFilledOut(): Boolean {
+        if (email.isNotEmpty() && password.isNotEmpty()) {
+            return true
+        } else {
+            Toast.makeText(this, "Fill out all fields", Toast.LENGTH_SHORT).show()
+            return false
+        }
     }
 
 }
