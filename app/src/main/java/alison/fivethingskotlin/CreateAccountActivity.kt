@@ -53,8 +53,6 @@ class CreateAccountActivity : AppCompatActivity() {
         password1 = create_password1.text.toString()
         password2 = create_password2.text.toString()
 
-        //TODO add loading indicator
-
         Log.d("blerg", "inside createAccount")
 
         if (allFieldsComplete() && passwordsAreAllGood() && emailIsValid()) {
@@ -75,7 +73,6 @@ class CreateAccountActivity : AppCompatActivity() {
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     } else {
-                        //TODO present user with error
                         Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                         Log.d("blerg", "error response found by activity")
                     }

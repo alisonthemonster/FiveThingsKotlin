@@ -20,8 +20,6 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
         val liveData = MutableLiveData<Resource<Token>>()
         Log.d("blerg", "about to make request")
 
-        //TODO is email validation being done on server, or should client do it?
-
         val call = authService.createUser(userData)
         call.enqueue(object : Callback<Token> {
             override fun onFailure(call: Call<Token>?, t: Throwable?) {
