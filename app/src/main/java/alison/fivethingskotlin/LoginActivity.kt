@@ -22,9 +22,9 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class LoginActivity : AppCompatActivity() {
 
-    lateinit var email: String
-    lateinit var password: String
-    lateinit var binding: ActivityLogInBinding
+    private lateinit var email: String
+    private lateinit var password: String
+    private lateinit var binding: ActivityLogInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,8 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     binding.setLoading(false)
                     if (resource.status == SUCCESS) {
                         Log.d("blerg", "login was successful and token was passed back")
-                        //val authToken = resource.data?.tokenString //TODO get nagkumar to pass back token
-                        val authToken = "blahblahsomerandomtoken"
+                        val authToken = resource.data?.token
                         val accountManager = AccountManager.get(this)
                         val account = Account(email, "FIVE_THINGS")
                         accountManager.addAccountExplicitly(account, password, null)

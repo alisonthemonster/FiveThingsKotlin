@@ -47,10 +47,6 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
         val call = authService.logInUser(userData)
         call.enqueue(object : Callback<Token> {
             override fun onResponse(call: Call<Token>, response: Response<Token>) {
-                Log.d("blerg", response.code().toString())
-                Log.d("blerg", response.message())
-                Log.d("blerg", response.isSuccessful.toString())
-
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {

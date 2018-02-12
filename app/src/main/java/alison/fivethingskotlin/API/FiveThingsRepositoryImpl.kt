@@ -1,9 +1,6 @@
 package alison.fivethingskotlin.API
 
-import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Models.FiveThingsRequest
-import alison.fivethingskotlin.Models.Status
-import alison.fivethingskotlin.Models.Token
+import alison.fivethingskotlin.Models.*
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
@@ -44,29 +41,65 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         Log.d("blerg", "about to make request to save day")
 
         if (fiveThings.isEmpty) {
-            //TODO we want to delete entry
-        }
+            val call = fiveThingsService.deleteFiveThings(getDatabaseStyleDate(fiveThings.date))
+            call.enqueue(object : Callback<Response<Void>> {
 
-        val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date),
-                arrayOf(fiveThings.one, fiveThings.two, fiveThings.three, fiveThings.four, fiveThings.five))
-
-        val call = fiveThingsService.writeFiveThings(requestBody)
-        call.enqueue(object : Callback<> {
-            override fun onResponse(call: Call<FiveThings>?, response: Response<FiveThings>) {
-                if (response.isSuccessful) {
-                    fiveThings.saved = true
-                    fiveThingsData.value = Resource(Status.SUCCESS, "Saved!", fiveThings)
-                } else {
-                    fiveThingsData.value = Resource(Status.ERROR, response.message(), response.body())
+                override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
+                    if (response.isSuccessful) {
+                        //TODO somehow find a way to tell client to get new list of dates written
+                    } else {
+                        //TODO
+                    }
                 }
-            }
 
-            override fun onFailure(call: Call<FiveThings>?, t: Throwable?) {
-                //TODO
-                Log.d("blerg", "on failure babyyyy")
-                t?.printStackTrace()
+                override fun onFailure(call: Call<Response<Void>>?, t: Throwable?) {
+                    //TODO
+                    Log.d("blerg", "on failure babyyyy")
+                    t?.printStackTrace()
+                }
+            })
+        } else {
+            val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date),
+                    arrayOf(fiveThings.one, fiveThings.two, fiveThings.three, fiveThings.four, fiveThings.five))
+
+            if (fiveThings.saved) {
+                val call = fiveThingsService.updateFiveThings(requestBody)
+                call.enqueue(object : Callback<Message> {
+                    override fun onResponse(call: Call<Message>?, response: Response<Message>) {
+                        if (response.isSuccessful) {
+                            fiveThings.saved = true
+                            fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
+                        } else {
+                            //TODO
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Message>?, t: Throwable?) {
+                        //TODO
+                        Log.d("blerg", "on failure babyyyy")
+                        t?.printStackTrace()
+                    }
+                })
+            } else {
+                val call = fiveThingsService.writeFiveThings(requestBody)
+                call.enqueue(object : Callback<Message> {
+                    override fun onResponse(call: Call<Message>?, response: Response<Message>) {
+                        if (response.isSuccessful) {
+                            fiveThings.saved = true
+                            fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
+                        } else {
+                            //TODO
+                        }
+                    }
+
+                    override fun onFailure(call: Call<Message>?, t: Throwable?) {
+                        //TODO
+                        Log.d("blerg", "on failure babyyyy")
+                        t?.printStackTrace()
+                    }
+                })
             }
-        })
+        }
     }
 
     override fun getWrittenDates(): MutableLiveData<Resource<List<Date>>> {

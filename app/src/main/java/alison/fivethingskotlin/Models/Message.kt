@@ -1,3 +1,3 @@
 package alison.fivethingskotlin.Models
 
-data class Token(var token: String)
+data class Message(var content: String)

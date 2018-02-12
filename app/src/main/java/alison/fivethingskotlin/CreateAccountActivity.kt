@@ -67,7 +67,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         val account = Account(email, "FIVE_THINGS")
                         val accountManager = AccountManager.get(this)
                         accountManager.addAccountExplicitly(account, password1, null)
-                        accountManager.setAuthToken(account, "full_service", resource.data?.tokenString)
+                        accountManager.setAuthToken(account, "full_service", resource.data?.token)
                         val intent = Intent()
                         intent.putExtra("ACCOUNT", account)
                         setResult(Activity.RESULT_OK, intent)
