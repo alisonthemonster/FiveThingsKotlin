@@ -5,12 +5,14 @@ import alison.fivethingskotlin.Models.CreateUserRequest
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Models.Token
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.databinding.ActivityCreateAccountBinding
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -22,14 +24,18 @@ import java.util.regex.Pattern
 
 class CreateAccountActivity : AppCompatActivity() {
 
-    lateinit var name: String
-    lateinit var email: String
-    lateinit var password1: String
-    lateinit var password2: String
+    private lateinit var name: String
+    private lateinit var email: String
+    private lateinit var password1: String
+    private lateinit var password2: String
+    private lateinit var binding: ActivityCreateAccountBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
 
         getStartedButton.setOnClickListener{
             createAccount()
@@ -52,12 +58,12 @@ class CreateAccountActivity : AppCompatActivity() {
         Log.d("blerg", "inside createAccount")
 
         if (allFieldsComplete() && passwordsAreAllGood() && emailIsValid()) {
-            val userRepository = UserRepositoryImpl()
-            //binding.loading = true
+            binding.setLoading(true)
 
+            val userRepository = UserRepositoryImpl()
             userRepository.createUser(CreateUserRequest(name, password1, email)).observe(this, Observer<Resource<Token>> { resource ->
                 resource?.let {
-                    //binding.loading = false
+                    binding.setLoading(false)
                     if (resource.status == Status.SUCCESS) {
                         Log.d("blerg", "token created by nagkumar and passed back successfully")
                         val account = Account(email, "FIVE_THINGS")
