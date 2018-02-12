@@ -43,6 +43,10 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
     override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
         Log.d("blerg", "about to make request to save day")
 
+        if (fiveThings.isEmpty) {
+            //TODO we want to delete entry
+        }
+
         val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date),
                 arrayOf(fiveThings.one, fiveThings.two, fiveThings.three, fiveThings.four, fiveThings.five))
 

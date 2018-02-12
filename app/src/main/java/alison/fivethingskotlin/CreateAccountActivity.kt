@@ -13,16 +13,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_account.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import android.R.attr.data
-import android.arch.lifecycle.LiveData
-
-
+import java.util.regex.Pattern
 
 
 class CreateAccountActivity : AppCompatActivity() {
@@ -32,14 +27,9 @@ class CreateAccountActivity : AppCompatActivity() {
     lateinit var password1: String
     lateinit var password2: String
 
-    //TODO font not working in this activity
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_account)
-
-
-
 
         getStartedButton.setOnClickListener{
             createAccount()
@@ -57,12 +47,11 @@ class CreateAccountActivity : AppCompatActivity() {
         password1 = create_password1.text.toString()
         password2 = create_password2.text.toString()
 
-        //TODO change appearance of disabled button
         //TODO add loading indicator
 
         Log.d("blerg", "inside createAccount")
 
-        if (passwordsAreSame()) {
+        if (allFieldsComplete() && passwordsAreAllGood() && emailIsValid()) {
             val userRepository = UserRepositoryImpl()
             //binding.loading = true
 
@@ -86,39 +75,47 @@ class CreateAccountActivity : AppCompatActivity() {
                     }
                 }
             })
-        } else {
-            //TODO notify user passwords dont match
         }
-
-    }
-
-    private fun passwordsAreSame(): Boolean {
-        //TODO
-        //TODO are there minimums for password length?
-        return true
     }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    fun checkValidation() {
-        getStartedButton.isEnabled = !(name.isEmpty() || password1.isEmpty() || password2.isEmpty() || email.isEmpty())
-    }
-
-    var watcher: TextWatcher = object : TextWatcher {
-
-        override fun onTextChanged(s: CharSequence, start: Int, before: Int,
-                                   count: Int) {
-            checkValidation()
-        }
-
-        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int,
-                                       after: Int) {
-
-        }
-
-        override fun afterTextChanged(s: Editable) {
+    private fun passwordsAreAllGood(): Boolean {
+        return if (password1 == password2) {
+            if (password1.length < 6) {
+                Toast.makeText(this, "Password needs to be at least 6 characters", Toast.LENGTH_SHORT).show()
+                false
+            } else
+                true
+        } else {
+            Toast.makeText(this, "Passwords don't match", Toast.LENGTH_SHORT).show()
+            false
         }
     }
+
+    private fun emailIsValid(): Boolean {
+        val emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$"
+        val pat = Pattern.compile(emailRegex)
+        if (pat.matcher(email).matches()) {
+            return true
+        } else {
+            Toast.makeText(this, "Not a valid email", Toast.LENGTH_SHORT).show()
+            return false
+        }
+    }
+
+    private fun allFieldsComplete(): Boolean {
+        if (name.isNotEmpty() && password1.isNotEmpty() && password2.isNotEmpty() && email.isNotEmpty()) {
+            return true
+        } else {
+            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
+            return false
+        }
+    }
+
 }

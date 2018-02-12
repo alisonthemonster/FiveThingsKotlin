@@ -19,6 +19,7 @@ interface FiveThingsService {
     @GET("get_info_for_day/{dayString}")
     fun getFiveThings(@Path("dayString") day: String): Call<FiveThings>
 
+    //TODO what are the differences between put, post, and delete
     @PUT("log_day")
     fun writeFiveThings(fiveThingsRequest: FiveThingsRequest) //TODO what kind of response is this?
 
