@@ -13,9 +13,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserRepositoryImpl: UserRepository {
-
-    val retrofit = RetrofitHelper.build().create(AuthService::class.java)
+class UserRepositoryImpl(private val authService: AuthService = AuthService.create()): UserRepository {
 
     override fun createUser(userData: CreateUserRequest): LiveData<Resource<Token>> {
 
@@ -24,7 +22,7 @@ class UserRepositoryImpl: UserRepository {
 
         //TODO is email validation being done on server, or should client do it?
 
-        val call = retrofit.createUser(userData)
+        val call = authService.createUser(userData)
         call.enqueue(object : Callback<Token> {
             override fun onFailure(call: Call<Token>?, t: Throwable?) {
                 //TODO
@@ -48,7 +46,7 @@ class UserRepositoryImpl: UserRepository {
 
     override fun logIn(userData: LogInUserRequest): LiveData<Resource<Token>> {
         val liveData = MutableLiveData<Resource<Token>>()
-        val call = retrofit.logInUser(userData)
+        val call = authService.logInUser(userData)
         call.enqueue(object : Callback<Token> {
             override fun onResponse(call: Call<Token>, response: Response<Token>) {
                 Log.d("blerg", response.code().toString())

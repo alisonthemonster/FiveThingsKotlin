@@ -1,6 +1,8 @@
 package alison.fivethingskotlin.API
 
 import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import android.arch.lifecycle.LiveData
@@ -17,7 +19,7 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
 
     private var database = FirebaseDatabase.getInstance().reference
 
-    override fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<FiveThings>): LiveData<FiveThings> {
+    override fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
         val formattedDate = getDatabaseStyleDate(date)
         val dateQuery = database.child("users").child(user.uid).child(formattedDate)
         Log.d("fivethings", "date query: " + dateQuery)
@@ -37,18 +39,19 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
                             things[3],
                             things[4],
                             true)
-                    fiveThingsData.value = fiveThings
+                    fiveThingsData.value = Resource(Status.SUCCESS, "", fiveThings)
                     Log.d("fivethings", "data set!")
                 } else {
                     Log.d("fivethings", "no data found for this day")
-                    fiveThingsData.value = FiveThings(date, "", "", "", "", "", false)
+                    val emptyDay = FiveThings(date, "", "", "", "", "", false)
+                    fiveThingsData.value = Resource(Status.SUCCESS, "", emptyDay)
                 }
             }
         })
         return fiveThingsData
     }
 
-    override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<FiveThings>) {
+    override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
         val things = ArrayList<String>()
         things.add(fiveThings.one)
         things.add(fiveThings.two)
@@ -66,19 +69,22 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
             child.setValue(things) { error, ref ->
                 if (error != null) {
                     fiveThings.saved = true
-                    fiveThingsData.value = fiveThings
+                    fiveThingsData.value = Resource(Status.SUCCESS, "", fiveThings)
                     Log.d("fivethings", "No error: " + ref)
+                } else {
+                    fiveThingsData.value = Resource(Status.ERROR, "error found", error)
                 }
             }
         }
     }
 
-    override fun getWrittenDates(): MutableLiveData<List<Date>> {
-        val fiveThingsDates = MutableLiveData<List<Date>>()
+    override fun getWrittenDates(): MutableLiveData<Resource<List<Date>>> {
+        val fiveThingsDates = MutableLiveData<Resource<List<Date>>>()
         val query = database.child("users").child(user.uid)
         query.addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError?) {
-                Log.e("fivethings", p0.toString())
+            override fun onCancelled(error: DatabaseError?) {
+                Log.e("fivethings", error.toString())
+                fiveThingsDates.value = Resource(Status.ERROR, error.toString(), null)
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -86,7 +92,7 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
                 val dayStrings = results.keys
                 Log.d("blerg", "dayStrings: " + dayStrings)
                 val days = dayStrings.map { getDateFromDatabaseStyle(it) }
-                fiveThingsDates.value = days
+                fiveThingsDates.value = Resource(Status.SUCCESS, "", days)
             }
         })
         return fiveThingsDates

@@ -14,11 +14,11 @@ data class FiveThings(
 ) {
     val isComplete: Boolean
         get() {
-            return !one.isNullOrEmpty() &&
-                    !two.isNullOrEmpty() &&
-                    !three.isNullOrEmpty() &&
-                    !four.isNullOrEmpty() &&
-                    !five.isNullOrEmpty()
+            return !one.isEmpty() &&
+                    !two.isEmpty() &&
+                    !three.isEmpty() &&
+                    !four.isEmpty() &&
+                    !five.isEmpty()
         }
     val fullDateString: String
         get() {
@@ -26,11 +26,11 @@ data class FiveThings(
         }
     val isEmpty: Boolean
         get() {
-            return one.isNullOrEmpty() &&
-                    two.isNullOrEmpty() &&
-                    three.isNullOrEmpty() &&
-                    four.isNullOrEmpty() &&
-                    five.isNullOrEmpty()
+            return one.isEmpty() &&
+                    two.isEmpty() &&
+                    three.isEmpty() &&
+                    four.isEmpty() &&
+                    five.isEmpty()
         }
     val savedString: String
         get() {
