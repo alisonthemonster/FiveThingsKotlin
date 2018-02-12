@@ -2,16 +2,17 @@ package alison.fivethingskotlin
 
 import alison.fivethingskotlin.API.UserRepositoryImpl
 import alison.fivethingskotlin.Models.LogInUserRequest
-import alison.fivethingskotlin.Models.Status
-import alison.fivethingskotlin.Models.Status.*
+import alison.fivethingskotlin.Models.Status.SUCCESS
 import alison.fivethingskotlin.Models.Token
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.databinding.ActivityLogInBinding
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -23,12 +24,13 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var email: String
     lateinit var password: String
+    lateinit var binding: ActivityLogInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-        //TODO add loading screen
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
         logInButton.setOnClickListener{
             logIn()
@@ -44,11 +46,12 @@ class LoginActivity : AppCompatActivity() {
         password = login_password.text.toString()
 
         if (allFieldsAreFilledOut()) {
+            binding.setLoading(true)
 
             val userRepository = UserRepositoryImpl()
-
             userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
                 resource?.let {
+                    binding.setLoading(false)
                     if (resource.status == SUCCESS) {
                         Log.d("blerg", "login was successful and token was passed back")
                         //val authToken = resource.data?.tokenString //TODO get nagkumar to pass back token
