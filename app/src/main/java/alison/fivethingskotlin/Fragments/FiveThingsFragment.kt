@@ -3,6 +3,7 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.Models.FiveThings
 import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.convertDateToEvent
 import alison.fivethingskotlin.Util.getMonth
 import alison.fivethingskotlin.Util.getYear
@@ -26,20 +27,15 @@ class FiveThingsFragment : Fragment() {
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FiveThingsFragmentBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         user?.let {
             viewModel = FiveThingsViewModel(user)
 
             binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
-            viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
-                binding.fiveThings = fiveThings
+            viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
+                binding.fiveThings = fiveThings?.data
             })
 
             binding.calendarVisible = false
@@ -49,7 +45,7 @@ class FiveThingsFragment : Fragment() {
         }
         //TODO handle case where user get here without logging in
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.five_things_fragment, container, false)
+        return inflater.inflate(R.layout.five_things_fragment, container, false)
     }
 
     override fun onStart() {
@@ -69,12 +65,12 @@ class FiveThingsFragment : Fragment() {
             binding.loading = true
 
             //TODO only pull in for current month?
-            viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
+            viewModel.getWrittenDays().observe(this, Observer< Resource<List<Date>>> { days ->
                 days?.let{
                     Log.d("blerg", "updating cal")
                     binding.loading = false
                     compactCalendarView.removeAllEvents()
-                    val events = days.map { convertDateToEvent(it) }
+                    val events = days.data?.map { convertDateToEvent(it) }
                     compactCalendarView.addEvents(events)
                     eventsLoaded = true
 

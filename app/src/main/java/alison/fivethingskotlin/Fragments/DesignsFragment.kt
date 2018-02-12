@@ -18,12 +18,7 @@ class DesignsFragment : Fragment() {
 
     lateinit var viewModel: DesignsViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewModel = DesignsViewModel()
 
         viewModel.getDesignImageResources().observe(this, Observer<ArrayList<String>> { imageNames ->
@@ -33,11 +28,7 @@ class DesignsFragment : Fragment() {
         })
 
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.designs_fragment, container, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
+        return inflater.inflate(R.layout.designs_fragment, container, false)
     }
 
     private fun loadImages(imageNames: ArrayList<String>) {
