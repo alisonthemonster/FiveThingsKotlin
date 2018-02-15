@@ -68,6 +68,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         val accountManager = AccountManager.get(this)
                         accountManager.addAccountExplicitly(account, password1, null)
                         accountManager.setAuthToken(account, "full_service", resource.data?.token)
+                        //accountManager.setPassword(account, refreshToken) //TODO get refresh token
                         val intent = Intent()
                         intent.putExtra("ACCOUNT", account)
                         setResult(Activity.RESULT_OK, intent)
@@ -120,5 +121,4 @@ class CreateAccountActivity : AppCompatActivity() {
             return false
         }
     }
-
 }

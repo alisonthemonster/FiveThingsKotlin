@@ -19,11 +19,17 @@ class RetrofitHelper {
         }
 
         private val httpClient by lazy {
+
             val httpClient = OkHttpClient.Builder()
 
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             httpClient.addNetworkInterceptor(httpLoggingInterceptor)
+
+            val tokenHeaderInterceptor = TokenHeaderInterceptor()
+            val tokenAuthenticator = TokenAuthenticator()
+            httpClient.addNetworkInterceptor(tokenHeaderInterceptor)
+            httpClient.authenticator(tokenAuthenticator)
 
             httpClient.build()
         }

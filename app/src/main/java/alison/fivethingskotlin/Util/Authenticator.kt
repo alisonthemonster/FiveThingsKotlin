@@ -43,6 +43,7 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
         val authToken = accountManager.peekAuthToken(account, authTokenType)
 
         if (!TextUtils.isEmpty(authToken)) {
+            //we found a token and its all good
             val result = Bundle()
             result.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
             result.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
@@ -51,9 +52,23 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
             return result
         }
 
-        // If we get here, then we couldn't get a token
+        //we found an old token in the "password"
+        //we can use it to make a refresh call
+        val password = accountManager.getPassword(account)
+        if (password != null) {
+            Log.d("blerg", "going to try to refresh token!")
+            val newToken = "blah" //TODO call refresh endpoint
+            val refreshToken = "bleepbloop"
+            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
+            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
+            bundle.putString(AccountManager.KEY_AUTHTOKEN, newToken)
+            accountManager.setPassword(account, refreshToken)
+            return bundle
+
+        }
+
+        //we couldn't get a token
         Log.d("blerg", "auth token wasn't retrieved from cache")
-        //TODO call invalidateAuthToken here?
         val intent = Intent(mContext, LoginActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra("FIVE_THINGS", account.type)
@@ -62,7 +77,6 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
         val retBundle = Bundle()
         retBundle.putParcelable(AccountManager.KEY_INTENT, intent)
         return retBundle
-
     }
 
     // Ignore attempts to confirm credentials
