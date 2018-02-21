@@ -43,8 +43,6 @@ class PromoActivity : AppCompatActivity() {
         }
     }
 
-    //TODO a back press crashes the app
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         Log.d("blerg", "request code: " + requestCode)
         when (requestCode) {
@@ -54,9 +52,6 @@ class PromoActivity : AppCompatActivity() {
                     val accountManager = AccountManager.get(this)
                     val account = data.getParcelableExtra<Account>("ACCOUNT")
                     accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
-
-                    //TODO get auth token or load five things?
-                    Log.d("blerg", "account created all good dude")
                 } else {
                     //TODO handle error
                 }
@@ -81,7 +76,7 @@ class PromoActivity : AppCompatActivity() {
                 Log.d("blerg", "About to launch login activity, bc no good token found")
                 //no token found on device, show log in screen to force manual entry
                 val intent = Intent(applicationContext, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //TODO check this works
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivityForResult(intent, SIGN_IN)
                 return
             }
@@ -89,7 +84,7 @@ class PromoActivity : AppCompatActivity() {
             val token = bundle.getString(AccountManager.KEY_AUTHTOKEN)
             Log.d("blerg", "DA TOKEN???? " + token)
             val intent = Intent(applicationContext, ContainerActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //TODO check this works
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
 
