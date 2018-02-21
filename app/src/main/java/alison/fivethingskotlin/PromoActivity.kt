@@ -7,13 +7,13 @@ import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import kotlinx.android.synthetic.main.activity_promo.*
 
-class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAuthenticatorActivity?
+class PromoActivity : AppCompatActivity() {
 
     private val SIGN_IN = 0
     private val CREATE_ACCOUNT = 1
@@ -24,16 +24,22 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
 
         val accountManager = AccountManager.get(this)
         val accounts = accountManager.getAccountsByType(ACCOUNT_TYPE)
-        if (accounts.isEmpty()) {
-            Log.d("blerg", "no accounts found")
-            //no accounts can be found, send to create account screen
-            val intent = Intent(this, CreateAccountActivity::class.java)
-            startActivityForResult(intent, CREATE_ACCOUNT)
-        } else {
+        if (!accounts.isEmpty()) {
             //an account was found
             Log.d("blerg", "accounts: " + accounts)
             val account = accounts[0]
             accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
+        }
+
+        createAccountButton.setOnClickListener {
+            val intent = Intent(this, CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
+
+        signInButton.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+
+            startActivity(intent)
         }
     }
 
@@ -74,7 +80,8 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
             if (bundle.getString(AccountManager.KEY_INTENT) != null) {
                 Log.d("blerg", "About to launch login activity, bc no good token found")
                 //no token found on device, show log in screen to force manual entry
-                val intent = Intent(applicationContext, LoginActivity::class.java) //TODO double check this is right context
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //TODO check this works
                 startActivityForResult(intent, SIGN_IN)
                 return
             }
@@ -82,6 +89,7 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
             val token = bundle.getString(AccountManager.KEY_AUTHTOKEN)
             Log.d("blerg", "DA TOKEN???? " + token)
             val intent = Intent(applicationContext, ContainerActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK //TODO check this works
             startActivity(intent)
         }
 
