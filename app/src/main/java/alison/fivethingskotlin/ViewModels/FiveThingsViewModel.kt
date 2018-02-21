@@ -64,8 +64,6 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     }
 
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
-        Log.d("blerg", "token: " + token)
-        Log.d("blerg", "account: " + account)
         return fiveThingsSource.getWrittenDates(token)
     }
 

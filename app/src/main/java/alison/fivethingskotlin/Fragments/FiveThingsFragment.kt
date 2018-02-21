@@ -25,7 +25,6 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 class FiveThingsFragment : Fragment() {
 
     private val user = FirebaseAuth.getInstance().currentUser
-    private var eventsLoaded = false
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FiveThingsFragmentBinding
 
@@ -61,11 +60,11 @@ class FiveThingsFragment : Fragment() {
         if (compactCalendarView != null) {
 
             viewModel.getDate().observe(this, Observer<Date> { date ->
-                if (date != null) {
-                    binding.date = date
-                    binding.month = getMonth(date) + " " + getYear(date)
-                    compactCalendarView.setCurrentDate(date)
-                }
+                val currDate = date ?: Date()
+                Log.d("blerg", "currdate: " + currDate)
+                binding.date = currDate
+                binding.month = getMonth(currDate) + " " + getYear(currDate)
+                compactCalendarView.setCurrentDate(currDate)
             })
 
             binding.loading = true
@@ -81,7 +80,6 @@ class FiveThingsFragment : Fragment() {
 
                         compactCalendarView.addEvents(events)
                     }
-                    eventsLoaded = true
                 }
             })
 
@@ -106,11 +104,6 @@ class FiveThingsFragment : Fragment() {
                 binding.calendarVisible = !currentVisibility
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        eventsLoaded = false
     }
 
     //TODO handle when user tries to leave fragment with un-saved changes
