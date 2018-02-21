@@ -73,6 +73,7 @@ class CreateAccountActivity : AppCompatActivity() {
                         //accountManager.setPassword(account, refreshToken) //TODO get refresh token
                         val intent = Intent()
                         intent.putExtra("ACCOUNT", account)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         setResult(Activity.RESULT_OK, intent)
                         finish()
                     } else {

@@ -66,8 +66,7 @@ class LoginActivity : AppCompatActivity() {
                         Log.d("blerg", "Account has never logged in on this device: " + success)
                         accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authToken)
                         val intent = Intent(this, ContainerActivity::class.java)
-                        //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                        //TODO check backstack here
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         startActivity(intent)
                         setResult(Activity.RESULT_OK)
                         finish()

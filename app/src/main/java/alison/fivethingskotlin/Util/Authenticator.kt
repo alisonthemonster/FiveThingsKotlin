@@ -36,7 +36,6 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
         return bundle
     }
 
-    @Throws(NetworkErrorException::class) //TODO is this needed?
     override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, bundle: Bundle): Bundle {
         val accountManager = AccountManager.get(mContext)
         val authToken = accountManager.peekAuthToken(account, authTokenType)
