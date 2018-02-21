@@ -8,10 +8,10 @@ import java.util.*
 
 interface FiveThingsRepository {
 
-    fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>>
+    fun getFiveThings(token: String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>>
 
-    fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>)
+    fun saveFiveThings(token: String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>)
 
-    fun getWrittenDates(): MutableLiveData<Resource<List<Date>>>
+    fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>>
 
 }

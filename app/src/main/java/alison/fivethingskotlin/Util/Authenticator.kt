@@ -9,7 +9,7 @@ import android.text.TextUtils
 import android.util.Log
 
 
-class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticator(mContext) {
+class Authenticator(private val mContext: Context) : AbstractAccountAuthenticator(mContext) {
 
     // Editing properties is not supported
     override fun editProperties(r: AccountAuthenticatorResponse, s: String): Bundle {
@@ -52,20 +52,20 @@ class Authenticator(internal var mContext: Context) : AbstractAccountAuthenticat
             return result
         }
 
-        //we found an old token in the "password"
-        //we can use it to make a refresh call
-        val password = accountManager.getPassword(account)
-        if (password != null) {
-            Log.d("blerg", "going to try to refresh token!")
-            val newToken = "blah" //TODO call refresh endpoint
-            val refreshToken = "bleepbloop"
-            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
-            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-            bundle.putString(AccountManager.KEY_AUTHTOKEN, newToken)
-            accountManager.setPassword(account, refreshToken)
-            return bundle
-
-        }
+//        //we found an old token in the "password"
+//        //we can use it to make a refresh call
+//        val password = accountManager.getPassword(account)
+//        if (password != null) {
+//            Log.d("blerg", "going to try to refresh token!")
+//            val newToken = "blah" //TODO call refresh endpoint
+//            val refreshToken = "bleepbloop"
+//            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
+//            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
+//            bundle.putString(AccountManager.KEY_AUTHTOKEN, newToken)
+//            accountManager.setPassword(account, refreshToken)
+//            return bundle
+//
+//        }
 
         //we couldn't get a token
         Log.d("blerg", "auth token wasn't retrieved from cache")

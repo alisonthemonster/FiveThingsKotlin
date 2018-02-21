@@ -12,13 +12,11 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
-
-
 class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService = FiveThingsService.create()): FiveThingsRepository {
 
-    override fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
+    override fun getFiveThings(token:String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
         val dateString = getDatabaseStyleDate(date)
-        val call = fiveThingsService.getFiveThings(dateString)
+        val call = fiveThingsService.getFiveThings(token, dateString)
         call.enqueue(object : Callback<FiveThings> {
             override fun onResponse(call: Call<FiveThings>?, response: Response<FiveThings>) {
                 if (response.isSuccessful) {
@@ -37,11 +35,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         return fiveThingsData
     }
 
-    override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
+    override fun saveFiveThings(token:String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
         Log.d("blerg", "about to make request to save day")
 
         if (fiveThings.isEmpty) {
-            val call = fiveThingsService.deleteFiveThings(getDatabaseStyleDate(fiveThings.date))
+            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
             call.enqueue(object : Callback<Response<Void>> {
 
                 override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
@@ -63,7 +61,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     arrayOf(fiveThings.one, fiveThings.two, fiveThings.three, fiveThings.four, fiveThings.five))
 
             if (fiveThings.saved) {
-                val call = fiveThingsService.updateFiveThings(requestBody)
+                val call = fiveThingsService.updateFiveThings(token, requestBody)
                 call.enqueue(object : Callback<Message> {
                     override fun onResponse(call: Call<Message>?, response: Response<Message>) {
                         if (response.isSuccessful) {
@@ -81,7 +79,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     }
                 })
             } else {
-                val call = fiveThingsService.writeFiveThings(requestBody)
+                val call = fiveThingsService.writeFiveThings(token, requestBody)
                 call.enqueue(object : Callback<Message> {
                     override fun onResponse(call: Call<Message>?, response: Response<Message>) {
                         if (response.isSuccessful) {
@@ -102,11 +100,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         }
     }
 
-    override fun getWrittenDates(): MutableLiveData<Resource<List<Date>>> {
+    override fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>> {
         Log.d("blerg", "about to make request for written days")
         val fiveThingsDates = MutableLiveData<Resource<List<Date>>>()
 
-        val call = fiveThingsService.getWrittenDates()
+        val call = fiveThingsService.getWrittenDates(token)
         call.enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                 if (response.isSuccessful) {

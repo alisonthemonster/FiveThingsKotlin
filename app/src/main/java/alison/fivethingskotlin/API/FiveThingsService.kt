@@ -17,22 +17,22 @@ interface FiveThingsService {
         //inline
 
     @GET("get_info_for_day/{dayString}")
-    fun getFiveThings(@Path("dayString") day: String): Call<FiveThings> //TODO change
+    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings> //TODO change
 
     //TODO what are the differences between put, post, and delete
         //PUT: update a day
         //POST: post a day first time
         //DELETE: remove a day
     @PUT("log_day")
-    fun updateFiveThings(fiveThingsRequest: FiveThingsRequest): Call<Message> //TODO what kind of response is this?
+    fun updateFiveThings(@Header("Authorization") token: String, fiveThingsRequest: FiveThingsRequest): Call<Message> //TODO what kind of response is this?
 
     @POST("log_day")
-    fun writeFiveThings(fiveThingsRequest: FiveThingsRequest): Call<Message>
+    fun writeFiveThings(@Header("Authorization") token: String, fiveThingsRequest: FiveThingsRequest): Call<Message>
 
     @DELETE("log_day")
-    fun deleteFiveThings(dateString: String): Call<Response<Void>>
+    fun deleteFiveThings(@Header("Authorization") token: String, dateString: String): Call<Response<Void>>
 
-    @GET("get_written_days")
-    fun getWrittenDates(): Call<List<String>>
+    @GET("get_days_written")
+    fun getWrittenDates(@Header("Authorization") token: String): Call<List<String>>
 
 }

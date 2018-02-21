@@ -5,6 +5,7 @@ import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
 import android.app.Activity
+import android.app.Application
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -78,6 +79,7 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
             }
             Log.d("blerg", "BLESSED TOKEN HAS BEEN RECEIVED! About to fully open app")
             val token = bundle.getString(AccountManager.KEY_AUTHTOKEN)
+            Log.d("blerg", "DA TOKEN???? " + token)
             val intent = Intent(applicationContext, ContainerActivity::class.java)
             startActivity(intent)
         }

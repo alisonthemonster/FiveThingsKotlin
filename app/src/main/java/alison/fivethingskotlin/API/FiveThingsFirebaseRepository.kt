@@ -19,7 +19,7 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
 
     private var database = FirebaseDatabase.getInstance().reference
 
-    override fun getFiveThings(date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
+    override fun getFiveThings(token: String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
         val formattedDate = getDatabaseStyleDate(date)
         val dateQuery = database.child("users").child(user.uid).child(formattedDate)
         Log.d("fivethings", "date query: " + dateQuery)
@@ -51,7 +51,7 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
         return fiveThingsData
     }
 
-    override fun saveFiveThings(fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
+    override fun saveFiveThings(token: String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
         val things = ArrayList<String>()
         things.add(fiveThings.one)
         things.add(fiveThings.two)
@@ -78,7 +78,7 @@ class FiveThingsFirebaseRepository(private val user: FirebaseUser): FiveThingsRe
         }
     }
 
-    override fun getWrittenDates(): MutableLiveData<Resource<List<Date>>> {
+    override fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>> {
         val fiveThingsDates = MutableLiveData<Resource<List<Date>>>()
         val query = database.child("users").child(user.uid)
         query.addValueEventListener(object : ValueEventListener {

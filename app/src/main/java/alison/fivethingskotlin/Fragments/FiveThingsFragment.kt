@@ -9,6 +9,7 @@ import alison.fivethingskotlin.Util.getMonth
 import alison.fivethingskotlin.Util.getYear
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
+import android.accounts.AccountManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -20,6 +21,7 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.*
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 
+
 class FiveThingsFragment : Fragment() {
 
     private val user = FirebaseAuth.getInstance().currentUser
@@ -30,9 +32,12 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         user?.let {
-            viewModel = FiveThingsViewModel(user)
+            val accountManager = AccountManager.get(context)
 
-            binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
+
+            viewModel = FiveThingsViewModel(accountManager)
+
+            binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
             binding.viewModel = viewModel
             viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
                 binding.fiveThings = fiveThings?.data
@@ -47,6 +52,7 @@ class FiveThingsFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.five_things_fragment, container, false)
     }
+
 
     override fun onStart() {
         super.onStart()
@@ -70,10 +76,12 @@ class FiveThingsFragment : Fragment() {
                     Log.d("blerg", "updating cal")
                     binding.loading = false
                     compactCalendarView.removeAllEvents()
-                    val events = days.data?.map { convertDateToEvent(it) }
-                    compactCalendarView.addEvents(events)
-                    eventsLoaded = true
+                    days.data?.let {
+                        val events = days.data?.map { convertDateToEvent(it) }
 
+                        compactCalendarView.addEvents(events)
+                    }
+                    eventsLoaded = true
                 }
             })
 

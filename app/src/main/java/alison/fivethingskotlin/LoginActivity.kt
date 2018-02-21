@@ -32,6 +32,8 @@ class LoginActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
+//        FiveThingsApplication.component.inject(this)
+
         logInButton.setOnClickListener{
             logIn()
         }
@@ -55,17 +57,21 @@ class LoginActivity : AppCompatActivity() {
                     if (resource.status == SUCCESS) {
                         Log.d("blerg", "login was successful and token was passed back")
                         val authToken = resource.data?.token
+                        Log.d("blerg", "mr.token: " + authToken)
                         val accountManager = AccountManager.get(this)
                         val account = Account(email, "FIVE_THINGS")
-                        accountManager.addAccountExplicitly(account, password, null)
-                        accountManager.setAuthToken(account, "FIVE_THINGS", authToken)
+                        val success = accountManager.addAccountExplicitly(account, password, null)
+                        Log.d("blerg", "Account has never logged in on this device: " + success)
+                        accountManager.setAuthToken(account, "full_access", authToken)
                         val intent = Intent(this, ContainerActivity::class.java)
                         //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         //TODO check backstack here
                         startActivity(intent)
                         setResult(Activity.RESULT_OK)
                         finish()
+
                     } else {
+                        //TODO find a way to get all the various error types and present them to user
                         Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                         Log.d("blerg", "error response found by activity")
                     }

@@ -1,27 +1,33 @@
 package alison.fivethingskotlin.ViewModels
 
-import alison.fivethingskotlin.API.FiveThingsFirebaseRepository
+import alison.fivethingskotlin.API.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
+import android.accounts.AccountManager
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
-import com.google.firebase.auth.FirebaseUser
 import java.util.*
 
 
-class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
+class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
     private val dateData = MutableLiveData<Date>()
-    private val firebaseSource = FiveThingsFirebaseRepository(user)
+    private val fiveThingsSource = FiveThingsRepositoryImpl()
+
+    val account = accountManager.getAccountsByType("FIVE_THINGS")[0]
+    val token = "Token: " + accountManager.peekAuthToken(account, "full_access")
+
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
+        Log.d("blerg", "token: " + token)
+        Log.d("blerg", "account: " + account)
         dateData.value = date
-        return firebaseSource.getFiveThings(date, fiveThingsData)
+        return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }
 
     fun getDate(): LiveData<Date> {
@@ -36,7 +42,7 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
 
     fun writeFiveThings(fiveThings: FiveThings) {
         Log.d("fivethings", "about to write the data: " + fiveThings)
-        firebaseSource.saveFiveThings(fiveThings, fiveThingsData)
+        fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 
     fun getToday(): LiveData<Resource<FiveThings>> {
@@ -58,7 +64,9 @@ class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
     }
 
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
-        return firebaseSource.getWrittenDates()
+        Log.d("blerg", "token: " + token)
+        Log.d("blerg", "account: " + account)
+        return fiveThingsSource.getWrittenDates(token)
     }
 
 }
