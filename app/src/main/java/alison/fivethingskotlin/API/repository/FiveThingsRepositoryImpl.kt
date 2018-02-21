@@ -1,5 +1,6 @@
-package alison.fivethingskotlin.API
+package alison.fivethingskotlin.API.repository
 
+import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.Models.*
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getDatabaseStyleDate

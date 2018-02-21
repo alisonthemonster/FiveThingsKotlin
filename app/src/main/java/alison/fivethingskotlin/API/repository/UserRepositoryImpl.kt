@@ -1,5 +1,6 @@
-package alison.fivethingskotlin.API
+package alison.fivethingskotlin.API.repository
 
+import alison.fivethingskotlin.API.AuthService
 import alison.fivethingskotlin.Models.CreateUserRequest
 import alison.fivethingskotlin.Models.LogInUserRequest
 import alison.fivethingskotlin.Models.Status.ERROR

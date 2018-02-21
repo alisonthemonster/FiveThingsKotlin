@@ -11,6 +11,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_promo.*
 
 class PromoActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class PromoActivity : AppCompatActivity() {
         if (!accounts.isEmpty()) {
             //an account was found
             Log.d("blerg", "accounts: " + accounts)
+            Log.d("blerg", "accounts: " + accountManager.getAccountsByType(ACCOUNT_TYPE).size)
             val account = accounts[0]
             accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
         }
@@ -38,7 +40,6 @@ class PromoActivity : AppCompatActivity() {
 
         signInButton.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
-
             startActivity(intent)
         }
     }
@@ -49,9 +50,12 @@ class PromoActivity : AppCompatActivity() {
             CREATE_ACCOUNT -> {
                 Log.d("blerg", "onActivityResult with CREATE_ACCOUNT")
                 if (resultCode == Activity.RESULT_OK) {
-                    val accountManager = AccountManager.get(this)
-                    val account = data.getParcelableExtra<Account>("ACCOUNT")
-                    accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
+                    //user was able to create an account
+                    //but now they need to activate their account via email
+                    Toast.makeText(this, "Check your email to validate your account!", Toast.LENGTH_LONG).show()
+//                    val accountManager = AccountManager.get(this)
+//                    val account = data.getParcelableExtra<Account>("ACCOUNT")
+//                    accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
                 } else {
                     //TODO handle error
                 }

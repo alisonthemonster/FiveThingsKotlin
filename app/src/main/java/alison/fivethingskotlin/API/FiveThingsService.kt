@@ -13,10 +13,10 @@ interface FiveThingsService {
     }
 
     @GET("get_info_for_day/{dayString}")
-    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings> //TODO change
+    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings>
 
     @PUT("log_day")
-    fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<Message> //TODO what kind of response is this?
+    fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<Message>
 
     @POST("log_day")
     fun writeFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<Message>

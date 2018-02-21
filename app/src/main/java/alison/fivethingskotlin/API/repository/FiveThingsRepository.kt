@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.API
+package alison.fivethingskotlin.API.repository
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.Resource

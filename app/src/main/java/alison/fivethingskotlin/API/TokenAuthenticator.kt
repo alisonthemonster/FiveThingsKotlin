@@ -1,6 +1,10 @@
 package alison.fivethingskotlin.API
 
+import alison.fivethingskotlin.LoginActivity
+import alison.fivethingskotlin.PromoActivity
 import android.accounts.AccountManager
+import android.content.Intent
+import android.support.v4.content.ContextCompat.startActivity
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -10,13 +14,9 @@ class TokenAuthenticator(): Authenticator {
 
     //when a response is 401 Not Authorised this is called
     override fun authenticate(route: Route?, response: Response?): Request? {
-        response?.let {
-            if (response.request().header("Authorization") != null) {
-                return null
-            }
+        return null
 
-
-            //TODO come back to this one day?
+        //TODO come back to this one day?
 //            val account = accountManager.getAccountsByType("FIVE_THINGS")[0]
 //            val oldToken = accountManager.peekAuthToken(account, "full_access")
 //            oldToken?.let {
@@ -32,8 +32,7 @@ class TokenAuthenticator(): Authenticator {
 //                    .newBuilder()
 //                    .header("Authorization", newToken)
 //                    .build()
-        }
-        return null
+
     }
 }
 

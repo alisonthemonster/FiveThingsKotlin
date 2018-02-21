@@ -1,6 +1,6 @@
 package alison.fivethingskotlin.ViewModels
 
-import alison.fivethingskotlin.API.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
@@ -28,6 +28,8 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
         Log.d("blerg", "token: " + token)
         Log.d("blerg", "account: " + account)
+        Log.d("blerg", "accounts: " + accountManager.getAccountsByType(ACCOUNT_TYPE).size)
+
         dateData.value = date
         return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }

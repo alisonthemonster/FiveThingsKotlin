@@ -1,6 +1,6 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.API.UserRepositoryImpl
+import alison.fivethingskotlin.API.repository.UserRepositoryImpl
 import alison.fivethingskotlin.Models.CreateUserRequest
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Models.Token

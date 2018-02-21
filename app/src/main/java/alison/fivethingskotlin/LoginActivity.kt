@@ -1,6 +1,6 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.API.UserRepositoryImpl
+import alison.fivethingskotlin.API.repository.UserRepositoryImpl
 import alison.fivethingskotlin.Models.LogInUserRequest
 import alison.fivethingskotlin.Models.Status.SUCCESS
 import alison.fivethingskotlin.Models.Token
@@ -83,11 +83,11 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun allFieldsAreFilledOut(): Boolean {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            return true
+        return if (email.isNotEmpty() && password.isNotEmpty()) {
+            true
         } else {
             Toast.makeText(this, "Fill out all fields", Toast.LENGTH_SHORT).show()
-            return false
+            false
         }
     }
 
