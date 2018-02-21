@@ -52,6 +52,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
                     if (response.isSuccessful) {
                         //TODO somehow find a way to tell client to get new list of dates written
+                            //what if the success response returned the list of all dates?
                     } else {
                         //TODO
                     }

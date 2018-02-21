@@ -37,7 +37,7 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
     @Throws(NetworkErrorException::class) //TODO is this needed?
     override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, bundle: Bundle): Bundle {
 
-        Log.d("blerg", "inside getAuthToken with authTokenType: " + authTokenType)
+        Log.d("blerg", "inside getAuthToken with authTokenType: " + authTokenType) //TODO feel like this is the wrong type
 
         val accountManager = AccountManager.get(mContext)
         val authToken = accountManager.peekAuthToken(account, authTokenType)
@@ -52,6 +52,7 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
             return result
         }
 
+        //TODO hook up to nagkumar's service when refresh token is ready
 //        //we found an old token in the "password"
 //        //we can use it to make a refresh call
 //        val password = accountManager.getPassword(account)

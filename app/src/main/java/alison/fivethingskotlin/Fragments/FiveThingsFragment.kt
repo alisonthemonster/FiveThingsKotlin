@@ -32,8 +32,6 @@ class FiveThingsFragment : Fragment() {
 
         user?.let {
             val accountManager = AccountManager.get(context)
-
-
             viewModel = FiveThingsViewModel(accountManager)
 
             binding = FiveThingsFragmentBinding.inflate(inflater, container, false)

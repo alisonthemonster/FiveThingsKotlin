@@ -15,6 +15,8 @@ class TokenAuthenticator(): Authenticator {
                 return null
             }
 
+
+            //TODO come back to this one day?
 //            val account = accountManager.getAccountsByType("FIVE_THINGS")[0]
 //            val oldToken = accountManager.peekAuthToken(account, "full_access")
 //            oldToken?.let {
