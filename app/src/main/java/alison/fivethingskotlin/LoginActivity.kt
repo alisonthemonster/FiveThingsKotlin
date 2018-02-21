@@ -4,6 +4,8 @@ import alison.fivethingskotlin.API.UserRepositoryImpl
 import alison.fivethingskotlin.Models.LogInUserRequest
 import alison.fivethingskotlin.Models.Status.SUCCESS
 import alison.fivethingskotlin.Models.Token
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.databinding.ActivityLogInBinding
 import android.accounts.Account
@@ -59,10 +61,10 @@ class LoginActivity : AppCompatActivity() {
                         val authToken = resource.data?.token
                         Log.d("blerg", "mr.token: " + authToken)
                         val accountManager = AccountManager.get(this)
-                        val account = Account(email, "FIVE_THINGS")
+                        val account = Account(email, ACCOUNT_TYPE)
                         val success = accountManager.addAccountExplicitly(account, password, null)
                         Log.d("blerg", "Account has never logged in on this device: " + success)
-                        accountManager.setAuthToken(account, "full_access", authToken)
+                        accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authToken)
                         val intent = Intent(this, ContainerActivity::class.java)
                         //intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         //TODO check backstack here

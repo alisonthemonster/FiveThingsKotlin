@@ -4,7 +4,7 @@ import alison.fivethingskotlin.Util.getFullDateFormat
 import java.util.*
 
 
-//TODO udpate this class when nagkumar updates the response
+//TODO update this class when nagkumar updates the response
 data class FiveThings(
         var date: Date,
         var one: String,

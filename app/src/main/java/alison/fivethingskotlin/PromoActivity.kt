@@ -1,5 +1,7 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
@@ -13,7 +15,6 @@ import android.util.Log
 
 class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAuthenticatorActivity?
 
-    private val ACCOUNT_TYPE = "FIVE_THINGS"
     private val SIGN_IN = 0
     private val CREATE_ACCOUNT = 1
 
@@ -32,7 +33,7 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
             //an account was found
             Log.d("blerg", "accounts: " + accounts)
             val account = accounts[0]
-            accountManager.getAuthToken(account, ACCOUNT_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
+            accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
         }
     }
 
@@ -46,7 +47,7 @@ class PromoActivity : AppCompatActivity() { //TODO should this be the AccountAut
                 if (resultCode == Activity.RESULT_OK) {
                     val accountManager = AccountManager.get(this)
                     val account = data.getParcelableExtra<Account>("ACCOUNT")
-                    accountManager.getAuthToken(account, ACCOUNT_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
+                    accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
 
                     //TODO get auth token or load five things?
                     Log.d("blerg", "account created all good dude")

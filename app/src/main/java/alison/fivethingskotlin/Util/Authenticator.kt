@@ -1,6 +1,8 @@
 package alison.fivethingskotlin.Util
 
 import alison.fivethingskotlin.LoginActivity
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import android.accounts.*
 import android.content.Context
 import android.content.Intent
@@ -23,8 +25,8 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
                             options: Bundle): Bundle {
 
         val intent = Intent(mContext, LoginActivity::class.java)
-        intent.putExtra("FIVE_THINGS", accountType) //TODO move FIVE_THINGS somewhere global
-        intent.putExtra("full_access", authTokenType)
+        intent.putExtra(ACCOUNT_TYPE, accountType)
+        intent.putExtra(AUTH_TOKEN_TYPE, authTokenType)
         intent.putExtra("is_adding_new_account", true)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
 
@@ -36,9 +38,6 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
 
     @Throws(NetworkErrorException::class) //TODO is this needed?
     override fun getAuthToken(response: AccountAuthenticatorResponse, account: Account, authTokenType: String, bundle: Bundle): Bundle {
-
-        Log.d("blerg", "inside getAuthToken with authTokenType: " + authTokenType) //TODO feel like this is the wrong type
-
         val accountManager = AccountManager.get(mContext)
         val authToken = accountManager.peekAuthToken(account, authTokenType)
 
@@ -72,8 +71,8 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
         Log.d("blerg", "auth token wasn't retrieved from cache")
         val intent = Intent(mContext, LoginActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
-        intent.putExtra("FIVE_THINGS", account.type)
-        intent.putExtra("full_access", authTokenType)
+        intent.putExtra(ACCOUNT_TYPE, account.type)
+        intent.putExtra(AUTH_TOKEN_TYPE, authTokenType)
 
         val retBundle = Bundle()
         retBundle.putParcelable(AccountManager.KEY_INTENT, intent)

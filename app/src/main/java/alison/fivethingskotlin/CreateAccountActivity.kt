@@ -4,6 +4,8 @@ import alison.fivethingskotlin.API.UserRepositoryImpl
 import alison.fivethingskotlin.Models.CreateUserRequest
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Models.Token
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.databinding.ActivityCreateAccountBinding
 import android.accounts.Account
@@ -64,10 +66,10 @@ class CreateAccountActivity : AppCompatActivity() {
                     binding.setLoading(false)
                     if (resource.status == Status.SUCCESS) {
                         Log.d("blerg", "token created by nagkumar and passed back successfully")
-                        val account = Account(email, "FIVE_THINGS")
+                        val account = Account(email, ACCOUNT_TYPE)
                         val accountManager = AccountManager.get(this)
                         accountManager.addAccountExplicitly(account, password1, null)
-                        accountManager.setAuthToken(account, "full_service", resource.data?.token)
+                        accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, resource.data?.token)
                         //accountManager.setPassword(account, refreshToken) //TODO get refresh token
                         val intent = Intent()
                         intent.putExtra("ACCOUNT", account)

@@ -2,6 +2,8 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.API.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
@@ -19,8 +21,8 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     private val dateData = MutableLiveData<Date>()
     private val fiveThingsSource = FiveThingsRepositoryImpl()
 
-    val account = accountManager.getAccountsByType("FIVE_THINGS")[0]
-    val token = "Token: " + accountManager.peekAuthToken(account, "full_access")
+    val account = accountManager.getAccountsByType(ACCOUNT_TYPE)[0]
+    val token = "Token: " + accountManager.peekAuthToken(account, AUTH_TOKEN_TYPE)
 
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
