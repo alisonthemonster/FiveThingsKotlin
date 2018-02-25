@@ -14,10 +14,10 @@
 
         <variable
             name="fiveThings"
-            type="alison.fivethingskotlin.Models.FiveThings" />
+            type="alison.fivethingskotlin.Models.FiveThingz" />
 
         <variable
-            name="date"
+            name="naguDate"
             type="java.util.Date" />
 
         <variable
@@ -57,7 +57,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/arrow_left"
-                    android:onClick="@{() -> viewModel.getPreviousDay(date)}"
+                    android:onClick="@{() -> viewModel.getPreviousDay(naguDate)}"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +83,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/arrow_right"
-                    android:onClick="@{() -> viewModel.getNextDay(date)}"
+                    android:onClick="@{() -> viewModel.getNextDay(naguDate.date)}"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -183,7 +183,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.one}"
+                        android:text="@={fiveThings.things[0]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -206,7 +206,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.two}"
+                        android:text="@={fiveThings.things[1]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -229,7 +229,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.three}"
+                        android:text="@={fiveThings.things[2]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -252,7 +252,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.four}"
+                        android:text="@={fiveThings.things[3]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -275,7 +275,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.five}"
+                        android:text="@={fiveThings.things[4]}"
                         android:textSize="15sp" />
 
                     <Button

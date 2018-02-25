@@ -2,6 +2,7 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Models.FiveThingz
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.Util.Resource
@@ -17,7 +18,7 @@ import java.util.*
 
 class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
 
-    private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
+    private val fiveThingsData = MutableLiveData<Resource<FiveThingz>>()
     private val dateData = MutableLiveData<Date>()
     private val fiveThingsSource = FiveThingsRepositoryImpl()
 
@@ -25,7 +26,7 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     val token = "Token: " + accountManager.peekAuthToken(account, AUTH_TOKEN_TYPE)
 
 
-    fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
+    fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
         Log.d("blerg", "token: " + token)
         Log.d("blerg", "account: " + account)
         Log.d("blerg", "accounts: " + accountManager.getAccountsByType(ACCOUNT_TYPE).size)
@@ -44,31 +45,30 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
         fiveThingsData.value = fiveThings
     }
 
-    fun writeFiveThings(fiveThings: FiveThings) {
+    fun writeFiveThings(fiveThings: FiveThingz) {
         Log.d("fivethings", "about to write the data: " + fiveThings)
         fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 
-    fun getToday(): LiveData<Resource<FiveThings>> {
+    fun getToday(): LiveData<Resource<FiveThingz>> {
         return getFiveThings(Date())
     }
 
-    fun getPreviousDay(date: Date): LiveData<Resource<FiveThings>> {
+    fun getPreviousDay(date: Date): LiveData<Resource<FiveThingz>> {
         val prevDate = getPreviousDate(date)
         return getFiveThings(prevDate)
     }
 
-    fun getNextDay(date: Date): LiveData<Resource<FiveThings>>  {
+    fun getNextDay(date: Date): LiveData<Resource<FiveThingz>>  {
         val nextDate = getNextDate(date)
         return getFiveThings(nextDate)
     }
 
-    fun changeDate(date: Date): LiveData<Resource<FiveThings>> {
+    fun changeDate(date: Date): LiveData<Resource<FiveThingz>> {
         return getFiveThings(date)
     }
 
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         return fiveThingsSource.getWrittenDates(token)
     }
-
 }

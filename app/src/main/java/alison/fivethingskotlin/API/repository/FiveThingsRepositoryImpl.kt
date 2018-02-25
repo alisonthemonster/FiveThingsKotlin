@@ -11,30 +11,31 @@ import android.util.Log
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
+import java.util.Date
 
 class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService = FiveThingsService.create()): FiveThingsRepository {
 
-    override fun getFiveThings(token:String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
+    override fun getFiveThings(token:String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): LiveData<Resource<FiveThingz>> {
         val dateString = getDatabaseStyleDate(date)
         val call = fiveThingsService.getFiveThings(token, dateString)
-        call.enqueue(object : Callback<FiveThings> {
-            override fun onResponse(call: Call<FiveThings>?, response: Response<FiveThings>) {
+        call.enqueue(object : Callback<FiveThingz> {
+            override fun onResponse(call: Call<FiveThingz>?, response: Response<FiveThingz>) {
                 Log.d("blerg", "responseee: " + response.body())
-                Log.d("blerg", "is success: " + response.isSuccessful())
+                Log.d("blerg", "is success: " + response.isSuccessful)
 
                 if (response.isSuccessful) {
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
                     if (response.code() == 404) {
-                        fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", FiveThings(date, "", "", "", "", "", false))
+                        val things = FiveThingz(FiveThingsId("blah"), UserId("blah"), NaguDate(date), listOf(Thing(""), Thing(""), Thing(""), Thing(""), Thing("")))
+                        fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
                         fiveThingsData.value = Resource(Status.ERROR, response.message(), response.body())
                     }
                 }
             }
 
-            override fun onFailure(call: Call<FiveThings>?, t: Throwable?) {
+            override fun onFailure(call: Call<FiveThingz>?, t: Throwable?) {
                 //TODO
                 Log.d("blerg", "on failure babyyyy")
                 t?.printStackTrace()
@@ -43,11 +44,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         return fiveThingsData
     }
 
-    override fun saveFiveThings(token:String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>) {
+    override fun saveFiveThings(token:String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>) {
         Log.d("blerg", "about to make request to save day")
 
         if (fiveThings.isEmpty) {
-            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
+            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.naguDate.date))
             call.enqueue(object : Callback<Response<Void>> {
 
                 override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
@@ -66,8 +67,8 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 }
             })
         } else {
-            val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date),
-                    arrayOf(fiveThings.one, fiveThings.two, fiveThings.three, fiveThings.four, fiveThings.five))
+            val things = arrayOf(fiveThings.things[0].content, fiveThings.things[1].content, fiveThings.things[2].content, fiveThings.things[3].content, fiveThings.things[4].content)
+            val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.naguDate.date), things)
 
             if (fiveThings.saved) {
                 val call = fiveThingsService.updateFiveThings(token, requestBody)

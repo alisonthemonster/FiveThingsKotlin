@@ -1,6 +1,7 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Models.FiveThingz
 import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.Util.Resource
@@ -36,7 +37,7 @@ class FiveThingsFragment : Fragment() {
 
             binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
             binding.viewModel = viewModel
-            viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
+            viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
                 binding.fiveThings = fiveThings?.data
             })
 

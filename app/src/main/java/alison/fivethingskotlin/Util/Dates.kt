@@ -6,7 +6,7 @@ import java.util.*
 import com.github.sundeepk.compactcalendarview.domain.Event
 
 
-//TODO convert all Date objects to be something else like JodaTime or DateTime
+//TODO convert all NaguDate objects to be something else like JodaTime or DateTime
 fun getDatabaseStyleDate(date: Date): String {
     return SimpleDateFormat("yyyy-MM-dd").format(date).toString()
 }

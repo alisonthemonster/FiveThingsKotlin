@@ -2,6 +2,7 @@ package alison.fivethingskotlin.API
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.FiveThingsRequest
+import alison.fivethingskotlin.Models.FiveThingz
 import alison.fivethingskotlin.Models.Message
 import retrofit2.Call
 import retrofit2.Response
@@ -13,7 +14,7 @@ interface FiveThingsService {
     }
 
     @GET("get_info_for_day/{dayString}")
-    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings>
+    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThingz>
 
     @PUT("log_day")
     fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<Message>

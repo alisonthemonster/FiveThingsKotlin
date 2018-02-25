@@ -6,7 +6,7 @@ import java.util.*
 
 //TODO update this class when nagkumar updates the response
 data class FiveThings(
-        var date: Date,
+        var naguDate: Date,
         var one: String,
         var two: String,
         var three: String,
@@ -24,7 +24,7 @@ data class FiveThings(
         }
     val fullDateString: String
         get() {
-            return getFullDateFormat(date)
+            return getFullDateFormat(naguDate)
         }
     val isEmpty: Boolean
         get() {

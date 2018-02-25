@@ -11,7 +11,7 @@ import io.kotlintest.matchers.shouldEqual
 import java.util.*
 
 class DatesTest: FreeSpec( {
-    "converts from Date object" - {
+    "converts from NaguDate object" - {
         "to YY-MM-DD" {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
@@ -23,7 +23,7 @@ class DatesTest: FreeSpec( {
     }
 
     "converts from yy-MM-dd" - {
-        "to Date object" {
+        "to NaguDate object" {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
             cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -37,7 +37,7 @@ class DatesTest: FreeSpec( {
         }
     }
 
-    "gets the month from a date object" {
+    "gets the month from a naguDate object" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -46,7 +46,7 @@ class DatesTest: FreeSpec( {
         getMonth(date) shouldEqual "January"
     }
 
-    "gets the year from a date object" {
+    "gets the year from a naguDate object" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -56,7 +56,7 @@ class DatesTest: FreeSpec( {
     }
 
     "gets day of week" - {
-        "from a date object" {
+        "from a naguDate object" {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
             cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -84,7 +84,7 @@ class DatesTest: FreeSpec( {
         }
     }
 
-    "gets previous date object given a date" {
+    "gets previous naguDate object given a naguDate" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -95,7 +95,7 @@ class DatesTest: FreeSpec( {
         getPreviousDate(date) shouldEqual newDate
     }
 
-    "gets previous date object given a date" {
+    "gets previous naguDate object given a naguDate" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.JANUARY)
@@ -106,7 +106,7 @@ class DatesTest: FreeSpec( {
         getNextDate(date) shouldEqual newDate
     }
 
-    "builds a pretty date" - {
+    "builds a pretty naguDate" - {
         "for 12/12/17" {
             val cal = Calendar.getInstance()
             cal.set(Calendar.YEAR, 2017)
@@ -125,7 +125,7 @@ class DatesTest: FreeSpec( {
         }
     }
 
-    "builds an event object from a Date" {
+    "builds an event object from a NaguDate" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.DECEMBER)
