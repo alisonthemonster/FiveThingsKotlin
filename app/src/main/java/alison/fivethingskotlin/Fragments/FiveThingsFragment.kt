@@ -1,34 +1,33 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.Models.FiveThings
-import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.Util.convertDateToEvent
 import alison.fivethingskotlin.Util.getMonth
+import alison.fivethingskotlin.Util.getPreviousDate
 import alison.fivethingskotlin.Util.getYear
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
+import android.app.AlertDialog
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.google.firebase.auth.FirebaseAuth
-import java.util.*
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.five_things_fragment.*
+import java.util.*
+
 
 class FiveThingsFragment : Fragment() {
 
     private val user = FirebaseAuth.getInstance().currentUser
-    private var eventsLoaded = false
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FiveThingsFragmentBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private lateinit var yearList: MutableList<String>
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -76,8 +75,11 @@ class FiveThingsFragment : Fragment() {
                     compactCalendarView.removeAllEvents()
                     val events = days.map { convertDateToEvent(it) }
                     compactCalendarView.addEvents(events)
-                    eventsLoaded = true
 
+                    yearList = mutableListOf()
+                    val minYear = getYear(Collections.min(days))
+                    val maxYear = getYear(Collections.max(days))
+                    (minYear..maxYear).mapTo(yearList) { it.toString() }
                 }
             })
 
@@ -95,18 +97,29 @@ class FiveThingsFragment : Fragment() {
             })
         }
 
-        val date = view?.findViewById<TextView>(R.id.current_date)
-        date?.setOnClickListener {
+        val calendarMonth = month_year
+        calendarMonth.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(context)
+
+            dialogBuilder.setTitle("Select a year")
+                    .setItems(yearList.toTypedArray(), { _, year ->
+                        Log.d("blerg", "year: " + yearList[year])
+                        val newDate = GregorianCalendar(yearList[year].toInt(), Calendar.FEBRUARY, 1).time
+                        Log.d("blerg", "newDate: " + newDate)
+                        binding.month = getMonth(newDate) + " " + getYear(newDate)
+                        compactCalendarView?.setCurrentDate(newDate)
+                    })
+                    .create()
+            dialogBuilder.show()
+        }
+
+        val date = current_date
+        date.setOnClickListener {
             val currentVisibility = binding.calendarVisible
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
             }
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        eventsLoaded = false
     }
 
     //TODO handle when user tries to leave fragment with un-saved changes
