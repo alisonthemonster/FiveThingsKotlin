@@ -2,10 +2,7 @@ package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.convertDateToEvent
-import alison.fivethingskotlin.Util.getMonth
-import alison.fivethingskotlin.Util.getPreviousDate
-import alison.fivethingskotlin.Util.getYear
+import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.app.AlertDialog
@@ -28,6 +25,7 @@ class FiveThingsFragment : Fragment() {
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FiveThingsFragmentBinding
     private lateinit var yearList: MutableList<String>
+    private lateinit var currentDate: Date
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -37,7 +35,8 @@ class FiveThingsFragment : Fragment() {
 
             binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
             binding.viewModel = viewModel
-            viewModel.getFiveThings(Date()).observe(this, Observer<FiveThings> { fiveThings ->
+            currentDate = Date()
+            viewModel.getFiveThings(currentDate).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
             })
 
@@ -59,6 +58,7 @@ class FiveThingsFragment : Fragment() {
 
             viewModel.getDate().observe(this, Observer<Date> { date ->
                 if (date != null) {
+                    currentDate = date
                     binding.date = date
                     binding.month = getMonth(date) + " " + getYear(date)
                     compactCalendarView.setCurrentDate(date)
@@ -80,6 +80,24 @@ class FiveThingsFragment : Fragment() {
                     val minYear = getYear(Collections.min(days))
                     val maxYear = getYear(Collections.max(days))
                     (minYear..maxYear).mapTo(yearList) { it.toString() }
+
+                    if (yearList.size > 1) {
+                        //only show dialog if users have multiple years to choose from
+                        month_year.setOnClickListener {
+                            val dialogBuilder = AlertDialog.Builder(context)
+                            dialogBuilder
+                                .setTitle("Select a year")
+                                .setItems(yearList.toTypedArray(), { _, year ->
+                                    val month = getMonthNumber(currentDate)
+                                    val newDate = GregorianCalendar(yearList[year].toInt(), month, 1).time
+                                    currentDate = newDate
+                                    binding.month = getMonth(newDate) + " " + getYear(newDate)
+                                    compactCalendarView.setCurrentDate(newDate)
+                                })
+                                .create()
+                                .show()
+                        }
+                    }
                 }
             })
 
@@ -92,29 +110,15 @@ class FiveThingsFragment : Fragment() {
                 }
 
                 override fun onMonthScroll(firstDayOfNewMonth: Date) {
+                    currentDate = firstDayOfNewMonth
                     binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
                 }
             })
         }
 
-        val calendarMonth = month_year
-        calendarMonth.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(context)
 
-            dialogBuilder.setTitle("Select a year")
-                    .setItems(yearList.toTypedArray(), { _, year ->
-                        Log.d("blerg", "year: " + yearList[year])
-                        val newDate = GregorianCalendar(yearList[year].toInt(), Calendar.FEBRUARY, 1).time
-                        Log.d("blerg", "newDate: " + newDate)
-                        binding.month = getMonth(newDate) + " " + getYear(newDate)
-                        compactCalendarView?.setCurrentDate(newDate)
-                    })
-                    .create()
-            dialogBuilder.show()
-        }
 
-        val date = current_date
-        date.setOnClickListener {
+        current_date.setOnClickListener {
             val currentVisibility = binding.calendarVisible
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility

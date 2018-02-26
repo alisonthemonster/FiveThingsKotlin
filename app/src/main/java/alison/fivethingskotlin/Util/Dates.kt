@@ -72,6 +72,14 @@ fun getMonth(date: Date): String {
     return monthNames[monthNumber]
 }
 
+fun getMonthNumber(date: Date): Int {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    val monthNumber = cal.get(Calendar.MONTH)
+    val monthNames = arrayOf(Calendar.JANUARY, Calendar.FEBRUARY, Calendar.MARCH, Calendar.APRIL, Calendar.MAY, Calendar.JUNE, Calendar.JULY, Calendar.AUGUST, Calendar.SEPTEMBER, Calendar.OCTOBER, Calendar.NOVEMBER, Calendar.DECEMBER)
+    return monthNames[monthNumber]
+}
+
 fun getYear(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
