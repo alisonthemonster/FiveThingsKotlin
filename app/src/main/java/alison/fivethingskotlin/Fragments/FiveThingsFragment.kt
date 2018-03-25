@@ -24,6 +24,7 @@ class FiveThingsFragment : Fragment() {
     private val user = FirebaseAuth.getInstance().currentUser
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FiveThingsFragmentBinding
+
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
@@ -70,7 +71,7 @@ class FiveThingsFragment : Fragment() {
             //TODO only pull in for current month?
             viewModel.getWrittenDays().observe(this, Observer<List<Date>> { days ->
                 days?.let{
-                    Log.d("blerg", "updating cal")
+                    Log.d("blerg", "days: " + days)
                     binding.loading = false
                     compactCalendarView.removeAllEvents()
                     val events = days.map { convertDateToEvent(it) }
@@ -88,8 +89,7 @@ class FiveThingsFragment : Fragment() {
                             dialogBuilder
                                 .setTitle("Select a year")
                                 .setItems(yearList.toTypedArray(), { _, year ->
-                                    val month = getMonthNumber(currentDate)
-                                    val newDate = GregorianCalendar(yearList[year].toInt(), month, 1).time
+                                    val newDate = getDateInAYear(currentDate, yearList[year].toInt())
                                     currentDate = newDate
                                     binding.month = getMonth(newDate) + " " + getYear(newDate)
                                     compactCalendarView.setCurrentDate(newDate)

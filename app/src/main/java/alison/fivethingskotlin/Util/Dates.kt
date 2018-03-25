@@ -4,6 +4,7 @@ import android.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.*
 import com.github.sundeepk.compactcalendarview.domain.Event
+import org.joda.time.DateTime
 
 
 //TODO convert all Date objects to be something else like JodaTime or DateTime
@@ -84,6 +85,11 @@ fun getYear(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
     return cal.get(Calendar.YEAR)
+}
+
+fun getDateInAYear(currentYear: Date, year: Int): Date {
+    val yearDifference = getYear(currentYear) - year
+    return DateTime(currentYear).minusYears(yearDifference).toDate()
 }
 
 fun convertDateToEvent(date: Date): Event  {

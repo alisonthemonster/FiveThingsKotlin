@@ -143,6 +143,4 @@ class DatesTest: FreeSpec( {
         val event = Event(Color.WHITE, date.time)
         convertDateToEvent(date) shouldEqual event
     }
-
-
 })
