@@ -46,6 +46,15 @@ class DatesTest: FreeSpec( {
         getMonth(date) shouldEqual "January"
     }
 
+    "gets the month number from a date object" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        getMonthNumber(date) shouldEqual Calendar.JANUARY
+    }
+
     "gets the year from a date object" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
@@ -134,6 +143,4 @@ class DatesTest: FreeSpec( {
         val event = Event(Color.WHITE, date.time)
         convertDateToEvent(date) shouldEqual event
     }
-
-
 })

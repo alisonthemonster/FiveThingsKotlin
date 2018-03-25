@@ -110,12 +110,12 @@
                         android:onClick="@{() -> viewModel.getToday()}"
                         android:text="Today"
                         android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/monthYear"
+                        app:layout_constraintBottom_toBottomOf="@+id/month_year"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/monthYear"
+                        android:id="@+id/month_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
@@ -147,7 +147,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/monthYear" />
+                        app:layout_constraintTop_toBottomOf="@+id/month_year" />
                 </android.support.constraint.ConstraintLayout>
 
                 <LinearLayout
