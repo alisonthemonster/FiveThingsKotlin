@@ -176,14 +176,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/white"
+                        android:background="@color/lighter_grey"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.one}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -198,14 +199,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/white"
+                        android:background="@color/lighter_grey"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.two}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -220,14 +222,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/white"
+                        android:background="@color/lighter_grey"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.three}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -242,14 +245,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/white"
+                        android:background="@color/lighter_grey"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.four}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/white"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -264,14 +268,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:background="@color/white"
+                        android:background="@color/lighter_grey"
                         android:gravity="top"
                         android:inputType="textCapSentences|textMultiLine"
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.five}"
-                        android:textSize="15sp" />
+                        android:textSize="15sp"
+                        android:textColor="@color/white"/>
 
                     <Button
                         android:id="@+id/save_button"
