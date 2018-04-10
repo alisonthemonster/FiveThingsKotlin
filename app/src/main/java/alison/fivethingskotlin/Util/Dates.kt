@@ -4,6 +4,7 @@ import android.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.*
 import com.github.sundeepk.compactcalendarview.domain.Event
+import org.joda.time.DateTime
 
 
 //TODO convert all NaguDate objects to be something else like JodaTime or DateTime
@@ -72,10 +73,23 @@ fun getMonth(date: Date): String {
     return monthNames[monthNumber]
 }
 
+fun getMonthNumber(date: Date): Int {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    val monthNumber = cal.get(Calendar.MONTH)
+    val monthNames = arrayOf(Calendar.JANUARY, Calendar.FEBRUARY, Calendar.MARCH, Calendar.APRIL, Calendar.MAY, Calendar.JUNE, Calendar.JULY, Calendar.AUGUST, Calendar.SEPTEMBER, Calendar.OCTOBER, Calendar.NOVEMBER, Calendar.DECEMBER)
+    return monthNames[monthNumber]
+}
+
 fun getYear(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
     return cal.get(Calendar.YEAR)
+}
+
+fun getDateInAYear(currentYear: Date, year: Int): Date {
+    val yearDifference = getYear(currentYear) - year
+    return DateTime(currentYear).minusYears(yearDifference).toDate()
 }
 
 fun convertDateToEvent(date: Date): Event  {
