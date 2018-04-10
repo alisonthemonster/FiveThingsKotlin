@@ -8,7 +8,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '27.0.1'
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "alison.fivethingskotlin"
         minSdkVersion 22
@@ -36,20 +36,20 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.android.support:palette-v7:26.1.0'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
-    implementation 'com.google.firebase:firebase-auth:11.8.0'
-    implementation 'com.google.firebase:firebase-storage:11.8.0'
-    implementation 'com.google.android.gms:play-services-auth:11.8.0'
+    implementation 'com.google.firebase:firebase-auth:12.0.1'
+    implementation 'com.google.firebase:firebase-storage:12.0.1'
+    implementation 'com.google.android.gms:play-services-auth:12.0.1'
     implementation 'com.firebaseui:firebase-ui-storage:0.6.0'
-    implementation 'com.google.firebase:firebase-database:11.8.0'
+    implementation 'com.google.firebase:firebase-database:12.0.1'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.1'
     testCompile 'io.kotlintest:kotlintest:2.0.5'
-    kapt 'com.android.databinding:compiler:3.1.0-alpha05'
+    kapt 'com.android.databinding:compiler:3.2.0-alpha10'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
-    implementation "android.arch.lifecycle:extensions:1.0.0"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
     implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'joda-time:joda-time:2.9.9'
