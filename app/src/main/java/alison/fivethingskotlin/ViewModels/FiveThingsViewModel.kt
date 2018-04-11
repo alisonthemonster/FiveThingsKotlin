@@ -2,8 +2,6 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.Models.FirebaseSource
 import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Util.getDatabaseStyleDate
-import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
@@ -14,7 +12,7 @@ import com.google.firebase.auth.FirebaseUser
 import java.util.*
 
 
-class FiveThingsViewModel(private val user: FirebaseUser): ViewModel() {
+class FiveThingsViewModel(user: FirebaseUser): ViewModel() {
 
     private val fiveThingsData = MutableLiveData<FiveThings>()
     private val dateData = MutableLiveData<Date>()

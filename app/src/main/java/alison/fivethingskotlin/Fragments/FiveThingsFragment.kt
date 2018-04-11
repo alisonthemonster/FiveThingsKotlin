@@ -28,14 +28,13 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         user?.let {
             viewModel = FiveThingsViewModel(user)
 
-            binding = FiveThingsFragmentBinding.inflate(inflater!!, container, false)
+            binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
             binding.viewModel = viewModel
+
             currentDate = Date()
             viewModel.getFiveThings(currentDate).observe(this, Observer<FiveThings> { fiveThings ->
                 binding.fiveThings = fiveThings
@@ -48,7 +47,7 @@ class FiveThingsFragment : Fragment() {
         }
         //TODO handle case where user get here without logging in
         // Inflate the layout for this fragment
-        return inflater!!.inflate(R.layout.five_things_fragment, container, false)
+        return inflater.inflate(R.layout.five_things_fragment, container, false)
     }
 
     override fun onStart() {
