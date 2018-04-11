@@ -2,7 +2,6 @@ package alison.fivethingskotlin
 
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
-import android.accounts.Account
 import android.accounts.AccountManager
 import android.accounts.AccountManagerCallback
 import android.accounts.AccountManagerFuture
@@ -39,7 +38,7 @@ class PromoActivity : AppCompatActivity() {
         }
 
         signInButton.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
         }
     }
@@ -79,7 +78,7 @@ class PromoActivity : AppCompatActivity() {
             if (bundle.getString(AccountManager.KEY_INTENT) != null) {
                 Log.d("blerg", "About to launch login activity, bc no good token found")
                 //no token found on device, show log in screen to force manual entry
-                val intent = Intent(applicationContext, LoginActivity::class.java)
+                val intent = Intent(applicationContext, LogInActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivityForResult(intent, SIGN_IN)
                 return

@@ -22,7 +22,7 @@ import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
-class LoginActivity : AppCompatActivity() {
+class LogInActivity : AppCompatActivity() {
 
     private lateinit var email: String
     private lateinit var password: String
@@ -33,8 +33,6 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_log_in)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
-
-//        FiveThingsApplication.component.inject(this)
 
         logInButton.setOnClickListener{
             logIn()

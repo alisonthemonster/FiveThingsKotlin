@@ -1,10 +1,5 @@
 package alison.fivethingskotlin.API
 
-import alison.fivethingskotlin.LoginActivity
-import alison.fivethingskotlin.PromoActivity
-import android.accounts.AccountManager
-import android.content.Intent
-import android.support.v4.content.ContextCompat.startActivity
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response

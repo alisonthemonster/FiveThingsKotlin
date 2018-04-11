@@ -1,7 +1,6 @@
 package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
-import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.FiveThingz
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
@@ -14,7 +13,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
 import java.util.*
-
 
 class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
 

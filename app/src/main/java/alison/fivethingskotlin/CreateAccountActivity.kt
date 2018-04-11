@@ -44,7 +44,7 @@ class CreateAccountActivity : AppCompatActivity() {
         }
 
         alreadyHaveAccountText.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
+            val intent = Intent(this, LogInActivity::class.java)
             startActivity(intent)
         }
     }

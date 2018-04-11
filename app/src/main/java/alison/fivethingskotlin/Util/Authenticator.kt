@@ -1,6 +1,6 @@
 package alison.fivethingskotlin.Util
 
-import alison.fivethingskotlin.LoginActivity
+import alison.fivethingskotlin.LogInActivity
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import android.accounts.*
@@ -24,7 +24,7 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
                             requiredFeatures: Array<String>,
                             options: Bundle): Bundle {
 
-        val intent = Intent(mContext, LoginActivity::class.java)
+        val intent = Intent(mContext, LogInActivity::class.java)
         intent.putExtra(ACCOUNT_TYPE, accountType)
         intent.putExtra(AUTH_TOKEN_TYPE, authTokenType)
         intent.putExtra("is_adding_new_account", true)
@@ -68,7 +68,7 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
 
         //we couldn't get a token
         Log.d("blerg", "auth token wasn't retrieved from cache")
-        val intent = Intent(mContext, LoginActivity::class.java)
+        val intent = Intent(mContext, LogInActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra(ACCOUNT_TYPE, account.type)
         intent.putExtra(AUTH_TOKEN_TYPE, authTokenType)

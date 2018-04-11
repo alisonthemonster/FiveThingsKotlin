@@ -34,15 +34,14 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         user?.let {
             val accountManager = AccountManager.get(context)
             viewModel = FiveThingsViewModel(accountManager)
 
             binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
             binding.viewModel = viewModel
+
             currentDate = Date()
 
             viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
@@ -69,7 +68,7 @@ class FiveThingsFragment : Fragment() {
             viewModel.getDate().observe(this, Observer<Date> { date ->
                 val currDate = date ?: Date()
                 Log.d("blerg", "currdate: " + currDate)
-                binding.date = currDate
+                binding.naguDate = currDate
                 binding.month = getMonth(currDate) + " " + getYear(currDate)
                 compactCalendarView.setCurrentDate(currDate)
             })
@@ -83,7 +82,7 @@ class FiveThingsFragment : Fragment() {
                     binding.loading = false
                     compactCalendarView.removeAllEvents()
                     days.data?.let {
-                        val events = days.data?.map { convertDateToEvent(it) }
+                        val events = days.data.map { convertDateToEvent(it) }
                         compactCalendarView.addEvents(events)
 
                         yearList = mutableListOf()
