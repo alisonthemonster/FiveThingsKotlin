@@ -86,8 +86,8 @@ class FiveThingsFragment : Fragment() {
                         compactCalendarView.addEvents(events)
 
                         yearList = mutableListOf()
-                        val minYear = getYear(Collections.min(days))
-                        val maxYear = getYear(Collections.max(days))
+                        val minYear = getYear(Collections.min(days.data))
+                        val maxYear = getYear(Collections.max(days.data))
                         (minYear..maxYear).mapTo(yearList) { it.toString() }
 
                         if (yearList.size > 1) {
