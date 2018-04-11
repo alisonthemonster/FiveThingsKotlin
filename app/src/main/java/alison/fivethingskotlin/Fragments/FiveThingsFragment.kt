@@ -1,13 +1,7 @@
 package alison.fivethingskotlin.Fragments
 
-import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.FiveThingz
-import android.arch.lifecycle.Observer
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.Resource
-import alison.fivethingskotlin.Util.convertDateToEvent
-import alison.fivethingskotlin.Util.getMonth
-import alison.fivethingskotlin.Util.getYear
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
@@ -75,8 +69,7 @@ class FiveThingsFragment : Fragment() {
 
             binding.loading = true
 
-            //TODO only pull in for current month?
-            viewModel.getWrittenDays().observe(this, Observer< Resource<List<Date>>> { days ->
+            viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
                 days?.let{
                     Log.d("blerg", "updating cal")
                     binding.loading = false
