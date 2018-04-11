@@ -182,7 +182,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[0].content}"
+                        android:text="@={fiveThings.things[0]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -204,7 +204,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[1].content}"
+                        android:text="@={fiveThings.things[1]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -226,7 +226,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[2].content}"
+                        android:text="@={fiveThings.things[2]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -248,7 +248,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[3].content}"
+                        android:text="@={fiveThings.things[3]}"
                         android:textSize="15sp" />
 
                     <TextView
@@ -270,7 +270,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[4].content}"
+                        android:text="@={fiveThings.things[4]}"
                         android:textSize="15sp" />
 
                     <Button

@@ -27,7 +27,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
                     if (response.code() == 404) {
-                        val things = FiveThingz(FiveThingsId("blah"), UserId("blah"), NaguDate(date), listOf(Thing(""), Thing(""), Thing(""), Thing(""), Thing("")))
+                        val things = FiveThingz(listOf("", "", "", "", ""), date, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
                         fiveThingsData.value = Resource(Status.ERROR, response.message(), response.body())
@@ -48,7 +48,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         Log.d("blerg", "about to make request to save day")
 
         if (fiveThings.isEmpty) {
-            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.naguDate.date))
+            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
             call.enqueue(object : Callback<Response<Void>> {
 
                 override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
@@ -67,8 +67,8 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 }
             })
         } else {
-            val things = arrayOf(fiveThings.things[0].content, fiveThings.things[1].content, fiveThings.things[2].content, fiveThings.things[3].content, fiveThings.things[4].content)
-            val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.naguDate.date), things)
+            val things = arrayOf(fiveThings.things[0], fiveThings.things[1], fiveThings.things[2], fiveThings.things[3], fiveThings.things[4])
+            val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date), things)
 
             if (fiveThings.saved) {
                 val call = fiveThingsService.updateFiveThings(token, requestBody)

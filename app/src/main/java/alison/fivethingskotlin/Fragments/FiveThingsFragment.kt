@@ -40,7 +40,7 @@ class FiveThingsFragment : Fragment() {
 
             viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
                 binding.fiveThings = fiveThings?.data
-                binding.naguDate = fiveThings?.data?.naguDate?.date
+                binding.naguDate = fiveThings?.data?.date
             })
 
             binding.calendarVisible = false
