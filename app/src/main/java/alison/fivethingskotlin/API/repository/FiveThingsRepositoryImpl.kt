@@ -8,6 +8,7 @@ import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -30,15 +31,15 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         val things = FiveThingz(listOf("", "", "", "", ""), date, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
-                        fiveThingsData.value = Resource(Status.ERROR, response.message(), response.body())
+                        val json = JSONObject(response.errorBody()?.string())
+                        val messageString = json.getString("message")
+                        fiveThingsData.value = Resource(Status.ERROR, messageString, response.body())
                     }
                 }
             }
 
             override fun onFailure(call: Call<FiveThingz>?, t: Throwable?) {
-                //TODO
-                Log.d("blerg", "on failure babyyyy")
-                t?.printStackTrace()
+                fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
             }
         })
         return fiveThingsData
@@ -56,14 +57,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         //TODO somehow find a way to tell client to get new list of dates written
                             //what if the success response returned the list of all dates?
                     } else {
-                        //TODO
+                        val json = JSONObject(response.errorBody()?.string())
+                        val messageString = json.getString("message")
+                        fiveThingsData.value = Resource(Status.ERROR, messageString, null)
                     }
                 }
 
                 override fun onFailure(call: Call<Response<Void>>?, t: Throwable?) {
-                    //TODO
-                    Log.d("blerg", "on failure babyyyy")
-                    t?.printStackTrace()
+                    fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
                 }
             })
         } else {
@@ -78,14 +79,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             fiveThings.saved = true
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                         } else {
-                            //TODO
+                            val json = JSONObject(response.errorBody()?.string())
+                            val messageString = json.getString("message")
+                            fiveThingsData.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
                     override fun onFailure(call: Call<Message>?, t: Throwable?) {
-                        //TODO
-                        Log.d("blerg", "on failure babyyyy")
-                        t?.printStackTrace()
+                        fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
                     }
                 })
             } else {
@@ -96,14 +97,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             fiveThings.saved = true
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                         } else {
-                            //TODO
+                            val json = JSONObject(response.errorBody()?.string())
+                            val messageString = json.getString("message")
+                            fiveThingsData.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
                     override fun onFailure(call: Call<Message>?, t: Throwable?) {
-                        //TODO
-                        Log.d("blerg", "on failure babyyyy")
-                        t?.printStackTrace()
+                        fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
                     }
                 })
             }
@@ -121,19 +122,18 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                     fiveThingsDates.value = Resource(Status.SUCCESS, "", days)
                 } else {
-                    fiveThingsDates.value = Resource(Status.ERROR, response.message(), null)
+                    val json = JSONObject(response.errorBody()?.string())
+                    val messageString = json.getString("message")
+                    fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
                 }
             }
 
             override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
-                //TODO
-                Log.d("blerg", "on failure babyyyy")
-                t?.printStackTrace()
+                fiveThingsDates.value = Resource(Status.ERROR, t?.message, null)
             }
         })
 
         return fiveThingsDates
-
     }
 
 }

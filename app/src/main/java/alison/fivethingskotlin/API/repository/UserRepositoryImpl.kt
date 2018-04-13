@@ -25,10 +25,9 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
 
         val call = authService.createUser(userData)
         call.enqueue(object : Callback<Token> {
-            override fun onFailure(call: Call<Token>?, t: Throwable?) {
-                //TODO
+            override fun onFailure(call: Call<Token>?, t: Throwable) {
                 Log.d("blerg", "on failure babyyyy")
-                t?.printStackTrace()
+                liveData.value = Resource(ERROR, t.message, null)
             }
 
             override fun onResponse(call: Call<Token>?, response: Response<Token>) {
@@ -57,13 +56,14 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {
-                    Log.d("blerg", "body: " + response.body())
-                    liveData.value = Resource(ERROR, response.message(), response.body())
+                    val json = JSONObject(response.errorBody()?.string())
+                    val messageString = json.getString("message")
+                    liveData.value = Resource(ERROR, messageString, response.body())
                 }
             }
 
             override fun onFailure(call: Call<Token>, t: Throwable) {
-                //TODO
+                liveData.value = Resource(ERROR, t.message, null)
             }
         })
         return liveData
