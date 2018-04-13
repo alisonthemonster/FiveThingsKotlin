@@ -23,7 +23,6 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     val account = accountManager.getAccountsByType(ACCOUNT_TYPE)[0]
     val token = "Token: " + accountManager.peekAuthToken(account, AUTH_TOKEN_TYPE)
 
-
     fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
         Log.d("blerg", "token: " + token)
         Log.d("blerg", "account: " + account)

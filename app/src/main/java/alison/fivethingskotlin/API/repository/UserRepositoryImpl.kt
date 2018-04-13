@@ -7,10 +7,10 @@ import alison.fivethingskotlin.Models.Status.ERROR
 import alison.fivethingskotlin.Models.Status.SUCCESS
 import alison.fivethingskotlin.Models.Token
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.Util.buildErrorResource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,9 +39,7 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {
-                    val json = JSONObject(response.errorBody()?.string())
-                    val messageString = json.getString("message")
-                    liveData.value = Resource(ERROR, messageString, response.body())
+                    liveData.value = buildErrorResource(response)
                 }
             }
         })
@@ -56,9 +54,7 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {
-                    val json = JSONObject(response.errorBody()?.string())
-                    val messageString = json.getString("message")
-                    liveData.value = Resource(ERROR, messageString, response.body())
+                    liveData.value = buildErrorResource(response)
                 }
             }
 

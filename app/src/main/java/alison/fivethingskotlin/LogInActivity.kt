@@ -68,9 +68,7 @@ class LogInActivity : AppCompatActivity() {
                         startActivity(intent)
                         setResult(Activity.RESULT_OK)
                         finish()
-
                     } else {
-                        //TODO find a way to get all the various error types and present them to user
                         Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
                         Log.d("blerg", "error response found by activity")
                     }

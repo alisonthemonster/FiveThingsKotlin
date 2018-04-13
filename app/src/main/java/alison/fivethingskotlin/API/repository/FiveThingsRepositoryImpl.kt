@@ -3,6 +3,7 @@ package alison.fivethingskotlin.API.repository
 import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.Models.*
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.Util.buildErrorResource
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import android.arch.lifecycle.LiveData
@@ -31,9 +32,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         val things = FiveThingz(listOf("", "", "", "", ""), date, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
-                        val json = JSONObject(response.errorBody()?.string())
-                        val messageString = json.getString("message")
-                        fiveThingsData.value = Resource(Status.ERROR, messageString, response.body())
+                        fiveThingsData.value = buildErrorResource(response)
                     }
                 }
             }
