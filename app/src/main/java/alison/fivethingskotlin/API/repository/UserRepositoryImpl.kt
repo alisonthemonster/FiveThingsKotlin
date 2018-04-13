@@ -10,9 +10,11 @@ import alison.fivethingskotlin.Util.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class UserRepositoryImpl(private val authService: AuthService = AuthService.create()): UserRepository {
 
@@ -38,7 +40,9 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {
-                    liveData.value = Resource(ERROR, response.message(), response.body())
+                    val json = JSONObject(response.errorBody()?.string())
+                    val messageString = json.getString("message")
+                    liveData.value = Resource(ERROR, messageString, response.body())
                 }
             }
         })
