@@ -41,8 +41,7 @@ class FiveThingsFragment : Fragment() {
         currentDate = Date()
 
         viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
-            //binding.fiveThings = fiveThings?.data
-            binding.fiveThings = FiveThingz(listOf("Hello", "hi", "hey", "yo", "sup"), Date(), true)
+            binding.fiveThings = fiveThings?.data
             binding.naguDate = fiveThings?.data?.date
         })
 
@@ -55,6 +54,9 @@ class FiveThingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        binding.loading = true
+
+        //Pull in today's data
         viewModel.getDate().observe(this, Observer<Date> { date ->
             val currDate = date ?: Date()
             Log.d("blerg", "currdate: " + currDate)
@@ -63,14 +65,13 @@ class FiveThingsFragment : Fragment() {
             compactcalendar_view.setCurrentDate(currDate)
         })
 
-        binding.loading = true
-
+        //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
+            binding.loading = false
             days?.let{
                 when (it.status) {
                     Status.SUCCESS -> {
                         Log.d("blerg", "updating cal")
-                        binding.loading = false
                         compactcalendar_view.removeAllEvents()
                         days.data?.let {
                             val events = days.data.map { convertDateToEvent(it) }
@@ -81,7 +82,6 @@ class FiveThingsFragment : Fragment() {
                         }
                     }
                     Status.ERROR -> {
-                        binding.loading = false
                         Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -89,18 +89,18 @@ class FiveThingsFragment : Fragment() {
         })
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
-                override fun onDayClick(dateClicked: Date) {
-                    val events = compactcalendar_view.getEvents(dateClicked)
-                    Log.d("blerg", "Day was clicked: $dateClicked with events $events")
-                    viewModel.changeDate(dateClicked)
-                    binding.calendarVisible = false
-                }
+            override fun onDayClick(dateClicked: Date) {
+                val events = compactcalendar_view.getEvents(dateClicked)
+                Log.d("blerg", "Day was clicked: $dateClicked with events $events")
+                viewModel.changeDate(dateClicked)
+                binding.calendarVisible = false
+            }
 
-                override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                    currentDate = firstDayOfNewMonth
-                    binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
-                }
-            })
+            override fun onMonthScroll(firstDayOfNewMonth: Date) {
+                currentDate = firstDayOfNewMonth
+                binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
+            }
+        })
 
         current_date.setOnClickListener {
             val currentVisibility = binding.calendarVisible
