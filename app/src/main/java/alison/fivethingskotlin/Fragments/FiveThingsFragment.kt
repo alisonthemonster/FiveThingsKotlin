@@ -2,7 +2,6 @@ package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.Models.FiveThingz
 import alison.fivethingskotlin.Models.Status
-import alison.fivethingskotlin.R
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
@@ -47,7 +46,11 @@ class FiveThingsFragment : Fragment() {
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
                     binding.fiveThings = fiveThings.data
-                    binding.naguDate = fiveThings.data?.date
+                    fiveThings.data?.let {
+                        binding.naguDate = it.date
+                        binding.month = getMonth(it.date) + " " + getYear(it.date)
+                        compactcalendar_view.setCurrentDate(it.date)
+                    }
                 }
                 Status.ERROR -> {
                     binding.loading = false
@@ -56,37 +59,24 @@ class FiveThingsFragment : Fragment() {
             }
         })
 
-        //Pull in today's data
-        viewModel.getDate().observe(this, Observer<Date> { date ->
-            binding.loading = false
-            val currDate = date ?: Date()
-            Log.d("blerg", "currdate: " + currDate)
-            binding.naguDate = currDate
-            binding.month = getMonth(currDate) + " " + getYear(currDate)
-            compactcalendar_view.setCurrentDate(currDate)
-        })
+//        //Pull in today's data
+//        viewModel.getDate().observe(this, Observer<Date> { date ->
+//            //TODO can this info come from the above call?
+//            binding.loading = false
+//            val currDate = date ?: Date()
+//            Log.d("blerg", "currdate: " + currDate)
+//            binding.naguDate = currDate
+//            binding.month = getMonth(currDate) + " " + getYear(currDate)
+//            compactcalendar_view.setCurrentDate(currDate)
+//        })
 
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
             binding.loading = false
-            Log.d("blerg", "Scrollview: " + scroll_view.visibility.toString())
-            Log.d("blerg", "Loadingview: " + loading_view.visibility.toString())
             days?.let{
                 when (it.status) {
-                    Status.SUCCESS -> {
-                        Log.d("blerg", "updating cal")
-                        compactcalendar_view.removeAllEvents()
-                        days.data?.let {
-                            val events = days.data.map { convertDateToEvent(it) }
-                            compactcalendar_view.addEvents(events)
-                            if (it.isNotEmpty()) {
-                                buildYearDialog(it)
-                            }
-                        }
-                    }
-                    Status.ERROR -> {
-                        Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                    }
+                    Status.SUCCESS -> addEventsToCalendar(it.data)
+                    Status.ERROR ->Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -101,14 +91,12 @@ class FiveThingsFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
-                val events = compactcalendar_view.getEvents(dateClicked)
-                Log.d("blerg", "Day was clicked: $dateClicked with events $events")
                 viewModel.changeDate(dateClicked)
                 binding.calendarVisible = false
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                currentDate = firstDayOfNewMonth
+                currentDate = firstDayOfNewMonth //TODO what does currentDate do again?
                 binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
             }
         })
@@ -117,6 +105,28 @@ class FiveThingsFragment : Fragment() {
             val currentVisibility = binding.calendarVisible
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
+            }
+        }
+
+        save_button.setOnClickListener {
+            viewModel.writeFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
+                when (it?.status) {
+                    Status.SUCCESS -> addEventsToCalendar(it.data)
+                    Status.ERROR -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                }
+
+            })
+        }
+    }
+
+    private fun addEventsToCalendar(dates: List<Date>?) {
+        Log.d("blerg", "updating calendar")
+        compactcalendar_view.removeAllEvents()
+        dates?.let {
+            val events = it.map { convertDateToEvent(it) }
+            compactcalendar_view.addEvents(events)
+            if (it.isNotEmpty()) {
+                buildYearDialog(it)
             }
         }
     }

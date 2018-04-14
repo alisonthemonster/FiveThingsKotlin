@@ -11,7 +11,7 @@ interface FiveThingsRepository {
 
     fun getFiveThings(token: String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): LiveData<Resource<FiveThingz>>
 
-    fun saveFiveThings(token: String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>)
+    fun saveFiveThings(token: String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): MutableLiveData<Resource<List<Date>>>
 
     fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>>
 

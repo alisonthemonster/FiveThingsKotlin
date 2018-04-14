@@ -17,7 +17,6 @@ import java.util.*
 class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThingz>>()
-    private val dateData = MutableLiveData<Date>()
     private val fiveThingsSource = FiveThingsRepositoryImpl()
 
     val account = accountManager.getAccountsByType(ACCOUNT_TYPE)[0]
@@ -28,13 +27,9 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
         Log.d("blerg", "account: " + account)
         Log.d("blerg", "accounts: " + accountManager.getAccountsByType(ACCOUNT_TYPE).size)
 
-        dateData.value = date
         return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }
 
-    fun getDate(): LiveData<Date> {
-        return dateData
-    }
 
     fun onEditText() {
         val fiveThings = fiveThingsData.value
@@ -42,9 +37,9 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
         fiveThingsData.value = fiveThings
     }
 
-    fun writeFiveThings(fiveThings: FiveThingz) {
+    fun writeFiveThings(fiveThings: FiveThingz): LiveData<Resource<List<Date>>> {
         Log.d("fivethings", "about to write the data: " + fiveThings)
-        fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
+        return fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 
     fun getToday(): LiveData<Resource<FiveThingz>> {

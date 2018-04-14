@@ -47,26 +47,28 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         return fiveThingsData
     }
 
-    override fun saveFiveThings(token:String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>) {
+    override fun saveFiveThings(token:String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): MutableLiveData<Resource<List<Date>>> {
         Log.d("blerg", "about to make request to save day")
+        val writtenDates = MutableLiveData<Resource<List<Date>>>()
+
+        //FAILS until nagu updates API
 
         if (fiveThings.isEmpty) {
             val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
-            call.enqueue(object : Callback<Response<Void>> {
-
-                override fun onResponse(call: Call<Response<Void>>?, response: Response<Response<Void>>) {
+            call.enqueue(object : Callback<List<String>> {
+                override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                     if (response.isSuccessful) {
-                        //TODO somehow find a way to tell client to get new list of dates written
-                            //what if the success response returned the list of all dates?
+                        val days = response.body()?.map { getDateFromDatabaseStyle(it) }
+                        writtenDates.value = Resource(Status.SUCCESS, "Date removed", days)
                     } else {
                         val json = JSONObject(response.errorBody()?.string())
                         val messageString = json.getString("message")
-                        fiveThingsData.value = Resource(Status.ERROR, messageString, null)
+                        writtenDates.value = Resource(Status.ERROR, messageString, null)
                     }
                 }
 
-                override fun onFailure(call: Call<Response<Void>>?, t: Throwable?) {
-                    fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
+                override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
+                    writtenDates.value = Resource(Status.ERROR, t?.message, null)
                 }
             })
         } else {
@@ -74,43 +76,50 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
             val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date), things)
 
             if (fiveThings.saved) {
+                //TODO check that entries coming from nagu are created with saved = true
                 val call = fiveThingsService.updateFiveThings(token, requestBody)
-                call.enqueue(object : Callback<Message> {
-                    override fun onResponse(call: Call<Message>?, response: Response<Message>) {
+                call.enqueue(object : Callback<List<String>> {
+                    override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                         if (response.isSuccessful) {
                             fiveThings.saved = true
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
+                            val days = response.body()?.map { getDateFromDatabaseStyle(it) }
+                            writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
                         } else {
+                            //todo: set saved to false?
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("message")
-                            fiveThingsData.value = Resource(Status.ERROR, messageString, null)
+                            writtenDates.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
-                    override fun onFailure(call: Call<Message>?, t: Throwable?) {
-                        fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
+                    override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
+                        writtenDates.value = Resource(Status.ERROR, t?.message, null)
                     }
                 })
             } else {
                 val call = fiveThingsService.writeFiveThings(token, requestBody)
-                call.enqueue(object : Callback<Message> {
-                    override fun onResponse(call: Call<Message>?, response: Response<Message>) {
+                call.enqueue(object : Callback<List<String>> {
+                    override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                         if (response.isSuccessful) {
                             fiveThings.saved = true
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
+                            val days = response.body()?.map { getDateFromDatabaseStyle(it) }
+                            writtenDates.value = Resource(Status.SUCCESS, "Date saved", days)
                         } else {
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("message")
-                            fiveThingsData.value = Resource(Status.ERROR, messageString, null)
+                            writtenDates.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
-                    override fun onFailure(call: Call<Message>?, t: Throwable?) {
+                    override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
                         fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
                     }
                 })
             }
         }
+        return writtenDates
     }
 
     override fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>> {
