@@ -24,3 +24,6 @@ An app to track your quickly track, review, and reflect on your days.
 
 
 <img src="https://i.imgur.com/rkX3EZ7.png" width="350"> <img src="https://i.imgur.com/c35QxFl.png" width="350">
+
+
+*If you clone this repo the app will not build for a few reasons: You'll need my `google-services.json` for firebase and you'll be missing some font assets I didn't want to upload to github.*
