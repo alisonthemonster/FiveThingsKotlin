@@ -1,13 +1,10 @@
 package alison.fivethingskotlin.API
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
-import java.util.*
-
 
 class RetrofitHelper {
 
@@ -18,8 +15,7 @@ class RetrofitHelper {
         fun build(): Retrofit {
 
             val gson = GsonBuilder()
-                    .registerTypeAdapter(Date::class.java, JsonDeserializer<Date> { json, typeOfT, context ->
-                        Date(json.asJsonPrimitive.asLong) })
+                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                     .create()
 
             return Retrofit.Builder()

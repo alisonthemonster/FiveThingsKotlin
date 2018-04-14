@@ -40,24 +40,25 @@ class FiveThingsFragment : Fragment() {
 
         currentDate = Date()
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
-            binding.fiveThings = fiveThings?.data
-            binding.naguDate = fiveThings?.data?.date
-        })
-
-        binding.calendarVisible = false
-
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.five_things_fragment, container, false)
-    }
-
-    override fun onStart() {
-        super.onStart()
-
         binding.loading = true
+
+
+        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
+            when (fiveThings?.status) {
+                Status.SUCCESS -> {
+                    binding.fiveThings = fiveThings.data
+                    binding.naguDate = fiveThings.data?.date
+                }
+                Status.ERROR -> {
+                    binding.loading = false
+                    Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
 
         //Pull in today's data
         viewModel.getDate().observe(this, Observer<Date> { date ->
+            binding.loading = false
             val currDate = date ?: Date()
             Log.d("blerg", "currdate: " + currDate)
             binding.naguDate = currDate
@@ -68,6 +69,8 @@ class FiveThingsFragment : Fragment() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
             binding.loading = false
+            Log.d("blerg", "Scrollview: " + scroll_view.visibility.toString())
+            Log.d("blerg", "Loadingview: " + loading_view.visibility.toString())
             days?.let{
                 when (it.status) {
                     Status.SUCCESS -> {
@@ -87,6 +90,14 @@ class FiveThingsFragment : Fragment() {
                 }
             }
         })
+
+        binding.calendarVisible = false
+
+        return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {

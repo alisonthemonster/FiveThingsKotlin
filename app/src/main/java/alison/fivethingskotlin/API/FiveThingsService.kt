@@ -1,6 +1,5 @@
 package alison.fivethingskotlin.API
 
-import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.FiveThingsRequest
 import alison.fivethingskotlin.Models.FiveThingz
 import alison.fivethingskotlin.Models.Message
@@ -13,8 +12,11 @@ interface FiveThingsService {
         fun create(): FiveThingsService = RetrofitHelper.build().create(FiveThingsService::class.java)
     }
 
-    @GET("get_info_for_day/{dayString}")
+    @GET("info_for_day/{dayString}")
     fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThingz>
+
+    @GET("get_info_for_day/{dayString}")
+    fun getFiveThingsWithAnalytics(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThingz>
 
     @PUT("log_day")
     fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<Message>

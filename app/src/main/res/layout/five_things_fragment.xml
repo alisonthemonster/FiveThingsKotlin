@@ -42,6 +42,7 @@
         tools:context="alison.fivethingskotlin.Fragments.FiveThingsFragment">
 
         <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{loading ?  View.GONE : View.VISIBLE}" >
@@ -291,6 +292,7 @@
         </ScrollView>
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/loading_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="@{loading ?  View.VISIBLE : View.GONE}"

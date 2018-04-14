@@ -22,6 +22,9 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         val call = fiveThingsService.getFiveThings(token, dateString)
         call.enqueue(object : Callback<FiveThingz> {
             override fun onResponse(call: Call<FiveThingz>?, response: Response<FiveThingz>) {
+                Log.d("blerg", "given date: " + date)
+                Log.d("blerg", "gotten date: " + response.body()?.date)
+
                 Log.d("blerg", "responseee: " + response.body())
                 Log.d("blerg", "is success: " + response.isSuccessful)
 
@@ -29,7 +32,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
                     if (response.code() == 404) {
-                        val things = FiveThingz(listOf("", "", "", "", ""), date, false)
+                        val things = FiveThingz( date, listOf("", "", "", "", ""),false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
                         fiveThingsData.value = buildErrorResource(response)

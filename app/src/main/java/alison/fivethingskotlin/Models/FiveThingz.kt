@@ -4,9 +4,11 @@ import alison.fivethingskotlin.Util.getFullDateFormat
 import java.util.*
 
 data class FiveThingz(
-        val things: List<String>,
         val date: Date,
-        var saved: Boolean = false) {
+        val things: List<String>,
+        var saved: Boolean = true) {
+
+    //todo: should date be saved by default? useful for retrofit gson stuffz
 
     val isComplete: Boolean
         get() {
