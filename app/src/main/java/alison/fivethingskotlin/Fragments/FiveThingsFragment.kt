@@ -45,6 +45,7 @@ class FiveThingsFragment : Fragment() {
         viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
+                    fiveThings.data?.saved = true
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date

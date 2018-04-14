@@ -22,12 +22,6 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         val call = fiveThingsService.getFiveThings(token, dateString)
         call.enqueue(object : Callback<FiveThingz> {
             override fun onResponse(call: Call<FiveThingz>?, response: Response<FiveThingz>) {
-                Log.d("blerg", "given date: " + date)
-                Log.d("blerg", "gotten date: " + response.body()?.date)
-
-                Log.d("blerg", "responseee: " + response.body())
-                Log.d("blerg", "is success: " + response.isSuccessful)
-
                 if (response.isSuccessful) {
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
@@ -51,7 +45,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         Log.d("blerg", "about to make request to save day")
         val writtenDates = MutableLiveData<Resource<List<Date>>>()
 
-        //FAILS until nagu updates API
+        //FAILS until nagu updates API to return dates
 
         if (fiveThings.isEmpty) {
             val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
@@ -76,7 +70,6 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
             val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date), things)
 
             if (fiveThings.saved) {
-                //TODO check that entries coming from nagu are created with saved = true
                 val call = fiveThingsService.updateFiveThings(token, requestBody)
                 call.enqueue(object : Callback<List<String>> {
                     override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
@@ -107,9 +100,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date saved", days)
                         } else {
-                            val json = JSONObject(response.errorBody()?.string())
-                            val messageString = json.getString("message")
-                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            //TODO use when nagu updates his response to be a message object
+//                            val json = JSONObject(response.errorBody()?.string())
+//                            val messageString = json.getString("message")
+//                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            writtenDates.value = Resource(Status.ERROR, response.message(), null)
                         }
                     }
 
