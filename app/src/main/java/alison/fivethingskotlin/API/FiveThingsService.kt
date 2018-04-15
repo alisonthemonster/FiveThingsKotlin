@@ -23,7 +23,7 @@ interface FiveThingsService {
     fun writeFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<List<String>>
 
     @HTTP(method = "DELETE", path = "log_day", hasBody = true)
-    fun deleteFiveThings(@Header("Authorization") token: String, @Body date: String): Call<List<String>>
+    fun deleteFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<List<String>>
 
     @GET("get_days_written")
     fun getWrittenDates(@Header("Authorization") token: String): Call<List<String>>

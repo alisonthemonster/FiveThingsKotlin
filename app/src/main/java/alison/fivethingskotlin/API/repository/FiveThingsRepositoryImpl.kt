@@ -54,8 +54,8 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
 
         if (fiveThings.isEmpty) {
             //DELETE AN ENTRY
-            val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
-            call.enqueue(object : Callback<List<String>> {
+            val call = fiveThingsService.deleteFiveThings(token, FiveThingsRequest(getDatabaseStyleDate(fiveThings.date)))
+                call.enqueue(object : Callback<List<String>> {
                 override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                     if (response.isSuccessful) {
                         val days = response.body()?.map { getDateFromDatabaseStyle(it) }
