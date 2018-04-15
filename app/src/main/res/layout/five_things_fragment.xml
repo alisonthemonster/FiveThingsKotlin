@@ -285,7 +285,6 @@
                         android:layout_gravity="right"
                         android:layout_margin="5dp"
                         android:background="@drawable/rounded_button"
-                        android:onClick="@{() -> viewModel.writeFiveThings(fiveThings)}"
                         android:text="@{fiveThings.savedString}"
                         android:textColor="@color/white" />
                 </LinearLayout>

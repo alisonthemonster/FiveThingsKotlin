@@ -23,22 +23,16 @@ class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
     val token = "Token: " + accountManager.peekAuthToken(account, AUTH_TOKEN_TYPE)
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
-        Log.d("blerg", "token: " + token)
-        Log.d("blerg", "account: " + account)
-        Log.d("blerg", "accounts: " + accountManager.getAccountsByType(ACCOUNT_TYPE).size)
-
         return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }
 
-
     fun onEditText() {
         val fiveThings = fiveThingsData.value
-        fiveThings?.data?.saved = false
+        fiveThings?.data?.edited = true
         fiveThingsData.value = fiveThings
     }
 
     fun writeFiveThings(fiveThings: FiveThingz): LiveData<Resource<List<Date>>> {
-        Log.d("fivethings", "about to write the data: " + fiveThings)
         return fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 

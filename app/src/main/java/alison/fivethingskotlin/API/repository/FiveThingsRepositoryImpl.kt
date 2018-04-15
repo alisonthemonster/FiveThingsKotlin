@@ -23,10 +23,15 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         call.enqueue(object : Callback<FiveThingz> {
             override fun onResponse(call: Call<FiveThingz>?, response: Response<FiveThingz>) {
                 if (response.isSuccessful) {
+                    if (!response.body()!!.isEmpty) {
+                        //if there is data from DB then we know its saved
+                        response.body()?.saved = true
+                    }
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
+                    Log.d("blerg", "body: " + response.body())
                 } else {
                     if (response.code() == 404) {
-                        val things = FiveThingz( date, listOf("", "", "", "", ""),false)
+                        val things = FiveThingz(date, listOf("", "", "", "", ""),false, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
                         fiveThingsData.value = buildErrorResource(response)
@@ -45,9 +50,10 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         Log.d("blerg", "about to make request to save day")
         val writtenDates = MutableLiveData<Resource<List<Date>>>()
 
-        //FAILS until nagu updates API to return dates
+        //TODO FAILS until nagu updates API to return dates
 
         if (fiveThings.isEmpty) {
+            //DELETE AN ENTRY
             val call = fiveThingsService.deleteFiveThings(token, getDatabaseStyleDate(fiveThings.date))
             call.enqueue(object : Callback<List<String>> {
                 override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
@@ -70,11 +76,12 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
             val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date), things)
 
             if (fiveThings.saved) {
+                //UPDATE AN ALREADY WRITTEN DAY
                 val call = fiveThingsService.updateFiveThings(token, requestBody)
                 call.enqueue(object : Callback<List<String>> {
                     override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                         if (response.isSuccessful) {
-                            fiveThings.saved = true
+                            fiveThings.edited = false
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
@@ -91,11 +98,13 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     }
                 })
             } else {
+                //A BRAND NEW DAY TO BE SAVED
                 val call = fiveThingsService.writeFiveThings(token, requestBody)
                 call.enqueue(object : Callback<List<String>> {
                     override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                         if (response.isSuccessful) {
                             fiveThings.saved = true
+                            fiveThings.edited = false
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date saved", days)

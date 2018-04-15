@@ -45,7 +45,6 @@ class FiveThingsFragment : Fragment() {
         viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
-                    fiveThings.data?.saved = true
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date
@@ -111,6 +110,7 @@ class FiveThingsFragment : Fragment() {
 
         save_button.setOnClickListener {
             viewModel.writeFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
+                Log.d("blerg", "in the observer")
                 when (it?.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
                     Status.ERROR -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()

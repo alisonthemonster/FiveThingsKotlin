@@ -6,6 +6,7 @@ import java.util.*
 data class FiveThingz(
         val date: Date,
         val things: List<String>,
+        var edited: Boolean = false,
         var saved: Boolean = true) {
 
     //todo: should date be saved by default? useful for retrofit gson stuffz
@@ -30,7 +31,7 @@ data class FiveThingz(
 
     val savedString: String
         get() {
-            return if (saved) "Saved" else "Save"
+            return if (edited) "Save" else "Saved"
         }
 
     val fullDateString: String
