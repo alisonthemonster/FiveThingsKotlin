@@ -21,21 +21,14 @@ class UserRepositoryImpl(private val authService: AuthService = AuthService.crea
     override fun createUser(userData: CreateUserRequest): LiveData<Resource<Token>> {
 
         val liveData = MutableLiveData<Resource<Token>>()
-        Log.d("blerg", "about to make request")
 
         val call = authService.createUser(userData)
         call.enqueue(object : Callback<Token> {
             override fun onFailure(call: Call<Token>?, t: Throwable) {
-                Log.d("blerg", "on failure babyyyy")
                 liveData.value = Resource(ERROR, t.message, null)
             }
 
             override fun onResponse(call: Call<Token>?, response: Response<Token>) {
-                Log.d("blerg", response.code().toString())
-                Log.d("blerg", response.message())
-                Log.d("blerg", "body: " + response.body())
-
-                Log.d("blerg", response.isSuccessful.toString())
                 if (response.isSuccessful) {
                     liveData.value = Resource(SUCCESS, "", response.body())
                 } else {

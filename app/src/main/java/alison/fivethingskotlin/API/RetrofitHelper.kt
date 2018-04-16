@@ -15,7 +15,6 @@ class RetrofitHelper {
         fun build(): Retrofit {
 
             val gson = GsonBuilder()
-                    .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
                     .create()
 
             return Retrofit.Builder()
@@ -32,9 +31,6 @@ class RetrofitHelper {
             val httpLoggingInterceptor = HttpLoggingInterceptor()
             httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
             httpClient.addNetworkInterceptor(httpLoggingInterceptor)
-
-//            val tokenAuthenticator = TokenAuthenticator()
-//            httpClient.authenticator(tokenAuthenticator)
 
             httpClient.build()
         }

@@ -47,10 +47,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
     }
 
     override fun saveFiveThings(token:String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): MutableLiveData<Resource<List<Date>>> {
-        Log.d("blerg", "about to make request to save day")
         val writtenDates = MutableLiveData<Resource<List<Date>>>()
-
-        //TODO FAILS until nagu updates API to return dates
 
         if (fiveThings.isEmpty) {
             //DELETE AN ENTRY
@@ -86,7 +83,6 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
                         } else {
-                            //todo: set saved to false?
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("message")
                             writtenDates.value = Resource(Status.ERROR, messageString, null)
@@ -109,11 +105,9 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date saved", days)
                         } else {
-                            //TODO use when nagu updates his response to be a message object
-//                            val json = JSONObject(response.errorBody()?.string())
-//                            val messageString = json.getString("message")
-//                            writtenDates.value = Resource(Status.ERROR, messageString, null)
-                            writtenDates.value = Resource(Status.ERROR, response.message(), null)
+                            val json = JSONObject(response.errorBody()?.string())
+                            val messageString = json.getString("message")
+                            writtenDates.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
@@ -127,7 +121,6 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
     }
 
     override fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>> {
-        Log.d("blerg", "about to make request for written days")
         val fiveThingsDates = MutableLiveData<Resource<List<Date>>>()
 
         val call = fiveThingsService.getWrittenDates(token)

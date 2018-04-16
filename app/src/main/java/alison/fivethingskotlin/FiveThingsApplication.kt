@@ -1,8 +1,6 @@
 package alison.fivethingskotlin
 
-
 import android.app.Application
-import android.util.Log
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
 

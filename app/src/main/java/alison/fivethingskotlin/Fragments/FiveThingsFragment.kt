@@ -27,6 +27,7 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val accountManager = AccountManager.get(context)
@@ -40,7 +41,6 @@ class FiveThingsFragment : Fragment() {
         viewModel = FiveThingsViewModel(token) //TODO switch to viewmodelprovider
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
 
         currentDate = Date()
 
@@ -63,17 +63,6 @@ class FiveThingsFragment : Fragment() {
                 }
             }
         })
-
-//        //Pull in today's data
-//        viewModel.getDate().observe(this, Observer<Date> { date ->
-//            //TODO can this info come from the above call?
-//            binding.loading = false
-//            val currDate = date ?: Date()
-//            Log.d("blerg", "currdate: " + currDate)
-//            binding.naguDate = currDate
-//            binding.month = getMonth(currDate) + " " + getYear(currDate)
-//            compactcalendar_view.setCurrentDate(currDate)
-//        })
 
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
