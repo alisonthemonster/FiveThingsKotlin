@@ -23,7 +23,9 @@
         <activity
             android:name=".LogInActivity"
             android:configChanges="orientation"
-            android:noHistory="true"
+            android:screenOrientation="portrait" />
+        <activity android:name=".CreateAccountActivity"
+            android:configChanges="orientation"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PromoActivity"
@@ -34,9 +36,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateAccountActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait" />
 
         <service
             android:name="alison.fivethingskotlin.Util.AuthenticatorService"

@@ -2,25 +2,18 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThingz
-import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
-import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
-import android.accounts.AccountManager
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import java.util.*
 
-class FiveThingsViewModel(val accountManager: AccountManager) : ViewModel() {
+class FiveThingsViewModel(val token: String) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThingz>>()
     private val fiveThingsSource = FiveThingsRepositoryImpl()
-
-    val account = accountManager.getAccountsByType(ACCOUNT_TYPE)[0]
-    val token = "Token: " + accountManager.peekAuthToken(account, AUTH_TOKEN_TYPE)
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
         return fiveThingsSource.getFiveThings(token, date, fiveThingsData)

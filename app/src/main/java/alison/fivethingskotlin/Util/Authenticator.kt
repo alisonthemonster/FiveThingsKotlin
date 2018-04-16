@@ -27,7 +27,6 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
         val intent = Intent(mContext, LogInActivity::class.java)
         intent.putExtra(ACCOUNT_TYPE, accountType)
         intent.putExtra(AUTH_TOKEN_TYPE, authTokenType)
-        intent.putExtra("is_adding_new_account", true)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
 
         val bundle = Bundle()
@@ -50,24 +49,7 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
             return result
         }
 
-        //TODO hook up to nagkumar's service when refresh token is ready
-//        //we found an old token in the "password"
-//        //we can use it to make a refresh call
-//        val password = accountManager.getPassword(account)
-//        if (password != null) {
-//            Log.d("blerg", "going to try to refresh token!")
-//            val newToken = "blah" //TODO call refresh endpoint
-//            val refreshToken = "bleepbloop"
-//            bundle.putString(AccountManager.KEY_ACCOUNT_NAME, account.name)
-//            bundle.putString(AccountManager.KEY_ACCOUNT_TYPE, account.type)
-//            bundle.putString(AccountManager.KEY_AUTHTOKEN, newToken)
-//            accountManager.setPassword(account, refreshToken)
-//            return bundle
-//
-//        }
-
-        //we couldn't get a token
-        Log.d("blerg", "auth token wasn't retrieved from cache")
+        //user has created an account on device but has never logged in to generate a token
         val intent = Intent(mContext, LogInActivity::class.java)
         intent.putExtra(AccountManager.KEY_ACCOUNT_AUTHENTICATOR_RESPONSE, response)
         intent.putExtra(ACCOUNT_TYPE, account.type)
@@ -96,10 +78,5 @@ class Authenticator(private val mContext: Context) : AbstractAccountAuthenticato
     // Checking features for the account is not supported
     override fun hasFeatures(r: AccountAuthenticatorResponse, account: Account, strings: Array<String>): Bundle {
         throw UnsupportedOperationException()
-    }
-
-    // Handle a user logging out here.
-    override fun getAccountRemovalAllowed(response: AccountAuthenticatorResponse, account: Account): Bundle {
-        return super.getAccountRemovalAllowed(response, account)
     }
 }

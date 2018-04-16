@@ -29,10 +29,15 @@ class FiveThingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        //TODO handle case where user get here without logging in
-
         val accountManager = AccountManager.get(context)
-        viewModel = FiveThingsViewModel(accountManager) //TODO switch to viewmodelprovider
+        val account = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0]
+        val token = "Token: " + accountManager.peekAuthToken(account, Constants.AUTH_TOKEN_TYPE)
+
+        if (token.isNullOrEmpty()) {
+            //TODO handle case where user get here without logging in
+        }
+
+        viewModel = FiveThingsViewModel(token) //TODO switch to viewmodelprovider
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel

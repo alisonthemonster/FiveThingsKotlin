@@ -2,7 +2,7 @@ package alison.fivethingskotlin
 
 import alison.fivethingskotlin.API.repository.UserRepositoryImpl
 import alison.fivethingskotlin.Models.LogInUserRequest
-import alison.fivethingskotlin.Models.Status.SUCCESS
+import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Models.Token
 import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
 import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
@@ -10,14 +10,12 @@ import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.databinding.ActivityLogInBinding
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -32,6 +30,8 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
+        //TODO add button to go back to promo screen
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
         logInButton.setOnClickListener{
@@ -44,7 +44,7 @@ class LogInActivity : AppCompatActivity() {
     }
 
     private fun logIn() {
-        email = login_email.text.toString()
+        email = login_email.text.toString().toLowerCase()
         password = login_password.text.toString()
 
         if (allFieldsAreFilledOut()) {
@@ -54,25 +54,20 @@ class LogInActivity : AppCompatActivity() {
             userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
                 resource?.let {
                     binding.setLoading(false)
-                    if (resource.status == SUCCESS) {
-                        Log.d("blerg", "login was successful and token was passed back")
-                        val authToken = resource.data?.token
-                        Log.d("blerg", "mr.token: " + authToken)
-                        val accountManager = AccountManager.get(this)
-                        val account = Account(email, ACCOUNT_TYPE)
-                        val success = accountManager.addAccountExplicitly(account, password, null)
-                        Log.d("blerg", "Account has never logged in on this device: " + success)
-                        accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authToken)
-                        val intent = Intent(this, ContainerActivity::class.java)
-                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        startActivity(intent)
-                        setResult(Activity.RESULT_OK)
-                        finish()
-                    } else {
-                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                        Log.d("blerg", "error response found by activity")
-                    }
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            val authToken = resource.data?.token
+                            val accountManager = AccountManager.get(this)
+                            val account = Account(email, ACCOUNT_TYPE)
+                            accountManager.addAccountExplicitly(account, password, null)
+                            accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authToken)
 
+                            val intent = Intent(this, ContainerActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        Status.ERROR -> Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
         }

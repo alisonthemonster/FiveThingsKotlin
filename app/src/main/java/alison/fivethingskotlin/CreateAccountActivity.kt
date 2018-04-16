@@ -10,14 +10,12 @@ import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.databinding.ActivityCreateAccountBinding
 import android.accounts.Account
 import android.accounts.AccountManager
-import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_account.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -31,7 +29,6 @@ class CreateAccountActivity : AppCompatActivity() {
     private lateinit var password1: String
     private lateinit var password2: String
     private lateinit var binding: ActivityCreateAccountBinding
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,34 +48,29 @@ class CreateAccountActivity : AppCompatActivity() {
 
     private fun createAccount() {
         name = create_name.text.toString()
-        email = create_email.text.toString()
+        email = create_email.text.toString().toLowerCase()
         password1 = create_password1.text.toString()
         password2 = create_password2.text.toString()
-
-        Log.d("blerg", "inside createAccount")
 
         if (allFieldsComplete() && passwordsAreAllGood() && emailIsValid()) {
             binding.setLoading(true)
 
             val userRepository = UserRepositoryImpl()
-            userRepository.createUser(CreateUserRequest(name, password1, email)).observe(this, Observer<Resource<Token>> { resource ->
-                resource?.let {
+            userRepository.createUser(CreateUserRequest(name, password1, email)).observe(this, Observer<Resource<Token>> { tokenResource ->
+                tokenResource?.let {
                     binding.setLoading(false)
-                    if (resource.status == Status.SUCCESS) {
-                        Log.d("blerg", "token created by nagkumar and passed back successfully")
+                    if (tokenResource.status == Status.SUCCESS) {
                         val account = Account(email, ACCOUNT_TYPE)
                         val accountManager = AccountManager.get(this)
                         accountManager.addAccountExplicitly(account, password1, null)
-                        accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, resource.data?.token)
-                        //accountManager.setPassword(account, refreshToken) //TODO get refresh token
-                        val intent = Intent()
-                        intent.putExtra("ACCOUNT", account)
+                        accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, tokenResource.data?.token)
+
+                        //Send user back to login screen so they can log in after validating email
+                        val intent = Intent(this, LogInActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
+                        startActivity(intent)
                     } else {
-                        Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
-                        Log.d("blerg", "error response found by activity")
+                        Toast.makeText(this, tokenResource.message, Toast.LENGTH_SHORT).show()
                     }
                 }
             })
@@ -108,11 +100,11 @@ class CreateAccountActivity : AppCompatActivity() {
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$"
         val pat = Pattern.compile(emailRegex)
-        if (pat.matcher(email).matches()) {
-            return true
+        return if (pat.matcher(email).matches()) {
+            true
         } else {
             Toast.makeText(this, "Not a valid email", Toast.LENGTH_SHORT).show()
-            return false
+            false
         }
     }
 
