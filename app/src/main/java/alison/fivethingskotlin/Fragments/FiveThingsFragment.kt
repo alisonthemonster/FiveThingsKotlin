@@ -41,6 +41,7 @@ class FiveThingsFragment : Fragment() {
         viewModel = FiveThingsViewModel(token) //TODO switch to viewmodelprovider
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
+        binding.viewModel = viewModel
 
         currentDate = Date()
 
@@ -50,6 +51,7 @@ class FiveThingsFragment : Fragment() {
         viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
+                    Log.d("blerg", "bloop")
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date
@@ -90,7 +92,7 @@ class FiveThingsFragment : Fragment() {
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                currentDate = firstDayOfNewMonth //TODO what does currentDate do again?
+                currentDate = firstDayOfNewMonth
                 binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
             }
         })
