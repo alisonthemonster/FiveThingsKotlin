@@ -3,8 +3,10 @@ package alison.fivethingskotlin.Models
 import alison.fivethingskotlin.Util.getFullDateFormat
 import java.util.*
 
+
+//TODO update this class when nagkumar updates the response
 data class FiveThings(
-        var date: Date,
+        var naguDate: Date,
         var one: String,
         var two: String,
         var three: String,
@@ -14,23 +16,23 @@ data class FiveThings(
 ) {
     val isComplete: Boolean
         get() {
-            return !one.isNullOrEmpty() &&
-                    !two.isNullOrEmpty() &&
-                    !three.isNullOrEmpty() &&
-                    !four.isNullOrEmpty() &&
-                    !five.isNullOrEmpty()
+            return !one.isEmpty() &&
+                    !two.isEmpty() &&
+                    !three.isEmpty() &&
+                    !four.isEmpty() &&
+                    !five.isEmpty()
         }
     val fullDateString: String
         get() {
-            return getFullDateFormat(date)
+            return getFullDateFormat(naguDate)
         }
     val isEmpty: Boolean
         get() {
-            return one.isNullOrEmpty() &&
-                    two.isNullOrEmpty() &&
-                    three.isNullOrEmpty() &&
-                    four.isNullOrEmpty() &&
-                    five.isNullOrEmpty()
+            return one.isEmpty() &&
+                    two.isEmpty() &&
+                    three.isEmpty() &&
+                    four.isEmpty() &&
+                    five.isEmpty()
         }
     val savedString: String
         get() {

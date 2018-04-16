@@ -18,7 +18,7 @@ class DatesTest: FreeSpec( {
             cal.set(Calendar.MONTH, Calendar.JANUARY)
             cal.set(Calendar.DAY_OF_MONTH, 22)
             val date = cal.time
-            getDatabaseStyleDate(date) shouldEqual "17-01-22"
+            getDatabaseStyleDate(date) shouldEqual "2017-01-22"
         }
     }
 
@@ -33,7 +33,7 @@ class DatesTest: FreeSpec( {
             cal.set(Calendar.SECOND, 0)
             cal.set(Calendar.MILLISECOND, 0)
             val date = cal.time
-            getDateFromDatabaseStyle("17-01-22") shouldEqual date
+            getDateFromDatabaseStyle("2017-01-22") shouldEqual date
         }
     }
 
@@ -46,15 +46,6 @@ class DatesTest: FreeSpec( {
         getMonth(date) shouldEqual "January"
     }
 
-    "gets the month number from a date object" {
-        val cal = Calendar.getInstance()
-        cal.set(Calendar.YEAR, 2017)
-        cal.set(Calendar.MONTH, Calendar.JANUARY)
-        cal.set(Calendar.DAY_OF_MONTH, 22)
-        val date = cal.time
-        getMonthNumber(date) shouldEqual Calendar.JANUARY
-    }
-
     "gets the year from a date object" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
@@ -62,6 +53,15 @@ class DatesTest: FreeSpec( {
         cal.set(Calendar.DAY_OF_MONTH, 22)
         val date = cal.time
         getYear(date) shouldEqual 2017
+    }
+
+    "gets the month number from a date object" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        val date = cal.time
+        getMonthNumber(date) shouldEqual Calendar.JANUARY
     }
 
     "gets day of week" - {
@@ -143,4 +143,6 @@ class DatesTest: FreeSpec( {
         val event = Event(Color.WHITE, date.time)
         convertDateToEvent(date) shouldEqual event
     }
+
+
 })

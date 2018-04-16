@@ -1,75 +1,41 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.API.repository.UserRepositoryImpl
+import alison.fivethingskotlin.Models.LogInUserRequest
+import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.Models.Token
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
+import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.databinding.ActivityLogInBinding
+import android.accounts.Account
+import android.accounts.AccountManager
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.constraint.ConstraintLayout
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.View
-import android.widget.Button
 import android.widget.Toast
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-
 
 class LogInActivity : AppCompatActivity() {
 
-    private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private lateinit var firebase: FirebaseAuth
-    private val RC_SIGN_IN = 9001
+    private lateinit var email: String
+    private lateinit var password: String
+    private lateinit var binding: ActivityLogInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-        // Configure Google Sign In
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build()
+        //TODO add button to go back to promo screen
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
-        firebase = FirebaseAuth.getInstance()
-
-        val logInButton = findViewById<Button>(R.id.logInButton)
         logInButton.setOnClickListener{
             logIn()
-        }
-    }
-
-    public override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-         if (firebase.currentUser != null) {
-             Log.d("auth", "user is already logged in!")
-            val intent = Intent(this, ContainerActivity::class.java)
-            startActivity(intent)
-        }
-    }
-
-    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account)
-            } catch (e: ApiException) {
-                Log.e("auth", e.toString())
-                Toast.makeText(this, "Uh oh, Google sign in failed", Toast.LENGTH_SHORT).show()
-            }
-
         }
     }
 
@@ -77,35 +43,43 @@ class LogInActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        showLoading()
-
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        firebase.signInWithCredential(credential)
-                .addOnCompleteListener(this, { task ->
-                    hideLoading()
-                    if (task.isSuccessful) {
-                        val intent = Intent(this, ContainerActivity::class.java)
-                        startActivity(intent)
-                    } else {
-                        Toast.makeText(this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show()
-                    }
-                })
-    }
-
     private fun logIn() {
-        val signInIntent = mGoogleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        email = login_email.text.toString().toLowerCase()
+        password = login_password.text.toString()
+
+        if (allFieldsAreFilledOut()) {
+            binding.setLoading(true)
+
+            val userRepository = UserRepositoryImpl()
+            userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
+                resource?.let {
+                    binding.setLoading(false)
+                    when (resource.status) {
+                        Status.SUCCESS -> {
+                            val authToken = resource.data?.token
+                            val accountManager = AccountManager.get(this)
+                            val account = Account(email, ACCOUNT_TYPE)
+                            accountManager.addAccountExplicitly(account, password, null)
+                            accountManager.setAuthToken(account, AUTH_TOKEN_TYPE, authToken)
+
+                            val intent = Intent(this, ContainerActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                        Status.ERROR -> Toast.makeText(this, resource.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+        }
     }
 
-    private fun showLoading() {
-        val loadingView = findViewById<ConstraintLayout>(R.id.loadingLayout)
-        loadingView.visibility = View.VISIBLE
+    private fun allFieldsAreFilledOut(): Boolean {
+        return if (email.isNotEmpty() && password.isNotEmpty()) {
+            true
+        } else {
+            Toast.makeText(this, "Fill out all fields", Toast.LENGTH_SHORT).show()
+            false
+        }
     }
 
-    private fun hideLoading() {
-        val loadingView = findViewById<ConstraintLayout>(R.id.loadingLayout)
-        loadingView.visibility = View.GONE
-    }
 }

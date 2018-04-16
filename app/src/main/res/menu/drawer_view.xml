@@ -17,6 +17,7 @@
             android:id="@+id/settings_item"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings" />
+
         <item
             android:id="@+id/logout_item"
             android:icon="@drawable/ic_signout"

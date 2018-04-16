@@ -4,6 +4,9 @@ import alison.fivethingskotlin.Fragments.AnalyticsFragment
 import alison.fivethingskotlin.Fragments.DesignsFragment
 import alison.fivethingskotlin.Fragments.FiveThingsFragment
 import alison.fivethingskotlin.Fragments.SettingsFragment
+import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
+import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
+import android.accounts.AccountManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -15,10 +18,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import com.google.firebase.auth.FirebaseAuth
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-
-
 
 
 class ContainerActivity : AppCompatActivity() {
@@ -119,10 +119,15 @@ class ContainerActivity : AppCompatActivity() {
     }
 
     private fun logOut() {
-        FirebaseAuth.getInstance().signOut()
-        val intent = Intent(this, LogInActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val accountManager = AccountManager.get(this)
+        val accounts = accountManager.getAccountsByType(ACCOUNT_TYPE)
+        val authToken = accountManager.peekAuthToken(accounts[0], AUTH_TOKEN_TYPE)
+        accountManager.invalidateAuthToken(ACCOUNT_TYPE, authToken)
+        accountManager.removeAccount(accounts[0], PromoActivity(), null, null)
+
+        val intent = Intent(applicationContext, PromoActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
-        finish()
     }
+
 }

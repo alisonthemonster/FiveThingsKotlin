@@ -7,13 +7,13 @@ import com.github.sundeepk.compactcalendarview.domain.Event
 import org.joda.time.DateTime
 
 
-//TODO convert all Date objects to be something else like JodaTime or DateTime
+//TODO convert all NaguDate objects to be something else like JodaTime or DateTime
 fun getDatabaseStyleDate(date: Date): String {
-    return SimpleDateFormat("yy-MM-dd").format(date).toString()
+    return SimpleDateFormat("yyyy-MM-dd").format(date).toString()
 }
 
 fun getDateFromDatabaseStyle(dateString: String): Date {
-    return SimpleDateFormat("yy-MM-dd").parse(dateString)
+    return SimpleDateFormat("yyyy-MM-dd").parse(dateString)
 }
 
 fun getDayOfWeek(date: Date): String {

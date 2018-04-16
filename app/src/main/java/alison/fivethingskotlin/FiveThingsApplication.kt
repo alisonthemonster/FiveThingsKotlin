@@ -8,6 +8,7 @@ class FiveThingsApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/Larsseit-Medium.ttf")
                 .setFontAttrId(R.attr.fontPath)

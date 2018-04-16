@@ -3,7 +3,7 @@ android:
   components:
   - platform-tools
   - build-tools-27.0.3
-  - android-26
+  - android-27
   - extra-android-m2repository
 install:
 - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v

@@ -14,7 +14,6 @@
     <FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -24,19 +23,43 @@
             tools:context="alison.fivethingskotlin.LogInActivity"
             android:visibility="@{loading ?  View.GONE : View.VISIBLE}" >
 
+            <TextView
+                android:id="@+id/create_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="24dp"
+                android:text="Name"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@+id/create_name"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/create_name"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/create_name_label" />
+
 
             <TextView
                 android:id="@+id/email_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="8dp"
                 android:text="Email"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/login_email"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/create_email"
+                app:layout_constraintTop_toBottomOf="@+id/create_name" />
 
             <EditText
-                android:id="@+id/login_email"
+                android:id="@+id/create_email"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -50,17 +73,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/email_label" />
 
             <TextView
-                android:id="@+id/password_label"
+                android:id="@+id/password_label1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
                 android:text="Password"
                 android:textColor="@color/white"
-                app:layout_constraintStart_toStartOf="@+id/login_password"
-                app:layout_constraintTop_toBottomOf="@+id/login_email" />
+                app:layout_constraintStart_toStartOf="@+id/create_password1"
+                app:layout_constraintTop_toBottomOf="@+id/create_email" />
 
             <EditText
-                android:id="@+id/login_password"
+                android:id="@+id/create_password1"
                 android:layout_width="270dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -71,22 +94,59 @@
                 android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/password_label" />
+                app:layout_constraintTop_toBottomOf="@+id/password_label1" />
 
+            <TextView
+                android:id="@+id/password_label2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="4dp"
+                android:text="Password"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@+id/create_password2"
+                app:layout_constraintTop_toBottomOf="@+id/create_password1" />
+
+            <EditText
+                android:id="@+id/create_password2"
+                android:layout_width="270dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password_label2" />
 
             <Button
-                android:id="@+id/logInButton"
+                android:id="@+id/getStartedButton"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@color/bluegreen"
                 android:padding="6dp"
-                android:text="Log In"
+                android:text="Get Started"
                 android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/login_password"
-                app:layout_constraintStart_toStartOf="@+id/login_password"
-                app:layout_constraintTop_toBottomOf="@+id/login_password" />
+                app:layout_constraintEnd_toEndOf="@+id/create_password2"
+                app:layout_constraintStart_toStartOf="@+id/create_password2"
+                app:layout_constraintTop_toBottomOf="@+id/create_password2" />
+
+            <TextView
+                android:id="@+id/alreadyHaveAccountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:text="@string/already_have_an_account"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -95,7 +155,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/darker_grey"
-            android:visibility="@{loading ?  View.VISIBLE : View.GONE}">
+            android:visibility="@{loading ?  View.VISIBLE : View.GONE}" >
 
             <TextView
                 android:id="@+id/loading"
@@ -127,4 +187,5 @@
         </android.support.constraint.ConstraintLayout>
 
     </FrameLayout>
+
 </layout>

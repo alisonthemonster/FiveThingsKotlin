@@ -1,63 +1,53 @@
 package alison.fivethingskotlin.ViewModels
 
-import alison.fivethingskotlin.Models.FirebaseSource
-import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.Models.FiveThingz
+import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.google.firebase.auth.FirebaseUser
 import java.util.*
 
+class FiveThingsViewModel(val token: String) : ViewModel() {
 
-class FiveThingsViewModel(user: FirebaseUser): ViewModel() {
+    private val fiveThingsData = MutableLiveData<Resource<FiveThingz>>()
+    private val fiveThingsSource = FiveThingsRepositoryImpl()
 
-    private val fiveThingsData = MutableLiveData<FiveThings>()
-    private val dateData = MutableLiveData<Date>()
-    private val firebaseSource = FirebaseSource(user)
-
-    fun getFiveThings(date: Date): LiveData<FiveThings> {
-        dateData.value = date
-        return firebaseSource.getFiveThings(date, fiveThingsData)
-    }
-
-    fun getDate(): LiveData<Date> {
-        return dateData
+    fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
+        return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }
 
     fun onEditText() {
         val fiveThings = fiveThingsData.value
-        fiveThings?.saved = false
+        fiveThings?.data?.edited = true
         fiveThingsData.value = fiveThings
     }
 
-    fun writeFiveThings(fiveThings: FiveThings) {
-        Log.d("fivethings", "about to write the data: " + fiveThings)
-        firebaseSource.saveFiveThings(fiveThings, fiveThingsData)
+    fun writeFiveThings(fiveThings: FiveThingz): LiveData<Resource<List<Date>>> {
+        return fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 
-    fun getToday(): LiveData<FiveThings> {
+    fun getToday(): LiveData<Resource<FiveThingz>> {
         return getFiveThings(Date())
     }
 
-    fun getPreviousDay(date: Date): LiveData<FiveThings> {
+    fun getPreviousDay(date: Date): LiveData<Resource<FiveThingz>> {
         val prevDate = getPreviousDate(date)
         return getFiveThings(prevDate)
     }
 
-    fun getNextDay(date: Date): LiveData<FiveThings>  {
+    fun getNextDay(date: Date): LiveData<Resource<FiveThingz>>  {
         val nextDate = getNextDate(date)
         return getFiveThings(nextDate)
     }
 
-    fun changeDate(date: Date): LiveData<FiveThings> {
+    fun changeDate(date: Date): LiveData<Resource<FiveThingz>> {
         return getFiveThings(date)
     }
 
-    fun getWrittenDays(): LiveData<List<Date>> {
-        return firebaseSource.getWrittenDates()
+    fun getWrittenDays(): LiveData<Resource<List<Date>>> {
+        return fiveThingsSource.getWrittenDates(token)
     }
-
 }
