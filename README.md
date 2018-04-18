@@ -8,17 +8,16 @@ An app to track your quickly track, review, and reflect on your days.
   - Find your happiest/angriest/saddest days [IN PROGRESS]
   - Turn your digital entries into physical books with a design you can fully customize [IN PROGRESS]
 
-### Technology Used:
+### Technology + Frameworks Used:
 - MVVM pattern using Livedata + Databinding
-- Firebase for authentication and data storage [Although currently moving to another service]
+- Retrofit + OKHTTP
+- AccountManager for authentication
 - KotlinTest for unit testing
 - Espresso for instrumented tests
 - Glide for image loading
 - Travis CI
 - CompactCalendarView
-- Retrofit
-- OKHTTP for logging requests
-
+- Firebase for image storage
 
 ### Screenshots
 
