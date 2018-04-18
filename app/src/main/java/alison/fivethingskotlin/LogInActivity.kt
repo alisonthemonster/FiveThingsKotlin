@@ -16,14 +16,18 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import java.util.regex.Pattern
+
 
 class LogInActivity : AppCompatActivity() {
 
-    private lateinit var email: String
-    private lateinit var password: String
     private lateinit var binding: ActivityLogInBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,20 +38,25 @@ class LogInActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
-        logInButton.setOnClickListener{
-            logIn()
-        }
+        input_email.hint = "Email Address"
+        input_password.hint = "Password"
+
+        setUpListeners()
     }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private fun logIn() {
-        email = login_email.text.toString().toLowerCase()
-        password = login_password.text.toString()
+    fun logInClick(view: View) {
+        logIn()
+    }
 
-        if (allFieldsAreFilledOut()) {
+    private fun logIn() {
+        val email = email_text.text.toString().toLowerCase()
+        val password = password_text.text.toString()
+
+        if (validateEmail(email) && validatePassword(password)) {
             binding.setLoading(true)
 
             val userRepository = UserRepositoryImpl()
@@ -73,13 +82,58 @@ class LogInActivity : AppCompatActivity() {
         }
     }
 
-    private fun allFieldsAreFilledOut(): Boolean {
-        return if (email.isNotEmpty() && password.isNotEmpty()) {
+    private fun validateEmail(email: String): Boolean {
+        val emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$"
+        val pat = Pattern.compile(emailRegex)
+        return if (pat.matcher(email).matches()) {
+            input_email.isErrorEnabled = false
             true
         } else {
-            Toast.makeText(this, "Fill out all fields", Toast.LENGTH_SHORT).show()
+            input_email.error = "Please enter a valid email address"
             false
         }
     }
 
+    private fun validatePassword(password: String): Boolean {
+        return if (password.isNotEmpty()) {
+            input_password.isErrorEnabled = false
+            true
+        } else {
+            input_password.error = "Please enter a password"
+            false
+        }
+    }
+
+    private fun setUpListeners() {
+        email_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validateEmail(email_text.text.toString())
+            }
+        })
+
+        password_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validatePassword(password_text.text.toString())
+            }
+        })
+        password_text.setOnEditorActionListener { _, actionId, _ ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                logIn()
+                handled = true
+            }
+            handled
+        }
+    }
 }
