@@ -16,6 +16,9 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_account.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -24,10 +27,6 @@ import java.util.regex.Pattern
 
 class CreateAccountActivity : AppCompatActivity() {
 
-    private lateinit var name: String
-    private lateinit var email: String
-    private lateinit var password1: String
-    private lateinit var password2: String
     private lateinit var binding: ActivityCreateAccountBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +34,13 @@ class CreateAccountActivity : AppCompatActivity() {
         setContentView(R.layout.activity_create_account)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_create_account)
+
+        input_name.hint = "Name"
+        input_email.hint = "Email Address"
+        input_password1.hint = "Password"
+        input_password2.hint = "Password"
+
+        setUpListeners()
 
         getStartedButton.setOnClickListener{
             createAccount()
@@ -47,12 +53,16 @@ class CreateAccountActivity : AppCompatActivity() {
     }
 
     private fun createAccount() {
-        name = create_name.text.toString()
-        email = create_email.text.toString().toLowerCase()
-        password1 = create_password1.text.toString()
-        password2 = create_password2.text.toString()
+        val name = name_text.text.toString()
+        val email = email_text.text.toString().toLowerCase()
+        val password1 = password1_text.text.toString()
+        val password2 = password2_text.text.toString()
 
-        if (allFieldsComplete() && passwordsAreAllGood() && emailIsValid()) {
+        if (validateName(name) &&
+                validateEmail(email) &&
+                validatePassword(password1) &&
+                validateRepeatPassword(password1, password2)) {
+
             binding.setLoading(true)
 
             val userRepository = UserRepositoryImpl()
@@ -81,39 +91,99 @@ class CreateAccountActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private fun passwordsAreAllGood(): Boolean {
-        return if (password1 == password2) {
-            if (password1.length < 6) {
-                Toast.makeText(this, "Password needs to be at least 6 characters", Toast.LENGTH_SHORT).show()
-                false
-            } else
-                true
+    private fun validateName(name: String): Boolean {
+        return if (name.isNotEmpty()) {
+            input_name.isErrorEnabled = false
+            true
         } else {
-            Toast.makeText(this, "Passwords don't match", Toast.LENGTH_SHORT).show()
+            input_name.error = "Please enter your name"
             false
         }
     }
 
-    private fun emailIsValid(): Boolean {
+    private fun validateEmail(email: String): Boolean {
         val emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
                 "[a-zA-Z0-9_+&*-]+)*@" +
                 "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
                 "A-Z]{2,7}$"
         val pat = Pattern.compile(emailRegex)
         return if (pat.matcher(email).matches()) {
+            input_email.isErrorEnabled = false
             true
         } else {
-            Toast.makeText(this, "Not a valid email", Toast.LENGTH_SHORT).show()
+            input_email.error = "Please enter a valid email address"
             false
         }
     }
 
-    private fun allFieldsComplete(): Boolean {
-        if (name.isNotEmpty() && password1.isNotEmpty() && password2.isNotEmpty() && email.isNotEmpty()) {
-            return true
+    private fun validatePassword(password: String): Boolean {
+        return if (password.length >= 6) {
+            input_password1.isErrorEnabled = false
+            true
         } else {
-            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show()
-            return false
+            input_password1.error = "Passwords must be at least six characters"
+            false
+        }
+    }
+
+    private fun validateRepeatPassword(password1: String, password2: String): Boolean {
+        return if (password1 == password2) {
+            input_password2.isErrorEnabled = false
+            true
+        } else {
+            input_password2.error = "Passwords must match"
+            false
+        }
+    }
+
+    private fun setUpListeners() {
+        name_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validateName(name_text.text.toString())
+            }
+        })
+
+        email_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validateEmail(email_text.text.toString())
+            }
+        })
+
+        password1_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validatePassword(password1_text.text.toString())
+            }
+        })
+
+        password2_text.addTextChangedListener( object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+
+            override fun afterTextChanged(s: Editable?) {
+                validateRepeatPassword(password1_text.text.toString(), password2_text.text.toString())
+            }
+        })
+
+        password2_text.setOnEditorActionListener { _, actionId, _ ->
+            var handled = false
+            if (actionId == EditorInfo.IME_ACTION_GO) {
+                createAccount()
+                handled = true
+            }
+            handled
         }
     }
 }
