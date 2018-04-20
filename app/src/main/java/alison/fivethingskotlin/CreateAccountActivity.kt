@@ -17,7 +17,9 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.PasswordTransformationMethod
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_account.*
@@ -40,6 +42,12 @@ class CreateAccountActivity : AppCompatActivity() {
         input_password1.hint = "Password"
         input_password2.hint = "Password"
 
+        //calligraphy hack for password fields
+        password1_text.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        password1_text.transformationMethod = PasswordTransformationMethod.getInstance()
+        password2_text.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        password2_text.transformationMethod = PasswordTransformationMethod.getInstance()
+
         setUpListeners()
 
         getStartedButton.setOnClickListener{
@@ -58,17 +66,19 @@ class CreateAccountActivity : AppCompatActivity() {
         val password1 = password1_text.text.toString()
         val password2 = password2_text.text.toString()
 
+        //TODO dismiss keyboard
+
         if (validateName(name) &&
                 validateEmail(email) &&
                 validatePassword(password1) &&
                 validateRepeatPassword(password1, password2)) {
 
-            binding.setLoading(true)
+            binding.loading = true
 
             val userRepository = UserRepositoryImpl()
             userRepository.createUser(CreateUserRequest(name, password1, email)).observe(this, Observer<Resource<Token>> { tokenResource ->
                 tokenResource?.let {
-                    binding.setLoading(false)
+                    binding.loading = false
                     if (tokenResource.status == Status.SUCCESS) {
                         val account = Account(email, ACCOUNT_TYPE)
                         val accountManager = AccountManager.get(this)

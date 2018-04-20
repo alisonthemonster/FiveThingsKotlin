@@ -22,10 +22,13 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".LogInActivity"
-            android:configChanges="orientation"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
-        <activity android:name=".CreateAccountActivity"
-            android:configChanges="orientation"
+        <activity
+            android:name=".CreateAccountActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".PromoActivity"
