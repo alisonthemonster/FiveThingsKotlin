@@ -22,6 +22,7 @@ import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -62,7 +63,8 @@ class LogInActivity : AppCompatActivity() {
         val email = email_text.text.toString().toLowerCase()
         val password = password_text.text.toString()
 
-        //TODO dismiss keyboard
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
         if (validateEmail(email) && validatePassword(password)) {
             binding.loading = true

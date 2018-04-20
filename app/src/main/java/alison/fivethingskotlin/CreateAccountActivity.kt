@@ -10,6 +10,8 @@ import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.databinding.ActivityCreateAccountBinding
 import android.accounts.Account
 import android.accounts.AccountManager
+import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
@@ -20,7 +22,9 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_create_account.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -66,7 +70,8 @@ class CreateAccountActivity : AppCompatActivity() {
         val password1 = password1_text.text.toString()
         val password2 = password2_text.text.toString()
 
-        //TODO dismiss keyboard
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
 
         if (validateName(name) &&
                 validateEmail(email) &&
