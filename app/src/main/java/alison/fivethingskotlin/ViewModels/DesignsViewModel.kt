@@ -17,6 +17,7 @@ class DesignsViewModel: ViewModel() {
 
 
     fun getDesignImageResources(): LiveData<ArrayList<String>> {
+        //TODO does this fail because we no longer auth with FB?
         val query = database.child("resources")
         query.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError?) {
