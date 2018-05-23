@@ -3,6 +3,7 @@ package alison.fivethingskotlin.Util
 import alison.fivethingskotlin.R
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,8 +24,7 @@ class GalleryAdapter(images: ArrayList<String>): RecyclerView.Adapter<GalleryAda
         context = parent.context
         val inflater = LayoutInflater.from(context)
         val photoView = inflater.inflate(R.layout.template_image, parent, false)
-        val viewHolder = MyViewHolder(photoView)
-        return viewHolder
+        return MyViewHolder(photoView)
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
@@ -43,8 +43,6 @@ class GalleryAdapter(images: ArrayList<String>): RecyclerView.Adapter<GalleryAda
     }
 
     inner class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
-
-        var mPhotoImageView: ImageView = itemView.findViewById<View>(R.id.design_photo) as ImageView
 
         init {
             itemView.setOnClickListener(this)

@@ -8,6 +8,7 @@ import alison.fivethingskotlin.Util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import java.util.*
 
 class FiveThingsViewModel(val token: String) : ViewModel() {
@@ -16,6 +17,7 @@ class FiveThingsViewModel(val token: String) : ViewModel() {
     private val fiveThingsSource = FiveThingsRepositoryImpl()
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThingz>> {
+        Log.d("blerg", "token: " +  token)
         return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
     }
 

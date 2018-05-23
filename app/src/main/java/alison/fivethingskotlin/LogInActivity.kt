@@ -17,9 +17,12 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
+import android.text.method.PasswordTransformationMethod
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_log_in.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -41,6 +44,10 @@ class LogInActivity : AppCompatActivity() {
         input_email.hint = "Email Address"
         input_password.hint = "Password"
 
+        //calligraphy hack for password fields
+        password_text.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+        password_text.transformationMethod = PasswordTransformationMethod.getInstance()
+
         setUpListeners()
     }
 
@@ -56,13 +63,16 @@ class LogInActivity : AppCompatActivity() {
         val email = email_text.text.toString().toLowerCase()
         val password = password_text.text.toString()
 
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+
         if (validateEmail(email) && validatePassword(password)) {
-            binding.setLoading(true)
+            binding.loading = true
 
             val userRepository = UserRepositoryImpl()
             userRepository.logIn(LogInUserRequest(email, password)).observe(this, Observer<Resource<Token>> { resource ->
                 resource?.let {
-                    binding.setLoading(false)
+                    binding.loading = false
                     when (resource.status) {
                         Status.SUCCESS -> {
                             val authToken = resource.data?.token
