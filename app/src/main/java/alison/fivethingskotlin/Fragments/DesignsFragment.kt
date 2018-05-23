@@ -35,7 +35,6 @@ class DesignsFragment : Fragment() {
     private fun loadImages(imageNames: ArrayList<String>) {
         val recyclerView = view?.findViewById<RecyclerView>(R.id.imagegallery)
         recyclerView?.setHasFixedSize(true)
-        Log.d("blerg", "we got the image names yo")
 
         val layoutManager = GridLayoutManager(context, 2)
         recyclerView?.layoutManager = layoutManager

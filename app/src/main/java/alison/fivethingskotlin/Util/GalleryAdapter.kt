@@ -32,8 +32,6 @@ class GalleryAdapter(images: ArrayList<String>): RecyclerView.Adapter<GalleryAda
         val imageView = holder.itemView as ImageView
         val storageReference = storage.reference.child("CoverDesigns").child(image)
 
-        Log.d("blerg", "bout to aksjdfka")
-
         Glide.with(context)
                 .using(FirebaseImageLoader())
                 .load(storageReference)
