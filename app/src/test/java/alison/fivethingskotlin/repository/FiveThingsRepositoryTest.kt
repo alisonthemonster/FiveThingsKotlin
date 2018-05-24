@@ -86,52 +86,43 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun getFiveThings_serviceIsSuccessful_returnsFiveThings() {
-        val expected = Resource(Status.SUCCESS, "", fiveThings)
-
         doAnswer {
             val callback: Callback<FiveThings> = it.getArgument(0)
             callback.onResponse(fiveThingsCall, Response.success(fiveThings))
         }.`when`(fiveThingsCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
+        LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
         verify(service, times(1)).getFiveThings(token, "2017-01-22")
         verify(fiveThingsCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun getFiveThings_serviceSends404_returnsEmptyFiveThings() {
-        val emptyFiveThings = FiveThings(date, listOf("", "", "", "", ""), false, false)
-        val expected = Resource(Status.SUCCESS, "Unwritten Day", emptyFiveThings)
-
         doAnswer {
             val callback: Callback<FiveThings> = it.getArgument(0)
             callback.onResponse(fiveThingsCall, Response.error(404, mock<ResponseBody>()))
         }.`when`(fiveThingsCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
+        LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
         verify(service, times(1)).getFiveThings(token, "2017-01-22")
         verify(fiveThingsCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun getFiveThings_serviceFails_returnsErrorResource() {
         val exception = IOException("Exception thrown")
-        val expected = Resource(Status.ERROR, exception.message, null)
 
         doAnswer {
             val callback: Callback<FiveThings> = it.getArgument(0)
             callback.onFailure(fiveThingsCall, exception)
         }.`when`(fiveThingsCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
+        LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
         verify(service, times(1)).getFiveThings(token, "2017-01-22")
         verify(fiveThingsCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
 
@@ -188,7 +179,7 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
 
-        verify(service, times(1)).deleteFiveThings(token, any())
+        verify(service, times(1)).deleteFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -197,7 +188,7 @@ class FiveThingsRepositoryTest {
     fun saveFiveThings_emptyFiveThings_callbackFails_createsErrorResource() {
         val emptyFiveThings = FiveThings(date, listOf("", "", "", "", ""), true, true)
 
-        val expected = Resource(Status.ERROR, null, null)
+        val expected = Resource(Status.ERROR, "", null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
@@ -206,7 +197,7 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
 
-        verify(service, times(1)).deleteFiveThings(eq(token), any())
+        verify(service, times(1)).deleteFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -224,7 +215,7 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
 
-        verify(service, times(1)).deleteFiveThings(eq(token), any())
+        verify(service, times(1)).deleteFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -240,23 +231,23 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).updateFiveThings(token, any())
+        verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_existingEntry_callbackFails_createsErrorResource() {
-        val expected = Resource(Status.ERROR, null, null)
+        val expected = Resource(Status.ERROR, "", null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
-            callback.onResponse(datesCall, Response.error(mock<Int>(), mock<ResponseBody>()))
+            callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
         }.`when`(datesCall).enqueue(any())
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).deleteFiveThings(eq(token), any())
+        verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -273,7 +264,7 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).deleteFiveThings(eq(token), any())
+        verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -290,44 +281,42 @@ class FiveThingsRepositoryTest {
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).writeFiveThings(eq(token), any())
+        verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_newEntry_callbackFails_createsErrorResource() {
-        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), false, false)
-        val expected = Resource(Status.ERROR, null, null)
+        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), true, false)
+        val expected = Resource(Status.ERROR, "", null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
-            callback.onResponse(datesCall, Response.error(mock<Int>(), mock<ResponseBody>()))
+            callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
         }.`when`(datesCall).enqueue(any())
 
         val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).writeFiveThings(eq(token), any())
+        verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_newEntry_serviceFails_returnsErrorResource() {
-        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), false, false)
+        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), true, false)
         val exception = IOException("Exception thrown")
-        val expected = Resource(Status.ERROR, exception.message, null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
             callback.onFailure(datesCall, exception)
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
 
-        verify(service, times(1)).writeFiveThings(eq(token), any())
+        verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     //mockito and kotlin fix

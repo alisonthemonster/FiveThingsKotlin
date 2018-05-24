@@ -58,6 +58,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         writtenDates.value = Resource(Status.SUCCESS, "Date removed", days)
                     } else {
                         writtenDates.value = Resource(Status.ERROR, "", null)
+                        //TODO
 //                        response.errorBody()?.let {
 //                                val json = JSONObject(response.errorBody()?.string())
 //                                val messageString = json.getString("message")
@@ -85,9 +86,12 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
                         } else {
-                            val json = JSONObject(response.errorBody()?.string())
-                            val messageString = json.getString("message")
-                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+//                            val json = JSONObject(response.errorBody()?.string())
+//                            val messageString = json.getString("message")
+//                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            //TODO
+                            writtenDates.value = Resource(Status.ERROR, "", null)
+
                         }
                     }
 
@@ -107,9 +111,12 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date in database", days)
                         } else {
-                            val json = JSONObject(response.errorBody()?.string())
-                            val messageString = json.getString("message")
-                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            //val json = JSONObject(response.errorBody()?.string())
+                            //val messageString = json.getString("message")
+                            //TODO
+                            writtenDates.value = Resource(Status.ERROR, "", null)
+
+                            //writtenDates.value = Resource(Status.ERROR, messageString, null)
                         }
                     }
 
@@ -132,9 +139,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                     fiveThingsDates.value = Resource(Status.SUCCESS, "", days)
                 } else {
-                    val json = JSONObject(response.errorBody()?.string())
-                    val messageString = json.getString("message")
-                    fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
+                    //val json = JSONObject(response.errorBody()?.string())
+                    //val messageString = json.getString("message")
+                    //fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
+                    //TODO
+                    fiveThingsDates.value = Resource(Status.ERROR, "", null)
                 }
             }
 
