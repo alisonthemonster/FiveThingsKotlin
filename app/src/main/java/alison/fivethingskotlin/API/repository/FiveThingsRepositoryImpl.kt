@@ -17,21 +17,21 @@ import java.util.Date
 
 class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService = FiveThingsService.create()): FiveThingsRepository {
 
-    override fun getFiveThings(token:String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): LiveData<Resource<FiveThingz>> {
+    override fun getFiveThings(token:String, date: Date, fiveThingsData: MutableLiveData<Resource<FiveThings>>): LiveData<Resource<FiveThings>> {
         val dateString = getDatabaseStyleDate(date)
         val call = fiveThingsService.getFiveThings(token, dateString)
-        call.enqueue(object : Callback<FiveThingz> {
-            override fun onResponse(call: Call<FiveThingz>?, response: Response<FiveThingz>) {
+        call.enqueue(object : Callback<FiveThings> {
+            override fun onResponse(call: Call<FiveThings>?, response: Response<FiveThings>) {
                 if (response.isSuccessful) {
                     if (!response.body()!!.isEmpty) {
-                        //if there is data from DB then we know its saved
-                        response.body()?.saved = true
+                        //if there is data from DB then we know its inDatabase
+                        response.body()?.inDatabase = true
                     }
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
                     Log.d("blerg", "body: " + response.body())
                 } else {
                     if (response.code() == 404) {
-                        val things = FiveThingz(date, listOf("", "", "", "", ""),false, false)
+                        val things = FiveThings(date, listOf("", "", "", "", ""),false, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
                         fiveThingsData.value = buildErrorResource(response)
@@ -39,14 +39,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 }
             }
 
-            override fun onFailure(call: Call<FiveThingz>?, t: Throwable?) {
+            override fun onFailure(call: Call<FiveThings>?, t: Throwable?) {
                 fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
             }
         })
         return fiveThingsData
     }
 
-    override fun saveFiveThings(token:String, fiveThings: FiveThingz, fiveThingsData: MutableLiveData<Resource<FiveThingz>>): MutableLiveData<Resource<List<Date>>> {
+    override fun saveFiveThings(token:String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>): MutableLiveData<Resource<List<Date>>> {
         val writtenDates = MutableLiveData<Resource<List<Date>>>()
 
         if (fiveThings.isEmpty) {
@@ -72,7 +72,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
             val things = arrayOf(fiveThings.things[0], fiveThings.things[1], fiveThings.things[2], fiveThings.things[3], fiveThings.things[4])
             val requestBody = FiveThingsRequest(getDatabaseStyleDate(fiveThings.date), things)
 
-            if (fiveThings.saved) {
+            if (fiveThings.inDatabase) {
                 //UPDATE AN ALREADY WRITTEN DAY
                 val call = fiveThingsService.updateFiveThings(token, requestBody)
                 call.enqueue(object : Callback<List<String>> {
@@ -99,11 +99,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 call.enqueue(object : Callback<List<String>> {
                     override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                         if (response.isSuccessful) {
-                            fiveThings.saved = true
+                            fiveThings.inDatabase = true
                             fiveThings.edited = false
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
-                            writtenDates.value = Resource(Status.SUCCESS, "Date saved", days)
+                            writtenDates.value = Resource(Status.SUCCESS, "Date inDatabase", days)
                         } else {
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("message")

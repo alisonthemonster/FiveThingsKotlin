@@ -3,39 +3,41 @@ package alison.fivethingskotlin.Models
 import alison.fivethingskotlin.Util.getFullDateFormat
 import java.util.*
 
-
-//TODO update this class when nagkumar updates the response
 data class FiveThings(
-        var naguDate: Date,
-        var one: String,
-        var two: String,
-        var three: String,
-        var four: String,
-        var five: String,
-        var saved: Boolean
-) {
-    val isComplete: Boolean
-        get() {
-            return !one.isEmpty() &&
-                    !two.isEmpty() &&
-                    !three.isEmpty() &&
-                    !four.isEmpty() &&
-                    !five.isEmpty()
-        }
-    val fullDateString: String
-        get() {
-            return getFullDateFormat(naguDate)
-        }
+        val date: Date,
+        val things: List<String>,
+        var edited: Boolean = false,
+        var inDatabase: Boolean = true) {
+
     val isEmpty: Boolean
         get() {
-            return one.isEmpty() &&
-                    two.isEmpty() &&
-                    three.isEmpty() &&
-                    four.isEmpty() &&
-                    five.isEmpty()
+            return things[0].isEmpty() &&
+                    things[1].isEmpty() &&
+                    things[2].isEmpty() &&
+                    things[3].isEmpty() &&
+                    things[4].isEmpty()
         }
+
+    val isComplete: Boolean
+        get() {
+            return !things[0].isEmpty() &&
+                !things[1].isEmpty() &&
+                !things[2].isEmpty() &&
+                !things[3].isEmpty() &&
+                !things[4].isEmpty()
+        }
+
     val savedString: String
         get() {
-            return if (saved) "Saved" else "Save"
+            if (!inDatabase) return "Save"
+
+            return if (edited) "Save" else "Saved"
+        }
+
+    val fullDateString: String
+        get() {
+            return getFullDateFormat(date)
         }
 }
+
+

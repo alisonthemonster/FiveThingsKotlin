@@ -1,6 +1,6 @@
 package alison.fivethingskotlin.Fragments
 
-import alison.fivethingskotlin.Models.FiveThingz
+import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
@@ -48,7 +48,7 @@ class FiveThingsFragment : Fragment() {
         binding.loading = true
 
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
+        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
                     Log.d("blerg", "bloop")
@@ -152,5 +152,5 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
-    //TODO handle when user tries to leave fragment with un-saved changes
+    //TODO handle when user tries to leave fragment with un-inDatabase changes
 }
