@@ -1,19 +1,21 @@
 package alison.fivethingskotlin.API.repository
 
 import alison.fivethingskotlin.API.FiveThingsService
-import alison.fivethingskotlin.Models.*
+import alison.fivethingskotlin.Models.FiveThings
+import alison.fivethingskotlin.Models.FiveThingsRequest
+import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.buildErrorResource
 import alison.fivethingskotlin.Util.getDatabaseStyleDate
 import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.util.Log
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.Date
+import java.util.*
+
 
 class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService = FiveThingsService.create()): FiveThingsRepository {
 
@@ -57,13 +59,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                         writtenDates.value = Resource(Status.SUCCESS, "Date removed", days)
                     } else {
-                        writtenDates.value = Resource(Status.ERROR, "", null)
-                        //TODO
-//                        response.errorBody()?.let {
-//                                val json = JSONObject(response.errorBody()?.string())
-//                                val messageString = json.getString("message")
-//                                writtenDates.value = Resource(Status.ERROR, messageString, null)
-//                        }
+                        try {
+                            val json = JSONObject(response.errorBody()?.string())
+                            val messageString = json.getString("message")
+                            writtenDates.value = Resource(Status.ERROR, messageString, null)
+                        } catch (e: Exception) {
+                            //if there's malformed json
+                            writtenDates.value = Resource(Status.ERROR, "", null)
+                        }
                     }
                 }
 
@@ -86,12 +89,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
                         } else {
-//                            val json = JSONObject(response.errorBody()?.string())
-//                            val messageString = json.getString("message")
-//                            writtenDates.value = Resource(Status.ERROR, messageString, null)
-                            //TODO
-                            writtenDates.value = Resource(Status.ERROR, "", null)
-
+                            try {
+                                val json = JSONObject(response.errorBody()?.string())
+                                val messageString = json.getString("message")
+                                writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            } catch (e: Exception) {
+                                //if there's malformed json
+                                writtenDates.value = Resource(Status.ERROR, "", null)
+                            }
                         }
                     }
 
@@ -111,12 +116,14 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                             writtenDates.value = Resource(Status.SUCCESS, "Date in database", days)
                         } else {
-                            //val json = JSONObject(response.errorBody()?.string())
-                            //val messageString = json.getString("message")
-                            //TODO
-                            writtenDates.value = Resource(Status.ERROR, "", null)
-
-                            //writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            try {
+                                val json = JSONObject(response.errorBody()?.string())
+                                val messageString = json.getString("message")
+                                writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            } catch (e: Exception) {
+                                //if there's malformed json
+                                writtenDates.value = Resource(Status.ERROR, "", null)
+                            }
                         }
                     }
 
@@ -139,11 +146,9 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                     fiveThingsDates.value = Resource(Status.SUCCESS, "", days)
                 } else {
-                    //val json = JSONObject(response.errorBody()?.string())
-                    //val messageString = json.getString("message")
-                    //fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
-                    //TODO
-                    fiveThingsDates.value = Resource(Status.ERROR, "", null)
+                    val json = JSONObject(response.errorBody()?.string())
+                    val messageString = json.getString("message")
+                    fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
                 }
             }
 
