@@ -28,7 +28,6 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         response.body()?.inDatabase = true
                     }
                     fiveThingsData.value = Resource(Status.SUCCESS, "", response.body())
-                    Log.d("blerg", "body: " + response.body())
                 } else {
                     if (response.code() == 404) {
                         val things = FiveThings(date, listOf("", "", "", "", ""),false, false)
@@ -58,9 +57,12 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         val days = response.body()?.map { getDateFromDatabaseStyle(it) }
                         writtenDates.value = Resource(Status.SUCCESS, "Date removed", days)
                     } else {
-                        val json = JSONObject(response.errorBody()?.string())
-                        val messageString = json.getString("message")
-                        writtenDates.value = Resource(Status.ERROR, messageString, null)
+                        writtenDates.value = Resource(Status.ERROR, "", null)
+//                        response.errorBody()?.let {
+//                                val json = JSONObject(response.errorBody()?.string())
+//                                val messageString = json.getString("message")
+//                                writtenDates.value = Resource(Status.ERROR, messageString, null)
+//                        }
                     }
                 }
 
@@ -103,7 +105,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             fiveThings.edited = false
                             fiveThingsData.value = Resource(Status.SUCCESS, response.message(), fiveThings)
                             val days = response.body()?.map { getDateFromDatabaseStyle(it) }
-                            writtenDates.value = Resource(Status.SUCCESS, "Date inDatabase", days)
+                            writtenDates.value = Resource(Status.SUCCESS, "Date in database", days)
                         } else {
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("message")

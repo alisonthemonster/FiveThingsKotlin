@@ -61,6 +61,11 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'io.kotlintest:kotlintest:2.0.5'
     testImplementation 'io.kotlintest:kotlintest:2.0.5'
+    testCompile("android.arch.core:core-testing:1.1.1", {
+        exclude group: 'com.android.support', module: 'support-compat'
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-core-utils'
+    })
 
     compileOnly 'javax.annotation:jsr250-api:1.0'
     kapt 'com.android.databinding:compiler:3.1.2'
