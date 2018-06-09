@@ -60,7 +60,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'io.kotlintest:kotlintest:2.0.5'
-    testImplementation 'io.kotlintest:kotlintest:2.0.5'
+    testImplementation 'com.nhaarman:mockito-kotlin:1.5.0'
     testImplementation 'android.arch.core:core-testing:1.1.1'
 
     compileOnly 'javax.annotation:jsr250-api:1.0'

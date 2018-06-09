@@ -5,19 +5,19 @@ import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.Util.getPreviousDate
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
+import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldEqual
-import io.kotlintest.mock.`when`
-import io.kotlintest.mock.mock
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.Mockito
-import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.anyString
 import java.util.*
 
 @RunWith(JUnit4::class)
@@ -65,42 +65,42 @@ class FiveThingsViewModelTest {
         //set up mocks for getFiveThings
         expectedFiveThingsResource = Resource(Status.SUCCESS, "success", fiveThings)
         fiveThingsLiveData.value = expectedFiveThingsResource
-        `when`(repository.getFiveThings(any(), any(), any())).thenReturn(fiveThingsLiveData)
+        whenever(repository.getFiveThings(any(), any(), any())).thenReturn(fiveThingsLiveData)
 
         //setup mocks for writeFiveThings
         expectedDatesResource = Resource(Status.SUCCESS, "success", dates)
         datesLiveData.value = expectedDatesResource
-        `when`(repository.saveFiveThings(any(), any(), any())).thenReturn(datesLiveData)
+        whenever(repository.saveFiveThings(any(), any(), any())).thenReturn(datesLiveData)
     }
 
     @Test
     fun getFiveThings_returnsLiveData() {
-
         val actualResource = LiveDataTestUtil.getValue(viewModel.getFiveThings(date))
-
-        //verify(repository, times(1)).getFiveThings(token, date, mock()) //TODO
         actualResource shouldEqual expectedFiveThingsResource
     }
 
     @Test
     fun writeFiveThings_returnsLiveData() {
-
         val actualResource = LiveDataTestUtil.getValue(viewModel.writeFiveThings(fiveThings))
-
-        //verify(repository, times(1)).saveFiveThings(token, fiveThings, mock()) //TODO
         actualResource shouldEqual expectedDatesResource
     }
 
     @Test
     fun getPreviousDayThings_CallsGetFiveThingsWithPrevDay() {
-        val today = date
+        val previousDay = getPreviousDate(date)
 
+        LiveDataTestUtil.getValue(viewModel.getPreviousDay(date))
+
+        argumentCaptor<Date>().apply {
+            verify(repository, times(1)).getFiveThings(anyString(), capture(), any())
+            firstValue shouldEqual previousDay
+        }
     }
 
-    //mockito and kotlin fix
-    private fun <T> any(): T {
-        Mockito.any<T>()
-        return uninitialized()
-    }
-    private fun <T> uninitialized(): T = null as T
+//    //mockito and kotlin fix
+//    private fun <T> any(): T {
+//        Mockito.any<T>()
+//        return uninitialized()
+//    }
+//    private fun <T> uninitialized(): T = null as T
 }
