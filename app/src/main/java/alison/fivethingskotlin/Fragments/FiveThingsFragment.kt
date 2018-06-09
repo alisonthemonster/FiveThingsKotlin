@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.Fragments
 
+import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.*
@@ -38,7 +39,7 @@ class FiveThingsFragment : Fragment() {
             //TODO handle case where user get here without logging in
         }
 
-        viewModel = FiveThingsViewModel(token) //TODO switch to viewmodelprovider
+        viewModel = FiveThingsViewModel(token, FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel

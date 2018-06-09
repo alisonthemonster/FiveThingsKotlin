@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.ViewModels
 
+import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Util.Resource
@@ -11,14 +12,12 @@ import android.arch.lifecycle.ViewModel
 import android.util.Log
 import java.util.*
 
-class FiveThingsViewModel(val token: String) : ViewModel() {
+class FiveThingsViewModel(val token: String, val fiveThingsRepository: FiveThingsRepository) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
-    private val fiveThingsSource = FiveThingsRepositoryImpl()
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
-        Log.d("blerg", "token: " +  token)
-        return fiveThingsSource.getFiveThings(token, date, fiveThingsData)
+        return fiveThingsRepository.getFiveThings(token, date, fiveThingsData)
     }
 
     fun onEditText() {
@@ -31,7 +30,7 @@ class FiveThingsViewModel(val token: String) : ViewModel() {
     }
 
     fun writeFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
-        return fiveThingsSource.saveFiveThings(token, fiveThings, fiveThingsData)
+        return fiveThingsRepository.saveFiveThings(token, fiveThings, fiveThingsData)
     }
 
     fun getToday(): LiveData<Resource<FiveThings>> {
@@ -53,6 +52,6 @@ class FiveThingsViewModel(val token: String) : ViewModel() {
     }
 
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
-        return fiveThingsSource.getWrittenDates(token)
+        return fiveThingsRepository.getWrittenDates(token)
     }
 }
