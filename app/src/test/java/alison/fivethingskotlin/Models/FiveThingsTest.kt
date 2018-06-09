@@ -4,38 +4,44 @@ import io.kotlintest.specs.FreeSpec
 import io.kotlintest.matchers.shouldEqual
 import java.util.*
 
-class DatesTest: FreeSpec( {
+class FiveThingsTest: FreeSpec( {
     "detects if Five things is complete" - {
         "with complete things" {
             val completeThings = FiveThings(
                     Date(),
-                    "one",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
-                    true)
+                    listOf(
+                        "one",
+                        "two",
+                        "three",
+                        "four",
+                        "five"),
+                    false,
+                    false)
             completeThings.isComplete shouldEqual true
         }
         "with some empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    "",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
-                    true)
+                    listOf(
+                            "",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    false,
+                    false)
             completeThings.isComplete shouldEqual false
         }
         "with more empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
+                    listOf(
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""),
+                    false,
                     false)
             completeThings.isComplete shouldEqual false
         }
@@ -44,62 +50,122 @@ class DatesTest: FreeSpec( {
     "detects if Five things is empty" - {
         "with complete things" {
             val completeThings = FiveThings(
-                    Date(),
-                    "one",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
-                    true)
+                Date(),
+                listOf(
+                        "one",
+                        "two",
+                        "three",
+                        "four",
+                        "five"),
+                false,
+                false)
             completeThings.isEmpty shouldEqual false
         }
         "with some empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    "",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
+                    listOf(
+                            "",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    false,
                     false)
             completeThings.isEmpty shouldEqual false
         }
         "with more empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    "",
-                    "",
-                    "",
-                    "",
-                    "",
+                    listOf(
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""),
+                    false,
                     false)
             completeThings.isEmpty shouldEqual true
         }
     }
 
     "returns correct string for boolean" - {
-        "with saved == true" {
+        "with inDatabase and edited" {
             val things = FiveThings(
                     Date(),
-                    "one",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
+                    listOf(
+                            "one",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    true,
+                    true)
+            things.savedString shouldEqual "Save"
+        }
+        "In the database and not edited" {
+            val things = FiveThings(
+                    Date(),
+                    listOf(
+                            "one",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    false,
                     true)
             things.savedString shouldEqual "Saved"
         }
-        "with saved == false" {
+        "Not in the database and not edited" {
             val things = FiveThings(
                     Date(),
-                    "one",
-                    "two",
-                    "three",
-                    "four",
-                    "five",
+                    listOf(
+                            "one",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    false,
+                    false)
+            things.savedString shouldEqual "Save"
+        }
+        "Not in the database but edited" {
+            val things = FiveThings(
+                    Date(),
+                    listOf(
+                            "one",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    true,
                     false)
             things.savedString shouldEqual "Save"
         }
     }
+
+    "returns correct date string for five things" - {
+        "For this date" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.JANUARY)
+            cal.set(Calendar.DAY_OF_MONTH, 22)
+            val date = cal.time
+
+            val things = FiveThings(
+                    date,
+                    listOf(
+                            "one",
+                            "two",
+                            "three",
+                            "four",
+                            "five"),
+                    false,
+                    false)
+            things.fullDateString shouldEqual "Sunday January 22nd, 2017"
+        }
+    }
+
+    //TODO write tests for the date string getter
 })
 

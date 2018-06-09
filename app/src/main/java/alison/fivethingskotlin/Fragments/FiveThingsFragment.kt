@@ -1,6 +1,7 @@
 package alison.fivethingskotlin.Fragments
 
-import alison.fivethingskotlin.Models.FiveThingz
+import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
@@ -38,7 +39,7 @@ class FiveThingsFragment : Fragment() {
             //TODO handle case where user get here without logging in
         }
 
-        viewModel = FiveThingsViewModel(token) //TODO switch to viewmodelprovider
+        viewModel = FiveThingsViewModel(token, FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
@@ -48,7 +49,7 @@ class FiveThingsFragment : Fragment() {
         binding.loading = true
 
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThingz>> { fiveThings ->
+        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
                     Log.d("blerg", "bloop")
@@ -152,5 +153,5 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
-    //TODO handle when user tries to leave fragment with un-saved changes
+    //TODO handle when user tries to leave fragment with un-inDatabase changes
 }

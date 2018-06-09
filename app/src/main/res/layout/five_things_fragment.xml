@@ -14,7 +14,7 @@
 
         <variable
             name="fiveThings"
-            type="alison.fivethingskotlin.Models.FiveThingz" />
+            type="alison.fivethingskotlin.Models.FiveThings" />
 
         <variable
             name="naguDate"
