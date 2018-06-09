@@ -5,19 +5,18 @@ import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.MutableLiveData
 import com.nhaarman.mockito_kotlin.*
 import io.kotlintest.matchers.shouldEqual
-import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers.anyString
 import java.util.*
 
 @RunWith(JUnit4::class)
@@ -54,6 +53,7 @@ class FiveThingsViewModelTest {
         cal.set(Calendar.SECOND, 0)
         cal.set(Calendar.MILLISECOND, 0)
         date = cal.time
+
         cal.set(Calendar.DAY_OF_MONTH, 23)
         val nextDate = cal.time
         cal.set(Calendar.DAY_OF_MONTH, 24)
@@ -71,6 +71,9 @@ class FiveThingsViewModelTest {
         expectedDatesResource = Resource(Status.SUCCESS, "success", dates)
         datesLiveData.value = expectedDatesResource
         whenever(repository.saveFiveThings(any(), any(), any())).thenReturn(datesLiveData)
+
+        //setup mocks for getWrittenDates
+        whenever(repository.getWrittenDates(any())).thenReturn(datesLiveData)
     }
 
     @Test
@@ -80,9 +83,29 @@ class FiveThingsViewModelTest {
     }
 
     @Test
+    fun getFiveThings_callsRepositoryWithCorrectDate() {
+        LiveDataTestUtil.getValue(viewModel.getFiveThings(date))
+
+        argumentCaptor<Date>().apply {
+            verify(repository, times(1)).getFiveThings(any(), capture(), any())
+            firstValue shouldEqual date
+        }
+    }
+
+    @Test
     fun writeFiveThings_returnsLiveData() {
         val actualResource = LiveDataTestUtil.getValue(viewModel.writeFiveThings(fiveThings))
         actualResource shouldEqual expectedDatesResource
+    }
+
+    @Test
+    fun writeFiveThings_callsRepositoryWithCorrectThings() {
+        LiveDataTestUtil.getValue(viewModel.writeFiveThings(fiveThings))
+
+        argumentCaptor<FiveThings>().apply {
+            verify(repository, times(1)).saveFiveThings(any(), capture(), any())
+            firstValue shouldEqual fiveThings
+        }
     }
 
     @Test
@@ -92,15 +115,40 @@ class FiveThingsViewModelTest {
         LiveDataTestUtil.getValue(viewModel.getPreviousDay(date))
 
         argumentCaptor<Date>().apply {
-            verify(repository, times(1)).getFiveThings(anyString(), capture(), any())
+            verify(repository, times(1)).getFiveThings(any(), capture(), any())
             firstValue shouldEqual previousDay
         }
     }
 
-//    //mockito and kotlin fix
-//    private fun <T> any(): T {
-//        Mockito.any<T>()
-//        return uninitialized()
-//    }
-//    private fun <T> uninitialized(): T = null as T
+    @Test
+    fun getNextDayThings_CallsGetFiveThingsWithNextDay() {
+        val nextDate = getNextDate(date)
+
+        LiveDataTestUtil.getValue(viewModel.getNextDay(date))
+
+        argumentCaptor<Date>().apply {
+            verify(repository, times(1)).getFiveThings(any(), capture(), any())
+            firstValue shouldEqual nextDate
+        }
+    }
+
+    @Test
+    fun changeDate_CallsGetFiveThingsWithCorrectDate() {
+        val newDate = Date()
+
+        LiveDataTestUtil.getValue(viewModel.changeDate(newDate))
+
+        argumentCaptor<Date>().apply {
+            verify(repository, times(1)).getFiveThings(any(), capture(), any())
+            firstValue shouldEqual newDate
+        }
+    }
+
+    @Test
+    fun getWrittenDates_CallsRepositoryGetWrittenDates() {
+        LiveDataTestUtil.getValue(viewModel.getWrittenDays())
+
+        verify(repository, times(1)).getWrittenDates(token)
+    }
+
 }
