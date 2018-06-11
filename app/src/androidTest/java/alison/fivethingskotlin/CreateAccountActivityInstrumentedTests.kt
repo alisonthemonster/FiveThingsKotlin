@@ -32,7 +32,7 @@ class CreateAccountActivityInstrumentedTests {
 
     @Before
     fun setUp() {
-        mockServer.start() //TODO try with port 0
+        mockServer.start()
         RetrofitHelper.baseUrl = mockServer.url("/").toString()
     }
 
