@@ -10,11 +10,11 @@ import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.DrawerActions
 import android.support.test.espresso.contrib.DrawerMatchers
 import android.support.test.espresso.contrib.NavigationViewActions
+import android.support.test.rule.ActivityTestRule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
-import android.support.test.rule.ActivityTestRule
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
@@ -22,7 +22,7 @@ class ContainerActivityInstrumentedTestInstrumentedTest {
 
     @Rule
     @JvmField
-    val activityRule: ActivityTestRule<ContainerActivity> = ActivityTestRule(ContainerActivity::class.java)
+    val mActivityRule: ActivityTestRule<ContainerActivity> = ActivityTestRule(ContainerActivity::class.java)
 
     @Test
     fun useAppContext() {
@@ -30,6 +30,8 @@ class ContainerActivityInstrumentedTestInstrumentedTest {
         val appContext = InstrumentationRegistry.getTargetContext()
         assertEquals("alison.fivethingskotlin", appContext.packageName)
     }
+
+    //TODO how to mock AccountManager in the fragment?
 
     @Test
     fun userCanOpenAppDrawer() {
