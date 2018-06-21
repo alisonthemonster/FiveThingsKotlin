@@ -85,7 +85,6 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/rounded_button"
-                android:onClick="logInClick"
                 android:padding="6dp"
                 android:text="Log In"
                 android:textColor="@color/white"
