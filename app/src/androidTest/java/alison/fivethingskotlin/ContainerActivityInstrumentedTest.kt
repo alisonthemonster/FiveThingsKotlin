@@ -18,7 +18,7 @@ import org.junit.Assert.*
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
-class ContainerActivityInstrumentedTestInstrumentedTest {
+class ContainerActivityInstrumentedTest {
 
     @Rule
     @JvmField
