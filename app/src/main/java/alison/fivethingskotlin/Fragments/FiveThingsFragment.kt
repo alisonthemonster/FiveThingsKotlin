@@ -32,12 +32,15 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val accountManager = AccountManager.get(context)
-        val account = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)[0]
+        val accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)
+        if (accounts.isEmpty()) {
+            //TODO take user to login screen
+        }
+
+        val account = accounts[0]
         val token = "Token: " + accountManager.peekAuthToken(account, Constants.AUTH_TOKEN_TYPE)
 
-        if (token.isNullOrEmpty()) {
-            //TODO handle case where user get here without logging in
-        }
+
 
         viewModel = FiveThingsViewModel(token, FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 

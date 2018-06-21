@@ -15,4 +15,7 @@
     <string name="three">THREE</string>
     <string name="four">FOUR</string>
     <string name="five">FIVE</string>
+    <string name="let_s_get_started">Let\'s get started!</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_exists">Email ID exists</string>
 </resources>

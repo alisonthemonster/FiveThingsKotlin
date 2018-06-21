@@ -37,7 +37,7 @@ class LogInActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_in)
 
-        //TODO add button to go back to promo screen
+        //TODO loading screen when back button is pressed? (when an account exists in account manager)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_log_in)
 
@@ -48,15 +48,18 @@ class LogInActivity : AppCompatActivity() {
         password_text.inputType = InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
         password_text.transformationMethod = PasswordTransformationMethod.getInstance()
 
+        create_account_link.setOnClickListener {
+            val intent = Intent(this, LogInActivity::class.java)
+            startActivity(intent)
+        }
+
+        login_button.setOnClickListener{ logIn() }
+
         setUpListeners()
     }
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
-    }
-
-    fun logInClick(view: View) {
-        logIn()
     }
 
     private fun logIn() {
