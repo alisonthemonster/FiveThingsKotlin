@@ -14,6 +14,7 @@ An app to track your quickly track, review, and reflect on your days.
 - AccountManager for authentication
 - KotlinTest for unit testing
 - Espresso for instrumented tests
+- MockWebServer for instrumented tests
 - Glide for image loading
 - Travis CI
 - CompactCalendarView
@@ -22,7 +23,7 @@ An app to track your quickly track, review, and reflect on your days.
 ### Screenshots
 
 
-<img src="https://i.imgur.com/rkX3EZ7.png" width="350"> <img src="https://i.imgur.com/c35QxFl.png" width="350">
+<img src="https://i.imgur.com/88PeyDr.png" width="250"> <img src="https://i.imgur.com/vp1vPSr.png" width="250"> <img src="https://i.imgur.com/YY17Sf1.png" width="250"> <img src="https://i.imgur.com/CXZXfVX.png" width="250"> <img src="https://i.imgur.com/pfmj7Jo.png" width="250">
 
 
 *If you clone this repo the app will not build for a few reasons: You'll need my `google-services.json` for firebase and you'll be missing some font assets I didn't want to upload to github.*
