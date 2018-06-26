@@ -1,18 +1,49 @@
 language: android
 android:
   components:
-  - platform-tools
-  - build-tools-27.0.3
-  - android-27
-  - extra-android-m2repository
-install:
-- chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
-script:
-- ./gradlew build
+    - platform-tools
+    - build-tools-27.0.3
+    - android-22
+    - android-27
+    - extra-android-m2repository
+
+    #system images for emulator
+    - sys-img-armeabi-v7a-android-22
+    - sys-img-armeabi-v7a-android-27
+env:
+  matrix:
+    - ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-27
+  global:
+    - ADB_INSTALL_TIMEOUT=10    #Time out to 10 mins
+
+
+before_cache:
+    - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+cache:
+  directories:      #Cache all dirs under .gradle folder
+    - $HOME/.gradle/daemon      #Cache daemon logs
+    - $HOME/.gradle/native      #Cache library downloaded from the gradle dependency
+    - $HOME/.gradle/wrapper     #Cache the gradle
 before_install:
-- openssl aes-256-cbc -K $encrypted_5b0e5eaedfc3_key -iv $encrypted_5b0e5eaedfc3_iv
-  -in google-services.json.enc -out app/google-services.json -d
-- chmod +x gradlew
+  - openssl aes-256-cbc -K $encrypted_5b0e5eaedfc3_key -iv $encrypted_5b0e5eaedfc3_iv
+    -in google-services.json.enc -out app/google-services.json -d
+  - chmod +x gradlew #Grant permissions
+install:
+  - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
+before_script:
+  - android list targets
+  - echo no | android create avd --force --name test --target $ANDROID_TARGET   #Create AVD for given api
+  - emulator -avd test -no-skin -no-audio -no-window &    #Start emulator
+script:
+  - ./gradlew build
+  - android-wait-for-emulator             #Run wait for the emulator script.
+  - adb devices                           #Display list of devices
+  - adb shell input keyevent 82 &
+  - ./gradlew connectedAndroidTest -PdisablePreDex --stacktrace
 branches:
   only:
-  - master
+    - master
+
+
+
