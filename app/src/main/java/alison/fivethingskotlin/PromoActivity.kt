@@ -1,71 +1,175 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Util.Constants.ACCOUNT_TYPE
-import alison.fivethingskotlin.Util.Constants.AUTH_TOKEN_TYPE
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
-import android.accounts.AccountManager
-import android.accounts.AccountManagerCallback
-import android.accounts.AccountManagerFuture
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_promo.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import net.openid.appauth.AuthorizationServiceConfiguration
+import net.openid.appauth.AuthorizationRequest
+import net.openid.appauth.AuthorizationService
+import android.app.PendingIntent
+import net.openid.appauth.TokenResponse
+import net.openid.appauth.AuthState
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthorizationResponse
+import android.provider.SyncStateContract.Helpers.update
+import android.text.TextUtils
+import android.util.Log
+import android.view.View
+import org.json.JSONException
+
 
 class PromoActivity : AppCompatActivity() {
 
+    private val SHARED_PREFERENCES_NAME = "AuthStatePreference"
+    private val AUTH_STATE = "AUTH_STATE"
+    private val USED_INTENT = "USED_INTENT"
+    private val LOGIN_HINT = "login_hint"
+
     private lateinit var binding: ActivityPromoBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_promo)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
-        binding.loading = true
 
-        val accountManager = AccountManager.get(this)
-        val accounts = accountManager.getAccountsByType(ACCOUNT_TYPE)
-        if (!accounts.isEmpty()) {
-            //an account was found on device, try to find a token
-            val account = accounts[0]
-            accountManager.getAuthToken(account, AUTH_TOKEN_TYPE, Bundle(), this, OnTokenAcquired(), null) //TODO add onError handler instead of null
-        } else {
-            binding.loading = false
+        enablePostAuthorizationFlows()
+
+        google_auth_button.setOnClickListener {
+            val serviceConfiguration = AuthorizationServiceConfiguration(
+                    Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
+                    Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
+            )
+
+            val clientId = "623073071257-p5f1lgvj78kp9qdeafcm85767f4q37qa.apps.googleusercontent.com"
+            val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
+            //val redirectUri = Uri.parse("com.googleusercontent.apps.623073071257-p5f1lgvj78kp9qdeafcm85767f4q37qa:/oauth2redirect")
+            val builder = AuthorizationRequest.Builder(
+                    serviceConfiguration,
+                    clientId,
+                    AuthorizationRequest.RESPONSE_TYPE_CODE,
+                    redirectUri
+            )
+            builder.setScopes("profile")
+            val request = builder.build()
+
+            val authorizationService = AuthorizationService(it.context)
+            val action = "HANDLE_AUTHORIZATION_RESPONSE"
+            val postAuthorizationIntent = Intent(action)
+            val pendingIntent = PendingIntent.getActivity(it.context, request.hashCode(), postAuthorizationIntent, 0)
+            authorizationService.performAuthorizationRequest(request, pendingIntent)
+
         }
 
-        createAccountButton.setOnClickListener {
-            val intent = Intent(this, CreateAccountActivity::class.java)
-            startActivity(intent)
-        }
+    }
 
-        signInButton.setOnClickListener {
-            val intent = Intent(this, LogInActivity::class.java)
-            startActivity(intent)
+    override fun onStart() {
+        super.onStart()
+        checkIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        checkIntent(intent)
+    }
+
+    private fun checkIntent(intent: Intent?) {
+        intent?.let {
+            val action = intent.action
+            when (action) {
+                "HANDLE_AUTHORIZATION_RESPONSE" ->  {
+                    if (!intent.hasExtra(USED_INTENT)) {
+                        handleAuthorizationResponse(intent)
+                        intent.putExtra(USED_INTENT, true)
+                    }
+                }
+            }
         }
     }
+
+
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private inner class OnTokenAcquired: AccountManagerCallback<Bundle> {
 
-        override fun run(result: AccountManagerFuture<Bundle>) {
-            val bundle = result.result
-            if (bundle.getString(AccountManager.KEY_INTENT) != null) {
-                //no token found on device, show log in screen to force manual entry
-                val intent = Intent(applicationContext, LogInActivity::class.java)
-                startActivity(intent)
-                return
+    /**
+     * Exchanges the code, for the [TokenResponse].
+     *
+     * @param intent represents the [Intent] from the Custom Tabs or the System Browser.
+     */
+    private fun handleAuthorizationResponse(intent: Intent) {
+
+        val response = AuthorizationResponse.fromIntent(intent)
+        val error = AuthorizationException.fromIntent(intent)
+        val authState = AuthState(response, error)
+        /**
+         * The AuthState object created here is a convenient way to store details from the
+         * authorization session. You can update it with the results of new OAuth responses,
+         * and persist it to store the authorization session between app starts.
+         */
+
+        //exchange that authorization code for the refresh and access tokens
+        //update the AuthState instance with that response
+        response?.let {
+            Log.i("blerg", String.format("Handled Authorization Response %s ", authState.toJsonString()))
+            val service = AuthorizationService(this)
+            service.performTokenRequest(response.createTokenExchangeRequest()) { tokenResponse, exception ->
+                if (exception != null) {
+                    Log.w("blerg", "Token Exchange failed", exception)
+                } else {
+                    if (tokenResponse != null) {
+                        authState.update(tokenResponse, exception)
+                        persistAuthState(authState)
+                        Log.i("blerg", String.format("Token Response [ Access Token: %s, ID Token: %s ]", tokenResponse.accessToken, tokenResponse.idToken))
+                    }
+                }
             }
-            //A token was found and we can open the app
-            val intent = Intent(applicationContext, ContainerActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
         }
+    }
 
+    private fun persistAuthState(authState: AuthState) {
+        getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
+                .putString(AUTH_STATE, authState.toJsonString())
+                .apply()
+        enablePostAuthorizationFlows()
+    }
+
+    private fun restoreAuthState(): AuthState? {
+        val jsonString = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+                .getString(AUTH_STATE, null)
+        if (!TextUtils.isEmpty(jsonString)) {
+            try {
+                return AuthState.fromJson(jsonString!!)
+            } catch (jsonException: JSONException) {
+                // should never happen
+            }
+        }
+        return null
+    }
+
+    private fun enablePostAuthorizationFlows() {
+        val mAuthState = restoreAuthState()
+
+        mAuthState?.let {
+            if (mAuthState.isAuthorized) {
+                //we are logged in!!
+                Log.d("blerg", "yo yo yo we in bitches")
+                val intent = Intent(applicationContext, ContainerActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            } else {
+                //we need to log in!
+                Log.d("blerg", "bitches gotta log in")
+            }
+        }
     }
 
 }
