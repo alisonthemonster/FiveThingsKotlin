@@ -1,23 +1,25 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
-import android.accounts.AccountManager
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import kotlinx.android.synthetic.main.five_things_fragment.*
+import net.openid.appauth.AuthorizationService
 import java.util.*
 
 
@@ -31,58 +33,32 @@ class FiveThingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val accountManager = AccountManager.get(context)
-        val accounts = accountManager.getAccountsByType(Constants.ACCOUNT_TYPE)
-        if (accounts.isEmpty()) {
-            //TODO take user to login screen
-        }
-
-        val account = accounts[0]
-        val token = "Token: " + accountManager.peekAuthToken(account, Constants.AUTH_TOKEN_TYPE)
-
-
-
-        viewModel = FiveThingsViewModel(token, FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
-
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
-        binding.viewModel = viewModel
 
-        currentDate = Date()
+        context?.let {
+            val authorizationService = AuthorizationService(it)
+            val authState = restoreAuthState(it)
 
-        binding.loading = true
+            authState?.performActionWithFreshTokens(authorizationService, { accessToken, idToken, ex ->
+                if (ex != null) {
+                    Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
+                    showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
+                    //TODO show error here
+                } else {
+                    accessToken?.let {
+                        viewModel = FiveThingsViewModel("token: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
+                        binding.viewModel = viewModel
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
-            when (fiveThings?.status) {
-                Status.SUCCESS -> {
-                    Log.d("blerg", "bloop")
-                    binding.fiveThings = fiveThings.data
-                    fiveThings.data?.let {
-                        binding.naguDate = it.date
-                        binding.month = getMonth(it.date) + " " + getYear(it.date)
-                        compactcalendar_view.setCurrentDate(it.date)
+                        currentDate = Date()
+
+                        getFiveThings()
+
+                        getWrittenDays()
                     }
                 }
-                Status.ERROR -> {
-                    binding.loading = false
-                    Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
-        //build calendar when days come back from server
-        viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            binding.loading = false
-            days?.let{
-                when (it.status) {
-                    Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR ->Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
-
-        binding.calendarVisible = false
-
+            })
+        }
         return binding.root
     }
 
@@ -110,14 +86,60 @@ class FiveThingsFragment : Fragment() {
 
         save_button.setOnClickListener {
             viewModel.writeFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-                Log.d("blerg", "in the observer")
                 when (it?.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> Toast.makeText(context, it.message, Toast.LENGTH_SHORT).show()
+                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
                 }
 
             })
         }
+    }
+
+    private fun openLogInScreen(): DialogInterface.OnClickListener {
+        return DialogInterface.OnClickListener { _, _ ->
+            val intent = Intent(context, ContainerActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+    }
+
+    private fun getFiveThings() {
+
+        binding.loading = true
+
+        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
+            when (fiveThings?.status) {
+                Status.SUCCESS -> {
+                    Log.d("blerg", "bloop")
+                    binding.fiveThings = fiveThings.data
+                    fiveThings.data?.let {
+                        binding.naguDate = it.date
+                        binding.month = getMonth(it.date) + " " + getYear(it.date)
+                        compactcalendar_view.setCurrentDate(it.date)
+                    }
+                }
+                Status.ERROR -> {
+                    binding.loading = false
+                    showErrorDialog(fiveThings.message!!.capitalize(), context!!)
+                    //Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+    }
+
+    private fun getWrittenDays() {
+        //build calendar when days come back from server
+        viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
+            binding.loading = false
+            days?.let{
+                when (it.status) {
+                    Status.SUCCESS -> addEventsToCalendar(it.data)
+                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                }
+            }
+        })
+
+        binding.calendarVisible = false
     }
 
     private fun addEventsToCalendar(dates: List<Date>?) {

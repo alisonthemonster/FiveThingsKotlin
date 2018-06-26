@@ -1,27 +1,18 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.Util.restoreAuthState
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_promo.*
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import net.openid.appauth.AuthorizationServiceConfiguration
-import net.openid.appauth.AuthorizationRequest
-import net.openid.appauth.AuthorizationService
-import android.app.PendingIntent
-import net.openid.appauth.TokenResponse
-import net.openid.appauth.AuthState
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationResponse
-import android.provider.SyncStateContract.Helpers.update
-import android.text.TextUtils
 import android.util.Log
-import android.view.View
-import org.json.JSONException
+import kotlinx.android.synthetic.main.activity_promo.*
+import net.openid.appauth.*
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 class PromoActivity : AppCompatActivity() {
@@ -29,7 +20,6 @@ class PromoActivity : AppCompatActivity() {
     private val SHARED_PREFERENCES_NAME = "AuthStatePreference"
     private val AUTH_STATE = "AUTH_STATE"
     private val USED_INTENT = "USED_INTENT"
-    private val LOGIN_HINT = "login_hint"
 
     private lateinit var binding: ActivityPromoBinding
 
@@ -99,12 +89,6 @@ class PromoActivity : AppCompatActivity() {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-
-    /**
-     * Exchanges the code, for the [TokenResponse].
-     *
-     * @param intent represents the [Intent] from the Custom Tabs or the System Browser.
-     */
     private fun handleAuthorizationResponse(intent: Intent) {
 
         val response = AuthorizationResponse.fromIntent(intent)
@@ -142,21 +126,8 @@ class PromoActivity : AppCompatActivity() {
         enablePostAuthorizationFlows()
     }
 
-    private fun restoreAuthState(): AuthState? {
-        val jsonString = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-                .getString(AUTH_STATE, null)
-        if (!TextUtils.isEmpty(jsonString)) {
-            try {
-                return AuthState.fromJson(jsonString!!)
-            } catch (jsonException: JSONException) {
-                // should never happen
-            }
-        }
-        return null
-    }
-
     private fun enablePostAuthorizationFlows() {
-        val mAuthState = restoreAuthState()
+        val mAuthState = restoreAuthState(this)
 
         mAuthState?.let {
             if (mAuthState.isAuthorized) {
