@@ -21,3 +21,10 @@ fun restoreAuthState(context: Context): AuthState? {
     }
     return null
 }
+
+fun clearAuthState(context: Context) {
+    context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .remove(AUTH_STATE)
+            .apply()
+}
