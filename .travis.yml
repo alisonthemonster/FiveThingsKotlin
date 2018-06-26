@@ -33,7 +33,7 @@ install:
   - chmod +x ./gradlew; ls -l gradlew; ./gradlew wrapper -v
 before_script:
   - android list targets
-  - echo no | android create avd --force --name test --target $ANDROID_TARGET --abi $ANDROID_ABI    #Create AVD for given api
+  - echo no | android create avd --force --name test --target $ANDROID_TARGET   #Create AVD for given api
   - emulator -avd test -no-skin -no-audio -no-window &    #Start emulator
 script:
   - ./gradlew build
