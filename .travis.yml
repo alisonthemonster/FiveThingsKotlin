@@ -3,6 +3,7 @@ android:
   components:
     - platform-tools
     - build-tools-27.0.3
+    - android-22
     - android-27
     - extra-android-m2repository
 
@@ -12,7 +13,7 @@ android:
 env:
   matrix:
     - ANDROID_TARGET=android-22 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-27 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-27
   global:
     - ADB_INSTALL_TIMEOUT=10    #Time out to 10 mins
 
