@@ -1,8 +1,13 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.Models.Token
+import alison.fivethingskotlin.Models.UserBody
+import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.restoreAuthState
+import alison.fivethingskotlin.ViewModels.AuthViewModel
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import android.app.PendingIntent
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -13,6 +18,17 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import java.util.*
+import android.support.design.widget.Snackbar
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import android.text.TextUtils
+import org.json.JSONObject
+import okhttp3.OkHttpClient
+import android.os.AsyncTask
+import net.openid.appauth.AuthorizationException
+import net.openid.appauth.AuthState
+import okhttp3.Request
+import org.jetbrains.anko.doAsync
 
 
 class PromoActivity : AppCompatActivity() {
@@ -22,6 +38,7 @@ class PromoActivity : AppCompatActivity() {
     private val USED_INTENT = "USED_INTENT"
 
     private lateinit var binding: ActivityPromoBinding
+    private lateinit var viewModel: AuthViewModel
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +46,8 @@ class PromoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_promo)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
+
+        viewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
 
         enablePostAuthorizationFlows()
 
@@ -47,7 +66,7 @@ class PromoActivity : AppCompatActivity() {
                     AuthorizationRequest.RESPONSE_TYPE_CODE,
                     redirectUri
             )
-            builder.setScopes("profile")
+            builder.setScopes("profile email")
             val request = builder.build()
 
             val authorizationService = AuthorizationService(it.context)
@@ -123,7 +142,55 @@ class PromoActivity : AppCompatActivity() {
         getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
                 .putString(AUTH_STATE, authState.toJsonString())
                 .apply()
+
+        getUserData(authState)
         enablePostAuthorizationFlows()
+    }
+
+    private fun getUserData(authState: AuthState) {
+        //get user details for nagu
+        val authorizationService = AuthorizationService(this)
+        authState.performActionWithFreshTokens(authorizationService, { accessToken, idToken, ex ->
+
+        })
+
+        authState.performActionWithFreshTokens(authorizationService, AuthState.AuthStateAction { accessToken, idToken, exception ->
+
+
+            doAsync {
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                        .url("https://www.googleapis.com/oauth2/v3/userinfo")
+                        .addHeader("Authorization", String.format("Bearer %s", accessToken))
+                        .build()
+
+                try {
+                    val response = client.newCall(request).execute()
+                    val userInfo = JSONObject(response.body()?.string())
+                    val email = userInfo.optString("email", null)
+                    val fullName = userInfo.optString("name", null)
+                    val givenName = userInfo.optString("given_name", null)
+                    val familyName = userInfo.optString("family_name", null)
+                    val userBody = UserBody(email, fullName, givenName, familyName)
+
+                    postUserDataToDatabase(userBody)
+                } catch (exception: Exception) {
+                    Log.w("blerg", exception)
+                }
+            }
+        })
+    }
+
+    private fun postUserDataToDatabase(userBody: UserBody) {
+        //give user details to nagu
+
+        Log.d("blerg", "in post user data to database")
+
+//        viewModel.postUserBody(userBody).observe(this, Observer<Resource<Token>> { token ->
+//            token?.let{
+//                if (token.)
+//            }
+//        })
     }
 
     private fun enablePostAuthorizationFlows() {

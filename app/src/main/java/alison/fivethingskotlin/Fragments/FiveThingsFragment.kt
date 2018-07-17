@@ -46,7 +46,7 @@ class FiveThingsFragment : Fragment() {
                     //TODO show error here
                 } else {
                     accessToken?.let {
-                        viewModel = FiveThingsViewModel("token: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
+                        viewModel = FiveThingsViewModel("Token: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
                         binding.viewModel = viewModel
 
