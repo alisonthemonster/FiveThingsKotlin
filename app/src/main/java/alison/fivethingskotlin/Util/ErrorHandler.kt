@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.Util
 
+import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import android.app.AlertDialog
 import android.content.Context
@@ -7,7 +8,7 @@ import android.content.DialogInterface
 import org.json.JSONObject
 import retrofit2.Response
 
-fun <T> buildErrorResource(response: Response<T>): Resource<T> {
+fun <T> buildErrorResource(response: Response<T>): Resource<FiveThings>? {
     response.errorBody()?.string()?.let {
         return if (it.contains("\n")) {
             val json = JSONObject(it)

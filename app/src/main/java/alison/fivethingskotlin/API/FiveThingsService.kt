@@ -2,6 +2,7 @@ package alison.fivethingskotlin.API
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.FiveThingsRequest
+import alison.fivethingskotlin.Models.Thing
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -10,20 +11,17 @@ interface FiveThingsService {
         fun create(): FiveThingsService = RetrofitHelper.build().create(FiveThingsService::class.java)
     }
 
-    @GET("info_for_day/{dayString}")
-    fun getFiveThings(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings>
+    @GET("get_things_for_day/{year}/{month}/{day}")
+    fun getFiveThings(@Header("Authorization") token: String,
+                                   @Path("year") year: String,
+                                   @Path("month") month: String,
+                                   @Path("day") day: String): Call<List<Thing>>
 
-    @GET("get_info_for_day/{dayString}")
-    fun getFiveThingsWithAnalytics(@Header("Authorization") token: String, @Path("dayString") day: String): Call<FiveThings>
-
-    @PUT("log_day")
+    @PUT("things_for_day")
     fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<List<String>>
 
-    @POST("log_day")
+    @POST("things_for_day")
     fun writeFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<List<String>>
-
-    @HTTP(method = "DELETE", path = "log_day", hasBody = true)
-    fun deleteFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: FiveThingsRequest): Call<List<String>>
 
     @GET("get_days_written")
     fun getWrittenDates(@Header("Authorization") token: String): Call<List<String>>

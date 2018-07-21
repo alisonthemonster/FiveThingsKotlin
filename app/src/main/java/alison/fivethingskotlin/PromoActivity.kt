@@ -1,13 +1,8 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Models.Token
-import alison.fivethingskotlin.Models.UserBody
-import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.restoreAuthState
-import alison.fivethingskotlin.ViewModels.AuthViewModel
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import android.app.PendingIntent
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
@@ -18,17 +13,6 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import java.util.*
-import android.support.design.widget.Snackbar
-import android.databinding.adapters.TextViewBindingAdapter.setText
-import android.text.TextUtils
-import org.json.JSONObject
-import okhttp3.OkHttpClient
-import android.os.AsyncTask
-import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthState
-import okhttp3.Request
-import org.jetbrains.anko.doAsync
 
 
 class PromoActivity : AppCompatActivity() {
@@ -38,8 +22,6 @@ class PromoActivity : AppCompatActivity() {
     private val USED_INTENT = "USED_INTENT"
 
     private lateinit var binding: ActivityPromoBinding
-    private lateinit var viewModel: AuthViewModel
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +29,10 @@ class PromoActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
 
-        viewModel = ViewModelProviders.of(this).get(AuthViewModel::class.java)
-
         enablePostAuthorizationFlows()
 
         google_auth_button.setOnClickListener {
+            binding.loading = true
             val serviceConfiguration = AuthorizationServiceConfiguration(
                     Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
                     Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
@@ -74,7 +55,6 @@ class PromoActivity : AppCompatActivity() {
             val postAuthorizationIntent = Intent(action)
             val pendingIntent = PendingIntent.getActivity(it.context, request.hashCode(), postAuthorizationIntent, 0)
             authorizationService.performAuthorizationRequest(request, pendingIntent)
-
         }
 
     }
@@ -103,12 +83,12 @@ class PromoActivity : AppCompatActivity() {
     }
 
 
-
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
     private fun handleAuthorizationResponse(intent: Intent) {
+        binding.loading = true
 
         val response = AuthorizationResponse.fromIntent(intent)
         val error = AuthorizationException.fromIntent(intent)
@@ -126,6 +106,7 @@ class PromoActivity : AppCompatActivity() {
             val service = AuthorizationService(this)
             service.performTokenRequest(response.createTokenExchangeRequest()) { tokenResponse, exception ->
                 if (exception != null) {
+                    binding.loading = false
                     Log.w("blerg", "Token Exchange failed", exception)
                 } else {
                     if (tokenResponse != null) {
@@ -143,54 +124,7 @@ class PromoActivity : AppCompatActivity() {
                 .putString(AUTH_STATE, authState.toJsonString())
                 .apply()
 
-        getUserData(authState)
         enablePostAuthorizationFlows()
-    }
-
-    private fun getUserData(authState: AuthState) {
-        //get user details for nagu
-        val authorizationService = AuthorizationService(this)
-        authState.performActionWithFreshTokens(authorizationService, { accessToken, idToken, ex ->
-
-        })
-
-        authState.performActionWithFreshTokens(authorizationService, AuthState.AuthStateAction { accessToken, idToken, exception ->
-
-
-            doAsync {
-                val client = OkHttpClient()
-                val request = Request.Builder()
-                        .url("https://www.googleapis.com/oauth2/v3/userinfo")
-                        .addHeader("Authorization", String.format("Bearer %s", accessToken))
-                        .build()
-
-                try {
-                    val response = client.newCall(request).execute()
-                    val userInfo = JSONObject(response.body()?.string())
-                    val email = userInfo.optString("email", null)
-                    val fullName = userInfo.optString("name", null)
-                    val givenName = userInfo.optString("given_name", null)
-                    val familyName = userInfo.optString("family_name", null)
-                    val userBody = UserBody(email, fullName, givenName, familyName)
-
-                    postUserDataToDatabase(userBody)
-                } catch (exception: Exception) {
-                    Log.w("blerg", exception)
-                }
-            }
-        })
-    }
-
-    private fun postUserDataToDatabase(userBody: UserBody) {
-        //give user details to nagu
-
-        Log.d("blerg", "in post user data to database")
-
-//        viewModel.postUserBody(userBody).observe(this, Observer<Resource<Token>> { token ->
-//            token?.let{
-//                if (token.)
-//            }
-//        })
     }
 
     private fun enablePostAuthorizationFlows() {

@@ -10,7 +10,7 @@ class RetrofitHelper {
 
     companion object {
 
-        var baseUrl = "https://fivethings-dev.herokuapp.com/api/"
+        var baseUrl = "https://5things.nagkumar.com/api/"
 
         fun build(): Retrofit {
 

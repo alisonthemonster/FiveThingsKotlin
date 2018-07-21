@@ -59,7 +59,7 @@ fun getFullDateFormat(date: Date): String {
     return "$dayOfWeek $month $day, $year"
 }
 
-private fun getDay(date: Date): Int {
+fun getDay(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
     return cal.get(Calendar.DATE)

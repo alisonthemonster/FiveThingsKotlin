@@ -45,8 +45,8 @@ class FiveThingsFragment : Fragment() {
                     showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
                     //TODO show error here
                 } else {
-                    accessToken?.let {
-                        viewModel = FiveThingsViewModel("Token: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
+                    idToken?.let {
+                        viewModel = FiveThingsViewModel("Bearer: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
                         binding.viewModel = viewModel
 
