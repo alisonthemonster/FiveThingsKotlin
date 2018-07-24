@@ -8,6 +8,4 @@ data class Thing(val date: String,
         get() {
             return content.isEmpty()
         }
-
-
 }

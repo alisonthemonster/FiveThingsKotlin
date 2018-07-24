@@ -1,5 +1,7 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.Util.AUTH_STATE
+import alison.fivethingskotlin.Util.SHARED_PREFERENCES_NAME
 import alison.fivethingskotlin.Util.restoreAuthState
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import android.app.PendingIntent
@@ -17,8 +19,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class PromoActivity : AppCompatActivity() {
 
-    private val SHARED_PREFERENCES_NAME = "AuthStatePreference"
-    private val AUTH_STATE = "AUTH_STATE"
     private val USED_INTENT = "USED_INTENT"
 
     private lateinit var binding: ActivityPromoBinding
