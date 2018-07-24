@@ -9,12 +9,11 @@ class FiveThingsTest: FreeSpec( {
         "with complete things" {
             val completeThings = FiveThings(
                     Date(),
-                    listOf(
-                        "one",
-                        "two",
-                        "three",
-                        "four",
-                        "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
             completeThings.isComplete shouldEqual true
@@ -22,12 +21,11 @@ class FiveThingsTest: FreeSpec( {
         "with some empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    listOf(
-                            "",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
             completeThings.isComplete shouldEqual false
@@ -35,12 +33,11 @@ class FiveThingsTest: FreeSpec( {
         "with more empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    listOf(
-                            "",
-                            "",
-                            "",
-                            "",
-                            ""),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "", 2),
+                            Thing("MM-DD-YYYY", "", 3),
+                            Thing("MM-DD-YYYY", "", 4),
+                            Thing("MM-DD-YYYY", "", 5)),
                     false,
                     false)
             completeThings.isComplete shouldEqual false
@@ -51,25 +48,23 @@ class FiveThingsTest: FreeSpec( {
         "with complete things" {
             val completeThings = FiveThings(
                 Date(),
-                listOf(
-                        "one",
-                        "two",
-                        "three",
-                        "four",
-                        "five"),
-                false,
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
+                    false,
                 false)
             completeThings.isEmpty shouldEqual false
         }
         "with some empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    listOf(
-                            "",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
             completeThings.isEmpty shouldEqual false
@@ -77,12 +72,11 @@ class FiveThingsTest: FreeSpec( {
         "with more empty things" {
             val completeThings = FiveThings(
                     Date(),
-                    listOf(
-                            "",
-                            "",
-                            "",
-                            "",
-                            ""),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "", 2),
+                            Thing("MM-DD-YYYY", "", 3),
+                            Thing("MM-DD-YYYY", "", 4),
+                            Thing("MM-DD-YYYY", "", 5)),
                     false,
                     false)
             completeThings.isEmpty shouldEqual true
@@ -93,12 +87,11 @@ class FiveThingsTest: FreeSpec( {
         "with inDatabase and edited" {
             val things = FiveThings(
                     Date(),
-                    listOf(
-                            "one",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     true,
                     true)
             things.savedString shouldEqual "Save"
@@ -106,12 +99,11 @@ class FiveThingsTest: FreeSpec( {
         "In the database and not edited" {
             val things = FiveThings(
                     Date(),
-                    listOf(
-                            "one",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     true)
             things.savedString shouldEqual "Saved"
@@ -119,12 +111,11 @@ class FiveThingsTest: FreeSpec( {
         "Not in the database and not edited" {
             val things = FiveThings(
                     Date(),
-                    listOf(
-                            "one",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
             things.savedString shouldEqual "Save"
@@ -132,12 +123,11 @@ class FiveThingsTest: FreeSpec( {
         "Not in the database but edited" {
             val things = FiveThings(
                     Date(),
-                    listOf(
-                            "one",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     true,
                     false)
             things.savedString shouldEqual "Save"
@@ -154,12 +144,11 @@ class FiveThingsTest: FreeSpec( {
 
             val things = FiveThings(
                     date,
-                    listOf(
-                            "one",
-                            "two",
-                            "three",
-                            "four",
-                            "five"),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
             things.fullDateString shouldEqual "Sunday January 22nd, 2017"
