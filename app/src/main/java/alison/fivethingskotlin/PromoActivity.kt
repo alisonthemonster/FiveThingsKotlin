@@ -38,9 +38,8 @@ class PromoActivity : AppCompatActivity() {
                     Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
             )
 
-            val clientId = "623073071257-p5f1lgvj78kp9qdeafcm85767f4q37qa.apps.googleusercontent.com"
+            val clientId = "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com"
             val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
-            //val redirectUri = Uri.parse("com.googleusercontent.apps.623073071257-p5f1lgvj78kp9qdeafcm85767f4q37qa:/oauth2redirect")
             val builder = AuthorizationRequest.Builder(
                     serviceConfiguration,
                     clientId,

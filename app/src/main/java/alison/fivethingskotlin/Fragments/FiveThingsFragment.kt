@@ -4,6 +4,7 @@ import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
@@ -46,7 +47,7 @@ class FiveThingsFragment : Fragment() {
                     //TODO show error here
                 } else {
                     idToken?.let {
-                        viewModel = FiveThingsViewModel("Bearer: $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
+                        viewModel = FiveThingsViewModel("Bearer $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
 
                         binding.viewModel = viewModel
 
@@ -97,7 +98,7 @@ class FiveThingsFragment : Fragment() {
 
     private fun openLogInScreen(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
-            val intent = Intent(context, ContainerActivity::class.java)
+            val intent = Intent(context, PromoActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }

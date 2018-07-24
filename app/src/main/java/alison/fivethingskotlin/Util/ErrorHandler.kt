@@ -12,7 +12,7 @@ fun <T> buildErrorResource(response: Response<T>): Resource<FiveThings>? {
     response.errorBody()?.string()?.let {
         return if (it.contains("\n")) {
             val json = JSONObject(it)
-            val messageString = json.getString("message")
+            val messageString = json.getString("detail")
             Resource(Status.ERROR, messageString, null)
         } else {
             Resource(Status.ERROR, it, null)
