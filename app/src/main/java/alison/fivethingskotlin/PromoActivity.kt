@@ -15,6 +15,9 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import android.R.attr.action
+
+
 
 
 class PromoActivity : AppCompatActivity() {
@@ -43,7 +46,7 @@ class PromoActivity : AppCompatActivity() {
             val builder = AuthorizationRequest.Builder(
                     serviceConfiguration,
                     clientId,
-                    AuthorizationRequest.RESPONSE_TYPE_CODE,
+                    ResponseTypeValues.CODE,
                     redirectUri
             )
             builder.setScopes("profile email")
@@ -51,7 +54,8 @@ class PromoActivity : AppCompatActivity() {
 
             val authorizationService = AuthorizationService(it.context)
             val action = "HANDLE_AUTHORIZATION_RESPONSE"
-            val postAuthorizationIntent = Intent(action)
+            val postAuthorizationIntent = Intent(it.context, PromoActivity::class.java)
+            postAuthorizationIntent.action = action
             val pendingIntent = PendingIntent.getActivity(it.context, request.hashCode(), postAuthorizationIntent, 0)
             authorizationService.performAuthorizationRequest(request, pendingIntent)
         }
@@ -101,7 +105,7 @@ class PromoActivity : AppCompatActivity() {
         //exchange that authorization code for the refresh and access tokens
         //update the AuthState instance with that response
         response?.let {
-            Log.i("blerg", String.format("Handled Authorization Response %s ", authState.toJsonString()))
+            Log.i("blerg", String.format("Handled Authorization Response %s ", authState.jsonSerializeString()))
             val service = AuthorizationService(this)
             service.performTokenRequest(response.createTokenExchangeRequest()) { tokenResponse, exception ->
                 if (exception != null) {
@@ -120,7 +124,7 @@ class PromoActivity : AppCompatActivity() {
 
     private fun persistAuthState(authState: AuthState) {
         getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE).edit()
-                .putString(AUTH_STATE, authState.toJsonString())
+                .putString(AUTH_STATE, authState.jsonSerializeString())
                 .apply()
 
         enablePostAuthorizationFlows()

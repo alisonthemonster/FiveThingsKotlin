@@ -13,7 +13,7 @@ fun restoreAuthState(context: Context): AuthState? {
             .getString(AUTH_STATE, null)
     if (!TextUtils.isEmpty(jsonString)) {
         try {
-            return AuthState.fromJson(jsonString!!)
+            return AuthState.jsonDeserialize(jsonString!!)
         } catch (jsonException: JSONException) {
             // should never happen
         }
