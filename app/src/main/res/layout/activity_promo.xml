@@ -73,7 +73,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
             <Button
-                android:id="@+id/createAccountButton"
+                android:id="@+id/google_auth_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -81,27 +81,12 @@
                 android:layout_marginStart="16dp"
                 android:background="@drawable/rounded_button"
                 android:padding="6dp"
-                android:text="Create Account"
+                android:text="Sign in with Google"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
-            <Button
-                android:id="@+id/signInButton"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginStart="16dp"
-                android:background="@drawable/rounded_button"
-                android:padding="6dp"
-                android:text="Sign In"
-                android:textColor="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/createAccountButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
 

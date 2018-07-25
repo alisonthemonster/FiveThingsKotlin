@@ -6,9 +6,9 @@ import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.Models.Thing
 import alison.fivethingskotlin.Util.Resource
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.MutableLiveData
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.mock.`when`
 import io.kotlintest.mock.mock
@@ -18,7 +18,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.mockito.Mockito.*
 import retrofit2.Call
@@ -33,11 +32,12 @@ class FiveThingsRepositoryTest {
     private lateinit var service: FiveThingsService
     private lateinit var repository: FiveThingsRepository
 
-    private val fiveThingsCall = mock<Call<FiveThings>>()
+    private val fiveThingsCall = mock<Call<List<Thing>>>()
     private val datesCall = mock<Call<List<String>>>()
 
     private lateinit var date: Date
     private lateinit var fiveThings: FiveThings
+    private lateinit var things: List<Thing>
     private lateinit var dates: List<Date>
     private lateinit var dateStrings: List<String>
     private val token = "token"
@@ -65,48 +65,52 @@ class FiveThingsRepositoryTest {
         cal.set(Calendar.DAY_OF_MONTH, 24)
         val nextNextDate = cal.time
 
+        things = listOf(Thing("01-22-2017", "one", 1),
+                Thing("01-22-2017", "two", 2),
+                Thing("01-22-2017", "three", 3),
+                Thing("01-22-2017", "four", 4),
+                Thing("01-22-2017", "five", 5))
 
-        fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), false, true)
+        fiveThings = FiveThings(date, things, false, true)
         dates = listOf(date, nextDate, nextNextDate)
         dateStrings = listOf("2017-01-22", "2017-01-23", "2017-01-24")
 
-        `when`(service.getFiveThings(any(), any())).thenReturn(fiveThingsCall)
+        `when`(service.getFiveThings(any(), any(), any(), any())).thenReturn(fiveThingsCall)
         `when`(service.getWrittenDates(any())).thenReturn(datesCall)
         `when`(service.updateFiveThings(any(), any())).thenReturn(datesCall)
         `when`(service.writeFiveThings(any(), any())).thenReturn(datesCall)
-        `when`(service.deleteFiveThings(any(), any())).thenReturn(datesCall)
     }
 
     @Test
     fun getFiveThings_callsServiceOnce() {
         repository.getFiveThings(token, date, mock())
 
-        verify(service, times(1)).getFiveThings(token, "2017-01-22")
+        verify(service, times(1)).getFiveThings(token, "2017", "01", "22")
     }
 
     @Test
     fun getFiveThings_serviceIsSuccessful_returnsFiveThings() {
         doAnswer {
-            val callback: Callback<FiveThings> = it.getArgument(0)
-            callback.onResponse(fiveThingsCall, Response.success(fiveThings))
+            val callback: Callback<List<Thing>> = it.getArgument(0)
+            callback.onResponse(fiveThingsCall, Response.success(things))
         }.`when`(fiveThingsCall).enqueue(any())
 
         LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
-        verify(service, times(1)).getFiveThings(token, "2017-01-22")
+        verify(service, times(1)).getFiveThings(token, "2017", "01", "22")
         verify(fiveThingsCall, times(1)).enqueue(any())
     }
 
     @Test
     fun getFiveThings_serviceSends404_returnsEmptyFiveThings() {
         doAnswer {
-            val callback: Callback<FiveThings> = it.getArgument(0)
+            val callback: Callback<List<Thing>> = it.getArgument(0)
             callback.onResponse(fiveThingsCall, Response.error(404, mock<ResponseBody>()))
         }.`when`(fiveThingsCall).enqueue(any())
 
         LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
-        verify(service, times(1)).getFiveThings(token, "2017-01-22")
+        verify(service, times(1)).getFiveThings(token, "2017", "01", "22")
         verify(fiveThingsCall, times(1)).enqueue(any())
     }
 
@@ -115,13 +119,13 @@ class FiveThingsRepositoryTest {
         val exception = IOException("Exception thrown")
 
         doAnswer {
-            val callback: Callback<FiveThings> = it.getArgument(0)
+            val callback: Callback<List<Thing>> = it.getArgument(0)
             callback.onFailure(fiveThingsCall, exception)
         }.`when`(fiveThingsCall).enqueue(any())
 
         LiveDataTestUtil.getValue(repository.getFiveThings(token, date, mock()))
 
-        verify(service, times(1)).getFiveThings(token, "2017-01-22")
+        verify(service, times(1)).getFiveThings(token, "2017", "01", "22")
         verify(fiveThingsCall, times(1)).enqueue(any())
     }
 
@@ -162,60 +166,6 @@ class FiveThingsRepositoryTest {
         val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token))
 
         verify(service, times(1)).getWrittenDates(token)
-        verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
-    }
-
-    @Test
-    fun saveFiveThings_emptyFiveThings_callsDeleteService() {
-        val emptyFiveThings = FiveThings(date, listOf("", "", "", "", ""), true, true)
-
-        val expected = Resource(Status.SUCCESS, "Date removed", dates)
-
-        doAnswer {
-            val callback: Callback<List<String>> = it.getArgument(0)
-            callback.onResponse(datesCall, Response.success(dateStrings))
-        }.`when`(datesCall).enqueue(any())
-
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
-
-        verify(service, times(1)).deleteFiveThings(any(), any())
-        verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
-    }
-
-    @Test
-    fun saveFiveThings_emptyFiveThings_callbackFails_createsErrorResource() {
-        val emptyFiveThings = FiveThings(date, listOf("", "", "", "", ""), true, true)
-
-        val expected = Resource(Status.ERROR, "", null)
-
-        doAnswer {
-            val callback: Callback<List<String>> = it.getArgument(0)
-            callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
-        }.`when`(datesCall).enqueue(any())
-
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
-
-        verify(service, times(1)).deleteFiveThings(any(), any())
-        verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
-    }
-
-    @Test
-    fun saveFiveThings_emptyFiveThings_serviceFails_returnsErrorResource() {
-        val emptyFiveThings = FiveThings(date, listOf("", "", "", "", ""), true, true)
-        val exception = IOException("Exception thrown")
-        val expected = Resource(Status.ERROR, exception.message, null)
-
-        doAnswer {
-            val callback: Callback<List<String>> = it.getArgument(0)
-            callback.onFailure(datesCall, exception)
-        }.`when`(datesCall).enqueue(any())
-
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, emptyFiveThings, mock()))
-
-        verify(service, times(1)).deleteFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
         actual shouldEqual expected
     }
@@ -271,7 +221,11 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun saveFiveThings_newEntry_callsWriteService() {
-        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), false, false)
+        val fiveThings = FiveThings(date, listOf(Thing("01-22-2017", "one", 1),
+                Thing("01-22-2017", "two", 2),
+                Thing("01-22-2017", "three", 3),
+                Thing("01-22-2017", "four", 4),
+                Thing("01-22-2017", "five", 5)), false, false)
         val expected = Resource(Status.SUCCESS, "Date in database", dates)
 
         doAnswer {
@@ -288,7 +242,11 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun saveFiveThings_newEntry_callbackFails_createsErrorResource() {
-        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), true, false)
+        val fiveThings = FiveThings(date, listOf(Thing("01-22-2017", "one", 1),
+                Thing("01-22-2017", "two", 2),
+                Thing("01-22-2017", "three", 3),
+                Thing("01-22-2017", "four", 4),
+                Thing("01-22-2017", "five", 5)), true, false)
         val expected = Resource(Status.ERROR, "", null)
 
         doAnswer {
@@ -305,7 +263,11 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun saveFiveThings_newEntry_serviceFails_returnsErrorResource() {
-        val fiveThings = FiveThings(date, listOf("one", "two", "three", "four", "five"), true, false)
+        val fiveThings = FiveThings(date, listOf(Thing("01-22-2017", "one", 1),
+                Thing("01-22-2017", "two", 2),
+                Thing("01-22-2017", "three", 3),
+                Thing("01-22-2017", "four", 4),
+                Thing("01-22-2017", "five", 5)), true, false)
         val exception = IOException("Exception thrown")
 
         doAnswer {

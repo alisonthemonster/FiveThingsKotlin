@@ -61,7 +61,7 @@ class DatesTest: FreeSpec( {
         cal.set(Calendar.MONTH, Calendar.JANUARY)
         cal.set(Calendar.DAY_OF_MONTH, 22)
         val date = cal.time
-        getMonthNumber(date) shouldEqual Calendar.JANUARY
+        getMonthNumber(date) shouldEqual 1
     }
 
     "gets day of week" - {

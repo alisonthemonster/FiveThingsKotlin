@@ -183,7 +183,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[0]}"
+                        android:text="@={fiveThings.things[0].content}"
                         android:textSize="15sp"
                         android:textColor="@color/white" />
 
@@ -208,7 +208,7 @@
                         android:padding="4dp"
                         android:textSize="15sp"
                         android:textColor="@color/white"
-                        android:text="@={fiveThings.things[1]}"  />
+                        android:text="@={fiveThings.things[1].content}"  />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -229,7 +229,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[2]}"
+                        android:text="@={fiveThings.things[2].content}"
                         android:textSize="15sp"
                         android:textColor="@color/white"/>
 
@@ -252,7 +252,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[3]}"
+                        android:text="@={fiveThings.things[3].content}"
                         android:textSize="15sp"
                         android:textColor="@color/white"/>
 
@@ -275,7 +275,7 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:text="@={fiveThings.things[4]}"
+                        android:text="@={fiveThings.things[4].content}"
                         android:textSize="15sp"
                         android:textColor="@color/white"/>
 

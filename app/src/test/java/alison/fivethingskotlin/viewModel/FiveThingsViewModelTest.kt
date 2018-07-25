@@ -4,6 +4,7 @@ import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.Models.Thing
 import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.getNextDate
 import alison.fivethingskotlin.Util.getPreviousDate
@@ -60,7 +61,11 @@ class FiveThingsViewModelTest {
         val nextNextDate = cal.time
 
         dates = listOf(date, nextDate, nextNextDate)
-        fiveThings =  FiveThings(date, listOf("one", "two", "three", "four", "five"), false, true)
+        fiveThings =  FiveThings(date, listOf(Thing("01-22-2017", "one", 1),
+                Thing("01-22-2017", "two", 2),
+                Thing("01-22-2017", "three", 3),
+                Thing("01-22-2017", "four", 4),
+                Thing("01-22-2017", "five", 5)), false, true)
 
         //set up mocks for getFiveThings
         expectedFiveThingsResource = Resource(Status.SUCCESS, "success", fiveThings)
