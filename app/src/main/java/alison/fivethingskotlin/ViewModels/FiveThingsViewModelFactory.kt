@@ -1,12 +1,13 @@
 package alison.fivethingskotlin.ViewModels
 
 
+import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 
-class FiveThingsViewModelFactory(val token: String): ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(String::class.java).newInstance(token)
-    }
+class FiveThingsViewModelFactory(private val token: String, private val repository: FiveThingsRepository) : ViewModelProvider.NewInstanceFactory() {
 
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return FiveThingsViewModel(token, repository) as T
+    }
 }

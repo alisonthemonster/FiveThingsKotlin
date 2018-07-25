@@ -1,12 +1,16 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
+import alison.fivethingskotlin.ViewModels.FiveThingsViewModelFactory
+import alison.fivethingskotlin.ViewModels.SearchViewModel
+import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
@@ -22,6 +26,9 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
+import android.arch.lifecycle.ViewModelProviders
+
+
 
 
 class FiveThingsFragment : Fragment() {
@@ -40,14 +47,18 @@ class FiveThingsFragment : Fragment() {
             val authorizationService = AuthorizationService(it)
             val authState = restoreAuthState(it)
 
-            authState?.performActionWithFreshTokens(authorizationService, { accessToken, idToken, ex ->
+            //TODO move the fresh tokens into the view models?
+            authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
                 if (ex != null) {
                     Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
                     showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
                     //TODO show error here
                 } else {
                     idToken?.let {
-                        viewModel = FiveThingsViewModel("Bearer $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
+                        viewModel = ViewModelProviders.of(this,
+                                            FiveThingsViewModelFactory("Bearer $it",
+                                                                        FiveThingsRepositoryImpl()))
+                                .get(FiveThingsViewModel::class.java)
 
                         binding.viewModel = viewModel
 
@@ -58,7 +69,7 @@ class FiveThingsFragment : Fragment() {
                         getWrittenDays()
                     }
                 }
-            })
+            }
         }
         return binding.root
     }
