@@ -1,8 +1,8 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.Fragments.AnalyticsFragment
-import alison.fivethingskotlin.Fragments.DesignsFragment
 import alison.fivethingskotlin.Fragments.FiveThingsFragment
+import alison.fivethingskotlin.Fragments.SearchFragment
 import alison.fivethingskotlin.Fragments.SettingsFragment
 import alison.fivethingskotlin.Util.clearAuthState
 import android.content.Context
@@ -87,8 +87,8 @@ class ContainerActivity : AppCompatActivity() {
                     loadFragment(AnalyticsFragment())
                     true
                 }
-                R.id.templates_item -> {
-                    loadFragment(DesignsFragment())
+                R.id.search_item -> {
+                    loadFragment(SearchFragment())
                     true
                 }
                 R.id.settings_item -> {
