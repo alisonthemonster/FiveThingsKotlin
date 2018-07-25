@@ -1,19 +1,16 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
-import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
-import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModelFactory
-import alison.fivethingskotlin.ViewModels.SearchViewModel
-import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -26,9 +23,6 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
-import android.arch.lifecycle.ViewModelProviders
-
-
 
 
 class FiveThingsFragment : Fragment() {

@@ -7,6 +7,7 @@ import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.util.Log
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,6 +22,7 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService = Fi
         call.enqueue(object : Callback<List<SearchResult>> {
             override fun onResponse(call: Call<List<SearchResult>>?, response: Response<List<SearchResult>>) {
                 if (response.isSuccessful) {
+                    Log.d("blerg", "call is happy")
                     searchResults.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
                     val json = JSONObject(response.errorBody()?.string())

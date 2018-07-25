@@ -1,8 +1,12 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
+import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.restoreAuthState
+import alison.fivethingskotlin.Util.showErrorDialog
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import android.arch.lifecycle.ViewModelProviders
@@ -14,6 +18,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthorizationService
+import android.arch.lifecycle.Observer
+import android.util.Log
+
 
 class SearchFragment : Fragment() {
 
@@ -37,16 +44,31 @@ class SearchFragment : Fragment() {
                                                                                 authorizationService,
                                                                                 SearchRepositoryImpl()))
                             .get(SearchViewModel::class.java)
+            }
 
-                search_item.setOnEditorActionListener { textView, actionId, keyEvent ->
-                    if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                        viewModel.getSearchResults(textView.text.toString())
-                    }
-                    false
+            search_item.setOnEditorActionListener { textView, actionId, keyEvent ->
+                Log.d("blerg", "they pressed $actionId")
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    Log.d("blerg", "they pressed da button")
+                    viewModel.getSearchResults(textView.text.toString()).observe(this, Observer<Resource<List<SearchResult>>> { results ->
+                        results?.let{
+                            Log.d("blerg", "we got da results")
+                            when (it.status) {
+                                Status.SUCCESS -> addResultsToAdapter(it.data)
+                                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                            }
+                        }
+                    })
+
                 }
+                false
             }
 
         }
+    }
+
+    private fun addResultsToAdapter(data: List<SearchResult>?) {
+        Log.d("blerg", "data: $data")
     }
 
 }
