@@ -3,10 +3,9 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.Resource
-import alison.fivethingskotlin.Util.restoreAuthState
-import alison.fivethingskotlin.Util.showErrorDialog
+import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import android.arch.lifecycle.ViewModelProviders
@@ -19,12 +18,17 @@ import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthorizationService
 import android.arch.lifecycle.Observer
+import android.content.DialogInterface
+import android.content.Intent
 import android.util.Log
+import net.openid.appauth.AuthState
 
 
 class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
+    private lateinit var authState: AuthState
+    private lateinit var authorizationService: AuthorizationService
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -36,22 +40,37 @@ class SearchFragment : Fragment() {
 
         //TODO onViewCreated right place?
         context?.let {
-            val authorizationService = AuthorizationService(it)
-            val authState = restoreAuthState(it)
+            authorizationService = AuthorizationService(it)
+            authState = restoreAuthState(it)!!
 
-            authState?.let {
-                viewModel = ViewModelProviders.of(this, SearchViewModelFactory(authState,
-                                                                                authorizationService,
-                                                                                SearchRepositoryImpl()))
-                            .get(SearchViewModel::class.java)
-            }
+            viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl()))
+                        .get(SearchViewModel::class.java)
+
+
 
             search_item.setOnEditorActionListener { textView, actionId, keyEvent ->
                 Log.d("blerg", "they pressed $actionId")
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     Log.d("blerg", "they pressed da button")
-                    viewModel.getSearchResults(textView.text.toString()).observe(this, Observer<Resource<List<SearchResult>>> { results ->
-                        results?.let{
+                    getResultsWithFreshToken()
+                } else {
+                    Log.d("blerg", "idk what button they pressed")
+                }
+                false
+            }
+        }
+    }
+
+    private fun getResultsWithFreshToken() {
+        authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
+                showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
+            } else {
+                idToken?.let {
+
+                    viewModel.getSearchResults("Bearer $it", "hello").observe(this, Observer<Resource<List<SearchResult>>> { results ->
+                        results?.let {
                             Log.d("blerg", "we got da results")
                             when (it.status) {
                                 Status.SUCCESS -> addResultsToAdapter(it.data)
@@ -59,11 +78,8 @@ class SearchFragment : Fragment() {
                             }
                         }
                     })
-
                 }
-                false
             }
-
         }
     }
 
@@ -71,4 +87,12 @@ class SearchFragment : Fragment() {
         Log.d("blerg", "data: $data")
     }
 
+
+    private fun openLogInScreen(): DialogInterface.OnClickListener {
+        return DialogInterface.OnClickListener { _, _ ->
+            val intent = Intent(context, PromoActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+    }
 }
