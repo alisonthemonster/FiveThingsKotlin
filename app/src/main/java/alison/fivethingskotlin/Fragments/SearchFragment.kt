@@ -8,6 +8,7 @@ import alison.fivethingskotlin.R
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
+import alison.fivethingskotlin.adapter.SearchResultAdapter
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -20,6 +21,7 @@ import net.openid.appauth.AuthorizationService
 import android.arch.lifecycle.Observer
 import android.content.DialogInterface
 import android.content.Intent
+import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import net.openid.appauth.AuthState
 
@@ -29,6 +31,7 @@ class SearchFragment : Fragment() {
     private lateinit var viewModel: SearchViewModel
     private lateinit var authState: AuthState
     private lateinit var authorizationService: AuthorizationService
+    private lateinit var adapter: SearchResultAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -52,16 +55,20 @@ class SearchFragment : Fragment() {
                 Log.d("blerg", "they pressed $actionId")
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     Log.d("blerg", "they pressed da button")
-                    getResultsWithFreshToken()
+                    getResultsWithFreshToken(textView.text.toString())
                 } else {
                     Log.d("blerg", "idk what button they pressed")
                 }
                 false
             }
         }
+
+        search_results.layoutManager = LinearLayoutManager(context)
+        adapter = SearchResultAdapter(emptyList())
+        search_results.adapter = adapter
     }
 
-    private fun getResultsWithFreshToken() {
+    private fun getResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
@@ -69,11 +76,11 @@ class SearchFragment : Fragment() {
             } else {
                 idToken?.let {
 
-                    viewModel.getSearchResults("Bearer $it", "hello").observe(this, Observer<Resource<List<SearchResult>>> { results ->
+                    viewModel.getSearchResults("Bearer $it", text).observe(this, Observer<Resource<List<SearchResult>>> { results ->
                         results?.let {
                             Log.d("blerg", "we got da results")
                             when (it.status) {
-                                Status.SUCCESS -> addResultsToAdapter(it.data)
+                                Status.SUCCESS -> addResultsToAdapter(it.data!!)
                                 Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
                             }
                         }
@@ -83,8 +90,9 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun addResultsToAdapter(data: List<SearchResult>?) {
+    private fun addResultsToAdapter(data: List<SearchResult>) {
         Log.d("blerg", "data: $data")
+        adapter.setResults(data)
     }
 
 

@@ -35,15 +35,18 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
+        binding.loading = true
 
         context?.let {
             val authorizationService = AuthorizationService(it)
             val authState = restoreAuthState(it)
 
             //TODO move the fresh tokens into the view models?
+                //fresh token should be fetched for every call?
             authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
                 if (ex != null) {
                     Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
+                    binding.loading = false
                     showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
                     //TODO show error here
                 } else {
@@ -171,12 +174,12 @@ class FiveThingsFragment : Fragment() {
                 val dialogBuilder = AlertDialog.Builder(context)
                 dialogBuilder
                         .setTitle("Select a year")
-                        .setItems(yearList.toTypedArray(), { _, year ->
+                        .setItems(yearList.toTypedArray()) { _, year ->
                             val newDate = getDateInAYear(currentDate, yearList[year].toInt())
                             currentDate = newDate
                             binding.month = getMonth(newDate) + " " + getYear(newDate)
                             compactcalendar_view.setCurrentDate(newDate)
-                        })
+                        }
                         .create()
                         .show()
             }
