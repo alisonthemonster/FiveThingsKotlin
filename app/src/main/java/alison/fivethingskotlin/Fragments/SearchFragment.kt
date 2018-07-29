@@ -19,11 +19,14 @@ import android.view.inputmethod.EditorInfo
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthorizationService
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import net.openid.appauth.AuthState
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
 
 
 class SearchFragment : Fragment() {
@@ -55,6 +58,8 @@ class SearchFragment : Fragment() {
                 Log.d("blerg", "they pressed $actionId")
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     Log.d("blerg", "they pressed da button")
+                    val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(search_item.windowToken, 0)
                     getResultsWithFreshToken(textView.text.toString())
                 } else {
                     Log.d("blerg", "idk what button they pressed")
@@ -80,7 +85,12 @@ class SearchFragment : Fragment() {
                         results?.let {
                             Log.d("blerg", "we got da results")
                             when (it.status) {
-                                Status.SUCCESS -> addResultsToAdapter(it.data!!)
+                                Status.SUCCESS -> {
+                                    if (results.data!!.isEmpty()) {
+                                        //TODO if there are no results show a message for that
+                                    }
+                                    addResultsToAdapter(it.data!!)
+                                }
                                 Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
                             }
                         }
@@ -94,7 +104,6 @@ class SearchFragment : Fragment() {
         Log.d("blerg", "data: $data")
         adapter.setResults(data)
     }
-
 
     private fun openLogInScreen(): DialogInterface.OnClickListener {
         return DialogInterface.OnClickListener { _, _ ->
