@@ -5,28 +5,29 @@ import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.*
+import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.Util.restoreAuthState
+import alison.fivethingskotlin.Util.showErrorDialog
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.SearchResultAdapter
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import kotlinx.android.synthetic.main.search_fragment.*
-import net.openid.appauth.AuthorizationService
-import android.arch.lifecycle.Observer
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
-import net.openid.appauth.AuthState
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.view.inputmethod.InputMethodManager
+import kotlinx.android.synthetic.main.search_fragment.*
+import net.openid.appauth.AuthState
+import net.openid.appauth.AuthorizationService
 
 
 class SearchFragment : Fragment() {
@@ -44,15 +45,12 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //TODO onViewCreated right place?
         context?.let {
             authorizationService = AuthorizationService(it)
             authState = restoreAuthState(it)!!
 
             viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl()))
                         .get(SearchViewModel::class.java)
-
-
 
             search_item.setOnEditorActionListener { textView, actionId, keyEvent ->
                 Log.d("blerg", "they pressed $actionId")
@@ -86,9 +84,7 @@ class SearchFragment : Fragment() {
                             Log.d("blerg", "we got da results")
                             when (it.status) {
                                 Status.SUCCESS -> {
-                                    if (results.data!!.isEmpty()) {
-                                        //TODO if there are no results show a message for that
-                                    }
+                                    no_results.visibility = if (results.data!!.isEmpty()) View.VISIBLE else View.GONE
                                     addResultsToAdapter(it.data!!)
                                 }
                                 Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
