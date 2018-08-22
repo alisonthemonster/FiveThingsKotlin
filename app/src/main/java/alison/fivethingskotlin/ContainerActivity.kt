@@ -16,10 +16,28 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import kotlinx.android.synthetic.main.activity_container.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
-class ContainerActivity : AppCompatActivity() {
+class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
+
+    override fun onDateSelected(date: String) {
+        val fragment = FiveThingsFragment()
+        val bundle = Bundle()
+        bundle.putString("dateeee", date)
+        fragment.arguments = bundle
+
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
+                android.R.anim.fade_out)
+        fragmentTransaction.replace(R.id.content_frame, fragment)
+        fragmentTransaction.commitAllowingStateLoss()
+        navigation_view.setCheckedItem(R.id.five_things_item)
+
+        //TODO handle back button
+            //will search results need to save state?
+    }
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -76,8 +94,7 @@ class ContainerActivity : AppCompatActivity() {
         title = ""
         drawerToggle.syncState()
 
-        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
+        navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
                     loadFragment(FiveThingsFragment())
@@ -104,7 +121,7 @@ class ContainerActivity : AppCompatActivity() {
                 }
             }
         }
-        navigationView.setCheckedItem(R.id.five_things_item)
+        navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
     private fun loadFragment(fragment: android.support.v4.app.Fragment) {

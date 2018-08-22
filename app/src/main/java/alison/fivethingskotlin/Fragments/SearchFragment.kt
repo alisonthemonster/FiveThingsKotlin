@@ -28,6 +28,7 @@ import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
+import java.util.*
 
 
 class SearchFragment : Fragment() {
@@ -107,5 +108,10 @@ class SearchFragment : Fragment() {
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
+    }
+
+    // Container Activity must implement this interface
+    interface OnDateSelectedListener {
+        fun onDateSelected(date: String)
     }
 }

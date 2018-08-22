@@ -58,7 +58,10 @@ class FiveThingsFragment : Fragment() {
 
                         binding.viewModel = viewModel
 
-                        currentDate = Date()
+                        val passedInDate = arguments?.getString("dateeee") //TODO move to constant
+
+                        currentDate = if (passedInDate != null)
+                            getDateFromDatabaseStyle(passedInDate) else Date()
 
                         getFiveThings()
 
@@ -115,7 +118,7 @@ class FiveThingsFragment : Fragment() {
 
         binding.loading = true
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
+        viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
                     Log.d("blerg", "bloop")
