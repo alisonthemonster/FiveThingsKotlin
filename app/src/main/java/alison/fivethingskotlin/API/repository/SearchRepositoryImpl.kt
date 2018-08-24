@@ -39,10 +39,10 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService = Fi
         return searchResults
     }
 
-    override fun getPaginatedSearchResults(token: String, keyword: String): LiveData<Resource<PaginatedSearchResults>> {
+    override fun getPaginatedSearchResults(token: String, keyword: String, pageSize: Int, page: Int): LiveData<Resource<PaginatedSearchResults>> {
         val searchResults = MutableLiveData<Resource<PaginatedSearchResults>>()
 
-        val call = fiveThingsService.search(token, keyword)
+        val call = fiveThingsService.search(token, keyword, pageSize, page)
         call.enqueue(object : Callback<PaginatedSearchResults> {
             override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
                 if (response.isSuccessful) {

@@ -30,6 +30,9 @@ interface FiveThingsService {
     fun searchAll(@Header("Authorization") token: String, @Path("keyword") keyword: String): Call<List<SearchResult>>
 
     @GET("search/{keyword}")
-    fun search(@Header("Authorization") token: String, @Path("keyword") keyword: String): Call<PaginatedSearchResults>
+    fun search(@Header("Authorization") token: String,
+               @Path("keyword") keyword: String,
+               @Query("page_size") pageSize: Int,
+               @Query("page") page: Int): Call<PaginatedSearchResults>
 
 }

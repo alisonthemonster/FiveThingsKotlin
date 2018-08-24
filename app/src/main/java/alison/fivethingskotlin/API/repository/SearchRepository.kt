@@ -9,6 +9,6 @@ interface SearchRepository {
 
     fun getSearchResults(token: String, keyword: String): LiveData<Resource<List<SearchResult>>>
 
-    fun getPaginatedSearchResults(token: String, keyword: String): LiveData<Resource<PaginatedSearchResults>>
+    fun getPaginatedSearchResults(token: String, keyword: String, pageSize: Int, page: Int): LiveData<Resource<PaginatedSearchResults>>
 
 }
