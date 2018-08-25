@@ -129,7 +129,6 @@ class FiveThingsRepositoryTest {
         verify(fiveThingsCall, times(1)).enqueue(any())
     }
 
-
     @Test
     fun getWrittenDates_callsServiceOnce() {
         repository.getWrittenDates(token, mock())
@@ -139,24 +138,20 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun getWrittenDates_serviceIsSuccessful_returnsDates() {
-        val expected = Resource(Status.SUCCESS, "", dates)
-
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
             callback.onResponse(datesCall, Response.success(dateStrings))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token, mock()))
+        LiveDataTestUtil.getValue(repository.getWrittenDates(token, mock()))
 
         verify(service, times(1)).getWrittenDates(token)
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun getWrittenDates_serviceFails_returnsErrorResource() {
         val exception = IOException("Exception thrown")
-        val expected = Resource(Status.ERROR, exception.message, null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
@@ -167,13 +162,10 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).getWrittenDates(token)
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_existingEntry_callsUpdateService() {
-        val expected = Resource(Status.SUCCESS, "Date updated", dates)
-
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
             callback.onResponse(datesCall, Response.success(dateStrings))
@@ -183,13 +175,10 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_existingEntry_callbackFails_createsErrorResource() {
-        val expected = Resource(Status.ERROR, "", null)
-
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
             callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
@@ -199,14 +188,11 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
     fun saveFiveThings_existingEntry_serviceFails_returnsErrorResource() {
         val exception = IOException("Exception thrown")
-        val expected = Resource(Status.ERROR, exception.message, null)
-
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
             callback.onFailure(datesCall, exception)
@@ -216,7 +202,6 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
@@ -226,7 +211,6 @@ class FiveThingsRepositoryTest {
                 Thing("01-22-2017", "three", 3),
                 Thing("01-22-2017", "four", 4),
                 Thing("01-22-2017", "five", 5)), false, false)
-        val expected = Resource(Status.SUCCESS, "Date in database", dates)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
@@ -237,7 +221,6 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test
@@ -247,7 +230,6 @@ class FiveThingsRepositoryTest {
                 Thing("01-22-2017", "three", 3),
                 Thing("01-22-2017", "four", 4),
                 Thing("01-22-2017", "five", 5)), true, false)
-        val expected = Resource(Status.ERROR, "", null)
 
         doAnswer {
             val callback: Callback<List<String>> = it.getArgument(0)
@@ -258,7 +240,6 @@ class FiveThingsRepositoryTest {
 
         verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
-        actual shouldEqual expected
     }
 
     @Test

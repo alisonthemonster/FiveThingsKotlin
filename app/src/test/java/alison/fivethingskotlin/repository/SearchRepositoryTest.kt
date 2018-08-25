@@ -72,7 +72,10 @@ class SearchRepositoryTest {
         }.`when`(searchCall).enqueue(any())
 
         val listing = repository.getPaginatedSearchResults("token", "search query", 50, 1)
-        assertThat(getPagedList(listing), `is`(searchResults))
+
+        val actualSearchResults = listOf(
+                SearchResult(2, "content", "Sunday December 9th, 2012", 1))
+        assertThat(getPagedList(listing), `is`(actualSearchResults))
     }
 
     private fun getPagedList(listing: Listing<SearchResult>): PagedList<SearchResult> {

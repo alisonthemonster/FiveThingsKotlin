@@ -42,12 +42,9 @@ class DatesTest: FreeSpec( {
         cal.set(Calendar.YEAR, 2017)
         cal.set(Calendar.MONTH, Calendar.JANUARY)
         cal.set(Calendar.DAY_OF_MONTH, 22)
-        cal.set(Calendar.HOUR_OF_DAY, 0)
-        cal.set(Calendar.MINUTE, 0)
-        cal.set(Calendar.SECOND, 0)
-        cal.set(Calendar.MILLISECOND, 0)
+
         val date = cal.time
-        getDateFromFullDateFormat("January 22nd, 2017") shouldEqual date
+        getDateFromFullDateFormat("Wednesday January 22nd, 2017").toString() shouldEqual date.toString()
     }
 
     "gets the month from a date object" {
@@ -78,18 +75,18 @@ class DatesTest: FreeSpec( {
     }
 
     "gets the month number from a month string" {
-        getMonthNumber("January") shouldEqual 1
-        getMonthNumber("February") shouldEqual 2
-        getMonthNumber("March") shouldEqual 3
-        getMonthNumber("April") shouldEqual 4
-        getMonthNumber("May") shouldEqual 5
-        getMonthNumber("June") shouldEqual 6
-        getMonthNumber("July") shouldEqual 7
-        getMonthNumber("August") shouldEqual 8
-        getMonthNumber("September") shouldEqual 9
-        getMonthNumber("October") shouldEqual 10
-        getMonthNumber("November") shouldEqual 11
-        getMonthNumber("December") shouldEqual 12
+        getMonthNumber("January") shouldEqual 0
+        getMonthNumber("February") shouldEqual 1
+        getMonthNumber("March") shouldEqual 2
+        getMonthNumber("April") shouldEqual 3
+        getMonthNumber("May") shouldEqual 4
+        getMonthNumber("June") shouldEqual 5
+        getMonthNumber("July") shouldEqual 6
+        getMonthNumber("August") shouldEqual 7
+        getMonthNumber("September") shouldEqual 8
+        getMonthNumber("October") shouldEqual 9
+        getMonthNumber("November") shouldEqual 10
+        getMonthNumber("December") shouldEqual 11
     }
 
     "gets day of week" - {
