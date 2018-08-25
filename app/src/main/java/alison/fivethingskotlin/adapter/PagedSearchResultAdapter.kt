@@ -41,7 +41,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
             payloads: MutableList<Any>) {
         if (payloads.isNotEmpty()) {
             val item = getItem(position)
-            (holder as PagedResultViewHolder).bindViews(item!!) //TODO NPE?
+            (holder as PagedResultViewHolder).bindViews(item!!)
         } else {
             onBindViewHolder(holder, position)
         }
@@ -49,7 +49,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            R.layout.item_search_result -> (holder as PagedResultViewHolder).bindViews(getItem(position)!!) //TODO NPE?
+            R.layout.item_search_result -> (holder as PagedResultViewHolder).bindViews(getItem(position)!!)
             R.layout.item_network_state -> (holder as NetworkStateItemViewHolder).bindTo(
                     networkState)
         }

@@ -83,7 +83,7 @@ class SearchDataSource(private val service: FiveThingsService,
 
         networkState.postValue(NetworkState.LOADING)
 
-        val call = service.search(token, searchQuery, params.requestedLoadSize, params.key.toInt()) //TODO will this work with the way nagu has these?
+        val call = service.search(token, searchQuery, params.requestedLoadSize, params.key.toInt())
         call.enqueue(object : Callback<PaginatedSearchResults> {
             override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
                 if (response.isSuccessful) {
@@ -97,12 +97,11 @@ class SearchDataSource(private val service: FiveThingsService,
                         next[length- 1].toString()
                     }
 
-                    callback.onResult(response.body()!!.results, actualNext) //TODO will this work with the way nagu has these?
+                    callback.onResult(response.body()!!.results, actualNext)
                     networkState.postValue(NetworkState.LOADED)
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
-                    //TODO retry
                     retry = {
                         loadAfter(params, callback)
                     }
@@ -111,7 +110,6 @@ class SearchDataSource(private val service: FiveThingsService,
             }
 
             override fun onFailure(call: Call<PaginatedSearchResults>?, t: Throwable) {
-                //TODO retry
                 retry = {
                     loadAfter(params, callback)
                 }
