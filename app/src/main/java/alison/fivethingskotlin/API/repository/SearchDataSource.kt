@@ -50,7 +50,16 @@ class SearchDataSource(private val service: FiveThingsService,
                     retry = null
                     networkState.postValue(NetworkState.LOADED)
                     initialLoad.postValue(NetworkState.LOADED)
-                    callback.onResult(response.body()!!.results, null, "2")
+
+                    val next = response.body()!!.next
+                    val actualNext = if (next == null) {
+                        null
+                    } else {
+                        val length = next.length
+                        next[length- 1].toString()
+                    }
+
+                    callback.onResult(response.body()!!.results, null, actualNext) //TODO NPE
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
@@ -79,7 +88,16 @@ class SearchDataSource(private val service: FiveThingsService,
             override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
                 if (response.isSuccessful) {
                     retry = null
-                    callback.onResult(response.body()!!.results, response.body()!!.next) //TODO will this work with the way nagu has these?
+
+                    val next = response.body()!!.next
+                    val actualNext = if (next == null) {
+                        null
+                    } else {
+                        val length = next.length
+                        next[length- 1].toString()
+                    }
+
+                    callback.onResult(response.body()!!.results, actualNext) //TODO will this work with the way nagu has these?
                     networkState.postValue(NetworkState.LOADED)
                 } else {
                     val json = JSONObject(response.errorBody()?.string())

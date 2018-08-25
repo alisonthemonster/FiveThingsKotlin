@@ -2,19 +2,17 @@ package alison.fivethingskotlin.ViewModels
 
 import alison.fivethingskotlin.API.repository.SearchRepository
 import alison.fivethingskotlin.Models.Listing
-import alison.fivethingskotlin.Models.PaginatedSearchResults
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Util.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations.map
 import android.arch.lifecycle.Transformations.switchMap
 import android.arch.lifecycle.ViewModel
 
 class SearchViewModel(val repository: SearchRepository): ViewModel() {
 
 
-    private lateinit var repoResult: MutableLiveData<Listing<SearchResult>>
+    private val repoResult = MutableLiveData<Listing<SearchResult>>()
 
     //these are observed by the fragment
     val searchResults = switchMap(repoResult) { it.pagedList }!!

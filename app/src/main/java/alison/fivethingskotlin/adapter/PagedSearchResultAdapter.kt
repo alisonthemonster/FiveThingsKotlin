@@ -7,6 +7,7 @@ import alison.fivethingskotlin.R
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_result.view.*
@@ -28,7 +29,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
-            R.layout.item_search_result -> PagedResultViewHolder(parent)
+            R.layout.item_search_result -> PagedResultViewHolder.create(parent)
             R.layout.item_network_state -> NetworkStateItemViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
@@ -93,5 +94,13 @@ class PagedResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         itemView.setOnClickListener {
             val activity = it.context as ContainerActivity
             activity.onDateSelected(searchResult.date) }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): PagedResultViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.item_search_result, parent, false)
+            return PagedResultViewHolder(view)
+        }
     }
 }

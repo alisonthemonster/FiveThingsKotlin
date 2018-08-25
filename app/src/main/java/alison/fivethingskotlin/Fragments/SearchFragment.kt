@@ -11,9 +11,11 @@ import alison.fivethingskotlin.Util.restoreAuthState
 import alison.fivethingskotlin.Util.showErrorDialog
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
+import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
 import alison.fivethingskotlin.adapter.SearchResultAdapter
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.arch.paging.PagedList
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -62,7 +64,8 @@ class SearchFragment : Fragment() {
                     Log.d("blerg", "they pressed da button")
                     val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(search_item.windowToken, 0)
-                    getResultsWithFreshToken(textView.text.toString())
+                    //getResultsWithFreshToken(textView.text.toString())
+                    getPaginatedResultsWithFreshToken(textView.text.toString())
                 } else {
                     Log.d("blerg", "idk what button they pressed")
                 }
@@ -101,16 +104,26 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
+        //TODO this might have to invalidate the list somehow? if a second search happens
+
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
                 showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
             } else {
                 idToken?.let {
-                    //set up adapter
-                    //observe results
-                    //observe network state
-                    viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
+                    viewModel.getPaginatedSearchResults("Bearer $it", text, 5, 1)
+
+                    val adapter = PagedSearchResultAdapter {
+                        viewModel.retry()
+                    }
+                    search_results.adapter = adapter
+                    viewModel.searchResults.observe(this, Observer<PagedList<SearchResult>> {
+                        adapter.submitList(it)
+                    })
+                    viewModel.networkState.observe(this, Observer {
+                        adapter.setNetworkState(it)
+                    })
                 }
             }
         }
