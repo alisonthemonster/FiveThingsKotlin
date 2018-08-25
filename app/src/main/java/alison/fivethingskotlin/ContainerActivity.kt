@@ -4,16 +4,19 @@ import alison.fivethingskotlin.Fragments.AnalyticsFragment
 import alison.fivethingskotlin.Fragments.FiveThingsFragment
 import alison.fivethingskotlin.Fragments.SearchFragment
 import alison.fivethingskotlin.Fragments.SettingsFragment
+import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Util.clearAuthState
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
@@ -28,15 +31,12 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         bundle.putString("dateeee", date)
         fragment.arguments = bundle
 
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                android.R.anim.fade_out)
-        fragmentTransaction.replace(R.id.content_frame, fragment)
-        fragmentTransaction.commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack("search results")
+                .commitAllowingStateLoss()
         navigation_view.setCheckedItem(R.id.five_things_item)
-
-        //TODO handle back button
-            //will search results need to save state?
     }
 
     private lateinit var drawerLayout: DrawerLayout
@@ -70,8 +70,10 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
+        } else if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
         } else {
-            finish()
+            super.onBackPressed()
         }
     }
 

@@ -37,8 +37,6 @@ class FiveThingsFragment : Fragment() {
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
         binding.loading = true
 
-
-            //TODO move the fresh tokens into the view models?
         context?.let {
             val authorizationService = AuthorizationService(it)
             val authState = restoreAuthState(it)
@@ -52,7 +50,7 @@ class FiveThingsFragment : Fragment() {
             val passedInDate = arguments?.getString("dateeee") //TODO move to constant
 
             currentDate = if (passedInDate != null)
-                getDateFromDatabaseStyle(passedInDate) else Date()
+                getDateFromFullDateFormat(passedInDate) else Date()
 
             getFiveThings()
 
@@ -96,14 +94,6 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
-    private fun openLogInScreen(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ ->
-            val intent = Intent(context, PromoActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-    }
-
     private fun getFiveThings() {
 
         binding.loading = true
@@ -131,9 +121,7 @@ class FiveThingsFragment : Fragment() {
     private fun getWrittenDays() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            Log.d("blerg", "bloop")
             days?.let{
-                Log.d("blerg", "bleep $days")
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
                     Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
@@ -145,7 +133,6 @@ class FiveThingsFragment : Fragment() {
     }
 
     private fun addEventsToCalendar(dates: List<Date>?) {
-        Log.d("blerg", "updating calendar")
         compactcalendar_view.removeAllEvents()
         dates?.let {
             val events = it.map { convertDateToEvent(it) }

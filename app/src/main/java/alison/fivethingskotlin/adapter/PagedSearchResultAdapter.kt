@@ -68,10 +68,6 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
     }
 
-    fun getItemCountWithoutExtraRow(): Int {
-        return super.getItemCount()
-    }
-
     fun setNetworkState(newNetworkState: NetworkState?) {
         val previousState = this.networkState
         val hadExtraRow = hasExtraRow()
@@ -96,7 +92,8 @@ class PagedResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         itemView.date.text = searchResult.date
         itemView.setOnClickListener {
             val activity = it.context as ContainerActivity
-            activity.onDateSelected(searchResult.date) }
+            activity.onDateSelected(searchResult.date)
+        }
     }
 
     companion object {

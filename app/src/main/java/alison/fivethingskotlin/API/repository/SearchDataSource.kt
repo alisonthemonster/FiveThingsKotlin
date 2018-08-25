@@ -42,8 +42,6 @@ class SearchDataSource(private val service: FiveThingsService,
         networkState.postValue(NetworkState.LOADING)
         initialLoad.postValue(NetworkState.LOADING)
 
-        //TODO get token
-
         val call = service.search(token, searchQuery, 50, 1)
         call.enqueue(object : Callback<PaginatedSearchResults> {
             override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
@@ -53,7 +51,7 @@ class SearchDataSource(private val service: FiveThingsService,
                         networkState.postValue(NetworkState.error("No results found"))
                     } else {
 
-                        //TODO talk to nagkumar about changing the prev and next to just be indexes?
+                        //TODO talk to nagkumar about changing the prev and next to just be indexes
                         retry = null
                         networkState.postValue(NetworkState.LOADED)
                         initialLoad.postValue(NetworkState.LOADED)
@@ -67,9 +65,10 @@ class SearchDataSource(private val service: FiveThingsService,
                         }
 
                         val searchResultsNew = mutableListOf<SearchResult>()
-                        response.body()!!.results.mapTo(searchResultsNew) { it -> SearchResult(it.id, it.content, getFullDateFormat(getDateFromDatabaseStyle(it.date)), it.order)}
+                        response.body()!!.results.mapTo(searchResultsNew) { it ->
+                            SearchResult(it.id, it.content, getFullDateFormat(getDateFromDatabaseStyle(it.date)), it.order)}
 
-                        callback.onResult(searchResultsNew, null, actualNext) //TODO NPE
+                        callback.onResult(searchResultsNew, null, actualNext)
                     }
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
