@@ -1,19 +1,24 @@
 package alison.fivethingskotlin.API.repository
 
 import alison.fivethingskotlin.API.FiveThingsService
-import alison.fivethingskotlin.Models.PaginatedSearchResults
+import alison.fivethingskotlin.Models.Listing
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Util.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Transformations
+import android.arch.paging.LivePagedListBuilder
 import android.util.Log
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.Executor
 
-class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService = FiveThingsService.create()): SearchRepository {
+
+class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
+                           private val networkExecutor: Executor): SearchRepository {
 
     override fun getSearchResults(token: String, keyword: String): LiveData<Resource<List<SearchResult>>> {
         val searchResults = MutableLiveData<Resource<List<SearchResult>>>()
@@ -39,27 +44,33 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService = Fi
         return searchResults
     }
 
-    override fun getPaginatedSearchResults(token: String, keyword: String, pageSize: Int, page: Int): LiveData<Resource<PaginatedSearchResults>> {
-        val searchResults = MutableLiveData<Resource<PaginatedSearchResults>>()
+    override fun getPaginatedSearchResults(token: String, keyword: String, pageSize: Int, page: Int): Listing<SearchResult> {
+        val sourceFactory = SearchDataSourceFactory(fiveThingsService, keyword, networkExecutor, token)
 
-        val call = fiveThingsService.search(token, keyword, pageSize, page)
-        call.enqueue(object : Callback<PaginatedSearchResults> {
-            override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
-                if (response.isSuccessful) {
-                    searchResults.value = Resource(Status.SUCCESS, "", response.body())
-                } else {
-                    val json = JSONObject(response.errorBody()?.string())
-                    val messageString = json.getString("detail")
-                    searchResults.value = Resource(Status.ERROR, messageString, null)
-                }
-            }
+        val livePagedList = LivePagedListBuilder(sourceFactory, pageSize)
+                // provide custom executor for network requests, otherwise it will default to
+                // Arch Components' IO pool which is also used for disk access
+                .setFetchExecutor(networkExecutor)
+                .build()
 
-            override fun onFailure(call: Call<PaginatedSearchResults>?, t: Throwable?) {
-                searchResults.value = Resource(Status.ERROR, t?.message, null)
-            }
-        })
+        val refreshState = Transformations.switchMap(sourceFactory.sourceLiveData) {
+            it.initialLoad
+        }
 
-        return searchResults
+        return Listing(
+                livePagedList,
+                Transformations.switchMap(sourceFactory.sourceLiveData) {
+                    it.networkState
+                },
+                retry = {
+                    sourceFactory.sourceLiveData.value?.retryAllFailed()
+                },
+                refresh = {
+                    sourceFactory.sourceLiveData.value?.invalidate()
+                },
+                refreshState = refreshState
+        )
+
     }
 
 }

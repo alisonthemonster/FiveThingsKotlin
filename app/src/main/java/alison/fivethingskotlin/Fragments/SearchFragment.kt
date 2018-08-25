@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.Fragments
 
+import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Models.Status
@@ -28,7 +29,7 @@ import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
-import java.util.*
+import java.util.concurrent.Executors
 
 
 class SearchFragment : Fragment() {
@@ -50,7 +51,9 @@ class SearchFragment : Fragment() {
             authorizationService = AuthorizationService(it)
             authState = restoreAuthState(it)!!
 
-            viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl()))
+            val executor = Executors.newFixedThreadPool(5)
+
+            viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl(FiveThingsService.create(), executor)))
                         .get(SearchViewModel::class.java)
 
             search_item.setOnEditorActionListener { textView, actionId, keyEvent ->
@@ -92,6 +95,22 @@ class SearchFragment : Fragment() {
                             }
                         }
                     })
+                }
+            }
+        }
+    }
+
+    private fun getPaginatedResultsWithFreshToken(text: String) {
+        authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
+                showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
+            } else {
+                idToken?.let {
+                    //set up adapter
+                    //observe results
+                    //observe network state
+                    viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
                 }
             }
         }
