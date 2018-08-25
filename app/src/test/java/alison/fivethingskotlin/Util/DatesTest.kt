@@ -37,6 +37,19 @@ class DatesTest: FreeSpec( {
         }
     }
 
+    "converts from Wednesday January 3rd, 2018 to a date object" {
+        val cal = Calendar.getInstance()
+        cal.set(Calendar.YEAR, 2017)
+        cal.set(Calendar.MONTH, Calendar.JANUARY)
+        cal.set(Calendar.DAY_OF_MONTH, 22)
+        cal.set(Calendar.HOUR_OF_DAY, 0)
+        cal.set(Calendar.MINUTE, 0)
+        cal.set(Calendar.SECOND, 0)
+        cal.set(Calendar.MILLISECOND, 0)
+        val date = cal.time
+        getDateFromFullDateFormat("January 22nd, 2017") shouldEqual date
+    }
+
     "gets the month from a date object" {
         val cal = Calendar.getInstance()
         cal.set(Calendar.YEAR, 2017)
@@ -62,6 +75,21 @@ class DatesTest: FreeSpec( {
         cal.set(Calendar.DAY_OF_MONTH, 22)
         val date = cal.time
         getMonthNumber(date) shouldEqual 1
+    }
+
+    "gets the month number from a month string" {
+        getMonthNumber("January") shouldEqual 1
+        getMonthNumber("February") shouldEqual 2
+        getMonthNumber("March") shouldEqual 3
+        getMonthNumber("April") shouldEqual 4
+        getMonthNumber("May") shouldEqual 5
+        getMonthNumber("June") shouldEqual 6
+        getMonthNumber("July") shouldEqual 7
+        getMonthNumber("August") shouldEqual 8
+        getMonthNumber("September") shouldEqual 9
+        getMonthNumber("October") shouldEqual 10
+        getMonthNumber("November") shouldEqual 11
+        getMonthNumber("December") shouldEqual 12
     }
 
     "gets day of week" - {

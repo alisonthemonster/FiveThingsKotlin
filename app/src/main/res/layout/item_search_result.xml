@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="6dp">
+    android:layout_margin="8dp"
+    android:background="@drawable/rounded_text_box"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/date"
@@ -20,10 +22,10 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded_text_box"
+        android:layout_marginTop="6dp"
         android:minLines="2"
-        android:padding="6dp"
         android:textColor="@color/white"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

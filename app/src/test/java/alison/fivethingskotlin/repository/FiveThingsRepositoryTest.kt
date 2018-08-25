@@ -132,7 +132,7 @@ class FiveThingsRepositoryTest {
 
     @Test
     fun getWrittenDates_callsServiceOnce() {
-        repository.getWrittenDates(token)
+        repository.getWrittenDates(token, mock())
 
         verify(service, times(1)).getWrittenDates(token)
     }
@@ -146,7 +146,7 @@ class FiveThingsRepositoryTest {
             callback.onResponse(datesCall, Response.success(dateStrings))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token))
+        val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token, mock()))
 
         verify(service, times(1)).getWrittenDates(token)
         verify(datesCall, times(1)).enqueue(any())
@@ -163,7 +163,7 @@ class FiveThingsRepositoryTest {
             callback.onFailure(datesCall, exception)
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token))
+        val actual = LiveDataTestUtil.getValue(repository.getWrittenDates(token, mock()))
 
         verify(service, times(1)).getWrittenDates(token)
         verify(datesCall, times(1)).enqueue(any())
@@ -179,7 +179,7 @@ class FiveThingsRepositoryTest {
             callback.onResponse(datesCall, Response.success(dateStrings))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
@@ -195,7 +195,7 @@ class FiveThingsRepositoryTest {
             callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
@@ -212,7 +212,7 @@ class FiveThingsRepositoryTest {
             callback.onFailure(datesCall, exception)
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).updateFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
@@ -233,7 +233,7 @@ class FiveThingsRepositoryTest {
             callback.onResponse(datesCall, Response.success(dateStrings))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
@@ -254,7 +254,7 @@ class FiveThingsRepositoryTest {
             callback.onResponse(datesCall, Response.error(401, mock<ResponseBody>()))
         }.`when`(datesCall).enqueue(any())
 
-        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        val actual = LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
@@ -275,7 +275,7 @@ class FiveThingsRepositoryTest {
             callback.onFailure(datesCall, exception)
         }.`when`(datesCall).enqueue(any())
 
-        LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock()))
+        LiveDataTestUtil.getValue(repository.saveFiveThings(token, fiveThings, mock(), mock()))
 
         verify(service, times(1)).writeFiveThings(any(), any())
         verify(datesCall, times(1)).enqueue(any())
