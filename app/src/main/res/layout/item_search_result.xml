@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="March 2, 2018"
         android:textAlignment="center"
-        android:textColor="@color/white"
+        android:textColor="@color/bluegreen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
