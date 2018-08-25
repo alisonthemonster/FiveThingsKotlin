@@ -3,10 +3,8 @@ package alison.fivethingskotlin.Fragments
 import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.Models.SearchResult
-import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.Resource
 import alison.fivethingskotlin.Util.restoreAuthState
 import alison.fivethingskotlin.Util.showErrorDialog
 import alison.fivethingskotlin.ViewModels.SearchViewModel
@@ -64,7 +62,6 @@ class SearchFragment : Fragment() {
                     Log.d("blerg", "they pressed da button")
                     val imm = activity!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(search_item.windowToken, 0)
-                    //getResultsWithFreshToken(textView.text.toString())
                     getPaginatedResultsWithFreshToken(textView.text.toString())
                 } else {
                     Log.d("blerg", "idk what button they pressed")
@@ -78,31 +75,6 @@ class SearchFragment : Fragment() {
         search_results.adapter = adapter
     }
 
-    private fun getResultsWithFreshToken(text: String) {
-        authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-            if (ex != null) {
-                Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
-            } else {
-                idToken?.let {
-
-                    viewModel.getSearchResults("Bearer $it", text).observe(this, Observer<Resource<List<SearchResult>>> { results ->
-                        results?.let {
-                            Log.d("blerg", "we got da results")
-                            when (it.status) {
-                                Status.SUCCESS -> {
-                                    no_results.visibility = if (results.data!!.isEmpty()) View.VISIBLE else View.GONE
-                                    addResultsToAdapter(it.data!!)
-                                }
-                                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
-                            }
-                        }
-                    })
-                }
-            }
-        }
-    }
-
     private fun getPaginatedResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
@@ -110,7 +82,7 @@ class SearchFragment : Fragment() {
                 showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
             } else {
                 idToken?.let {
-                    viewModel.getPaginatedSearchResults("Bearer $it", text, 5, 1)
+                    viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
 
                     val adapter = PagedSearchResultAdapter {
                         viewModel.retry()
@@ -125,11 +97,6 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun addResultsToAdapter(data: List<SearchResult>) {
-        Log.d("blerg", "data: $data")
-        adapter.setResults(data)
     }
 
     private fun openLogInScreen(): DialogInterface.OnClickListener {

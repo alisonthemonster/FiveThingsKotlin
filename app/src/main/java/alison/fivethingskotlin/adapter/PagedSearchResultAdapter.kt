@@ -30,7 +30,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.item_search_result -> PagedResultViewHolder.create(parent)
-            R.layout.item_network_state -> NetworkStateItemViewHolder.create(parent, retryCallback)
+            R.layout.item_last -> NetworkStateItemViewHolder.create(parent, retryCallback)
             else -> throw IllegalArgumentException("unknown view type $viewType")
         }
     }
@@ -50,8 +50,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (getItemViewType(position)) {
             R.layout.item_search_result -> (holder as PagedResultViewHolder).bindViews(getItem(position)!!)
-            R.layout.item_network_state -> (holder as NetworkStateItemViewHolder).bindTo(
-                    networkState)
+            R.layout.item_last -> (holder as NetworkStateItemViewHolder).bindTo(networkState)
         }
     }
 
@@ -59,7 +58,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
-            R.layout.item_network_state
+            R.layout.item_last
         } else {
             R.layout.item_search_result
         }
@@ -67,6 +66,10 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
 
     override fun getItemCount(): Int {
         return super.getItemCount() + if (hasExtraRow()) 1 else 0
+    }
+
+    fun getItemCountWithoutExtraRow(): Int {
+        return super.getItemCount()
     }
 
     fun setNetworkState(newNetworkState: NetworkState?) {

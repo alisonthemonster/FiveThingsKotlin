@@ -32,12 +32,13 @@ class NetworkStateItemViewHolder(view: View,
         retry.visibility = toVisibility(networkState?.status == NetworkStatus.FAILED)
         errorMsg.visibility = toVisibility(networkState?.msg != null)
         errorMsg.text = networkState?.msg
+        if (networkState?.msg == "No results found") retry.visibility = View.GONE
     }
 
     companion object {
         fun create(parent: ViewGroup, retryCallback: () -> Unit): NetworkStateItemViewHolder {
             val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_network_state, parent, false)
+                    .inflate(R.layout.item_last, parent, false)
             return NetworkStateItemViewHolder(view, retryCallback)
         }
 

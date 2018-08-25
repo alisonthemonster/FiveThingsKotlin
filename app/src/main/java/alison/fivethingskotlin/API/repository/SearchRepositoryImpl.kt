@@ -47,9 +47,8 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
     override fun getPaginatedSearchResults(token: String, keyword: String, pageSize: Int, page: Int): Listing<SearchResult> {
         val sourceFactory = SearchDataSourceFactory(fiveThingsService, keyword, networkExecutor, token)
 
+        //initialize PagedLists on a background thread
         val livePagedList = LivePagedListBuilder(sourceFactory, pageSize)
-                // provide custom executor for network requests, otherwise it will default to
-                // Arch Components' IO pool which is also used for disk access
                 .setFetchExecutor(networkExecutor)
                 .build()
 

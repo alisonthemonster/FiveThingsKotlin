@@ -46,20 +46,26 @@ class SearchDataSource(private val service: FiveThingsService,
         call.enqueue(object : Callback<PaginatedSearchResults> {
             override fun onResponse(call: Call<PaginatedSearchResults>?, response: Response<PaginatedSearchResults>) {
                 if (response.isSuccessful) {
-                    //TODO talk to nagkumar about changing the prev and next to just be indexes?
-                    retry = null
-                    networkState.postValue(NetworkState.LOADED)
-                    initialLoad.postValue(NetworkState.LOADED)
 
-                    val next = response.body()!!.next
-                    val actualNext = if (next == null) {
-                        null
+                    if (response.body()!!.results.isEmpty()) {
+                        networkState.postValue(NetworkState.error("No results found"))
                     } else {
-                        val length = next.length
-                        next[length- 1].toString()
-                    }
 
-                    callback.onResult(response.body()!!.results, null, actualNext) //TODO NPE
+                        //TODO talk to nagkumar about changing the prev and next to just be indexes?
+                        retry = null
+                        networkState.postValue(NetworkState.LOADED)
+                        initialLoad.postValue(NetworkState.LOADED)
+
+                        val next = response.body()!!.next
+                        val actualNext = if (next == null) {
+                            null
+                        } else {
+                            val length = next.length
+                            next[length - 1].toString()
+                        }
+
+                        callback.onResult(response.body()!!.results, null, actualNext) //TODO NPE
+                    }
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
