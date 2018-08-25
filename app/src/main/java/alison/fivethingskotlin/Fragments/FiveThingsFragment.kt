@@ -111,12 +111,12 @@ class FiveThingsFragment : Fragment() {
         viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
-                    binding.loading = false
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date
                         binding.month = getMonth(it.date) + " " + getYear(it.date)
                         compactcalendar_view.setCurrentDate(it.date)
+                        binding.loading = false
                     }
                 }
                 Status.ERROR -> {
@@ -131,7 +131,6 @@ class FiveThingsFragment : Fragment() {
     private fun getWrittenDays() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            binding.loading = false
             Log.d("blerg", "bloop")
             days?.let{
                 Log.d("blerg", "bleep $days")
@@ -155,6 +154,7 @@ class FiveThingsFragment : Fragment() {
                 buildYearDialog(it)
             }
         }
+        binding.loading = false
     }
 
     private fun buildYearDialog(dates: List<Date>) {
