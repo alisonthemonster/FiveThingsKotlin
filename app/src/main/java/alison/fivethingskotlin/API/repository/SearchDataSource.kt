@@ -4,6 +4,8 @@ import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.Models.NetworkState
 import alison.fivethingskotlin.Models.PaginatedSearchResults
 import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
+import alison.fivethingskotlin.Util.getFullDateFormat
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
 import org.json.JSONObject
@@ -64,7 +66,10 @@ class SearchDataSource(private val service: FiveThingsService,
                             next[length - 1].toString()
                         }
 
-                        callback.onResult(response.body()!!.results, null, actualNext) //TODO NPE
+                        val searchResultsNew = mutableListOf<SearchResult>()
+                        response.body()!!.results.mapTo(searchResultsNew) { it -> SearchResult(it.id, it.content, getFullDateFormat(getDateFromDatabaseStyle(it.date)), it.order)}
+
+                        callback.onResult(searchResultsNew, null, actualNext) //TODO NPE
                     }
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
