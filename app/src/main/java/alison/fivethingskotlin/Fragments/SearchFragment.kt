@@ -104,8 +104,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
-        //TODO this might have to invalidate the list somehow? if a second search happens
-
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 Log.e("blerg", "Negotiation for fresh tokens failed: $ex")

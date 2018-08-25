@@ -54,8 +54,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         return fiveThingsData
     }
 
-    override fun saveFiveThings(token:String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>): MutableLiveData<Resource<List<Date>>> {
-        val writtenDates = MutableLiveData<Resource<List<Date>>>()
+    override fun saveFiveThings(token:String, fiveThings: FiveThings, fiveThingsData: MutableLiveData<Resource<FiveThings>>, writtenDates: MutableLiveData<Resource<List<Date>>>): MutableLiveData<Resource<List<Date>>> {
 
         val things = arrayOf(fiveThings.things[0], fiveThings.things[1], fiveThings.things[2], fiveThings.things[3], fiveThings.things[4])
 
@@ -117,28 +116,27 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
         return writtenDates
     }
 
-    override fun getWrittenDates(token: String): MutableLiveData<Resource<List<Date>>> {
-        val fiveThingsDates = MutableLiveData<Resource<List<Date>>>()
+    override fun getWrittenDates(token: String, writtenDates: MutableLiveData<Resource<List<Date>>>): MutableLiveData<Resource<List<Date>>> {
 
         val call = fiveThingsService.getWrittenDates(token)
         call.enqueue(object : Callback<List<String>> {
             override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                 if (response.isSuccessful) {
                     val days = response.body()?.map { getDateFromDatabaseStyle(it) }
-                    fiveThingsDates.value = Resource(Status.SUCCESS, "", days)
+                    writtenDates.value = Resource(Status.SUCCESS, "", days)
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
-                    fiveThingsDates.value = Resource(Status.ERROR, messageString, null)
+                    writtenDates.value = Resource(Status.ERROR, messageString, null)
                 }
             }
 
             override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
-                fiveThingsDates.value = Resource(Status.ERROR, t?.message, null)
+                writtenDates.value = Resource(Status.ERROR, t?.message, null)
             }
         })
 
-        return fiveThingsDates
+        return writtenDates
     }
 
 }

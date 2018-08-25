@@ -37,39 +37,29 @@ class FiveThingsFragment : Fragment() {
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
         binding.loading = true
 
+
+            //TODO move the fresh tokens into the view models?
         context?.let {
             val authorizationService = AuthorizationService(it)
             val authState = restoreAuthState(it)
 
-            //TODO move the fresh tokens into the view models?
-                //fresh token should be fetched for every call?
-            authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-                if (ex != null) {
-                    Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                    binding.loading = false
-                    showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
-                    //TODO show error here
-                } else {
-                    idToken?.let {
-                        viewModel = ViewModelProviders.of(this,
-                                            FiveThingsViewModelFactory("Bearer $it",
-                                                                        FiveThingsRepositoryImpl()))
-                                .get(FiveThingsViewModel::class.java)
+            viewModel = ViewModelProviders.of(this,
+                    FiveThingsViewModelFactory(FiveThingsRepositoryImpl(), authState, authorizationService))
+                    .get(FiveThingsViewModel::class.java)
 
-                        binding.viewModel = viewModel
+            binding.viewModel = viewModel
 
-                        val passedInDate = arguments?.getString("dateeee") //TODO move to constant
+            val passedInDate = arguments?.getString("dateeee") //TODO move to constant
 
-                        currentDate = if (passedInDate != null)
-                            getDateFromDatabaseStyle(passedInDate) else Date()
+            currentDate = if (passedInDate != null)
+                getDateFromDatabaseStyle(passedInDate) else Date()
 
-                        getFiveThings()
+            getFiveThings()
 
-                        getWrittenDays()
-                    }
-                }
-            }
+            getWrittenDays()
         }
+
+
         return binding.root
     }
 
@@ -121,7 +111,7 @@ class FiveThingsFragment : Fragment() {
         viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
-                    Log.d("blerg", "bloop")
+                    binding.loading = false
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date
@@ -142,7 +132,9 @@ class FiveThingsFragment : Fragment() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
             binding.loading = false
+            Log.d("blerg", "bloop")
             days?.let{
+                Log.d("blerg", "bleep $days")
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
                     Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
