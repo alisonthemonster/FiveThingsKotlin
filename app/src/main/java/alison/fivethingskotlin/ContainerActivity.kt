@@ -1,9 +1,6 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Fragments.AnalyticsFragment
-import alison.fivethingskotlin.Fragments.FiveThingsFragment
-import alison.fivethingskotlin.Fragments.SearchFragment
-import alison.fivethingskotlin.Fragments.SettingsFragment
+import alison.fivethingskotlin.Fragments.*
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Util.clearAuthState
 import android.content.Context
@@ -104,6 +101,10 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 }
                 R.id.analytics_item -> {
                     loadFragment(AnalyticsFragment())
+                    true
+                }
+                R.id.templates_item -> {
+                    loadFragment(DesignsFragment())
                     true
                 }
                 R.id.search_item -> {

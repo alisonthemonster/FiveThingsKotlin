@@ -18,4 +18,5 @@
     <string name="let_s_get_started">Let\'s get started!</string>
     <string name="create_account">Create Account</string>
     <string name="already_exists">Email ID exists</string>
+    <string name="print_your_five_things">Print your Five Things</string>
 </resources>
