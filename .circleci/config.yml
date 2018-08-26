@@ -10,8 +10,9 @@ jobs:
       - checkout
 
       - run:
-          name: Clear cache
-          command: rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+          name: Check dependency tree
+          command: ./gradlew -q dependencies app:dependencies --configuration debugAndroidTestCompileClasspath
+
 
 #      - restore_cache:
 #          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
