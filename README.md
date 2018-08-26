@@ -1,5 +1,5 @@
 # FiveThingsKotlin
-[![codebeat badge](https://codebeat.co/badges/3beb40b4-4805-4753-bb9e-7c5991c2d730)](https://codebeat.co/projects/github-com-alisonthemonster-fivethingskotlin-master)
+[![codebeat badge](https://codebeat.co/badges/3beb40b4-4805-4753-bb9e-7c5991c2d730)](https://codebeat.co/projects/github-com-alisonthemonster-fivethingskotlin-master) [![CircleCI](https://circleci.com/gh/alisonthemonster/FiveThingsKotlin/tree/master.svg?style=svg)](https://circleci.com/gh/alisonthemonster/FiveThingsKotlin/tree/master)
 
 An app to track your quickly track, review, and reflect on your days.
   - Write about your day in five quick notes
@@ -16,7 +16,7 @@ An app to track your quickly track, review, and reflect on your days.
 - KotlinTest for unit testing
 - Espresso for instrumented tests
 - MockWebServer for instrumented tests
-- Travis CI
+- ~~Travis CI~~ Circle CI
 - CompactCalendarView
 
 
