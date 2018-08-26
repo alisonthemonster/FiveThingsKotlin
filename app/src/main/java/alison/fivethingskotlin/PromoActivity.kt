@@ -32,6 +32,8 @@ class PromoActivity : AppCompatActivity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
 
+        binding.loading = true
+
         enablePostAuthorizationFlows()
 
         google_auth_button.setOnClickListener {
@@ -80,6 +82,9 @@ class PromoActivity : AppCompatActivity() {
                         handleAuthorizationResponse(intent)
                         intent.putExtra(USED_INTENT, true)
                     }
+                }
+                else -> {
+                    binding.loading = false
                 }
             }
         }
@@ -133,6 +138,7 @@ class PromoActivity : AppCompatActivity() {
     private fun enablePostAuthorizationFlows() {
         val mAuthState = restoreAuthState(this)
 
+
         mAuthState?.let {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!
@@ -141,6 +147,7 @@ class PromoActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
             } else {
+                binding.loading = false
                 //we need to log in!
                 Log.d("blerg", "bitches gotta log in")
             }

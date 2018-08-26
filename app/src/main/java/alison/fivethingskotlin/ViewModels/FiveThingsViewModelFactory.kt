@@ -1,12 +1,15 @@
 package alison.fivethingskotlin.ViewModels
 
 
+import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import net.openid.appauth.AuthState
+import net.openid.appauth.AuthorizationService
 
-class FiveThingsViewModelFactory(val token: String): ViewModelProvider.Factory {
+class FiveThingsViewModelFactory(private val repository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModelProvider.NewInstanceFactory() {
+
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return modelClass.getConstructor(String::class.java).newInstance(token)
+        return FiveThingsViewModel(repository, authState, authorizationService) as T
     }
-
 }

@@ -1,5 +1,7 @@
 package alison.fivethingskotlin.API
 
+import alison.fivethingskotlin.Models.PaginatedSearchResults
+import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Models.Thing
 import retrofit2.Call
 import retrofit2.http.*
@@ -23,5 +25,14 @@ interface FiveThingsService {
 
     @GET("get_days_written")
     fun getWrittenDates(@Header("Authorization") token: String): Call<List<String>>
+
+    @GET("search_all/{keyword}")
+    fun searchAll(@Header("Authorization") token: String, @Path("keyword") keyword: String): Call<List<SearchResult>>
+
+    @GET("search/{keyword}")
+    fun search(@Header("Authorization") token: String,
+               @Path("keyword") keyword: String,
+               @Query("page_size") pageSize: Int,
+               @Query("page") page: Int): Call<PaginatedSearchResults>
 
 }

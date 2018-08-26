@@ -49,10 +49,9 @@ class GalleryAdapter(images: ArrayList<String>): RecyclerView.Adapter<GalleryAda
         }
 
         override fun onClick(p0: View?) {
-            Toast.makeText(context, "ya clicked one yay", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Feature coming soon!", Toast.LENGTH_SHORT).show()
         }
     }
 
 
 }
-

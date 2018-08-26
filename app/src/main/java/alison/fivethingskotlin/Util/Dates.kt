@@ -59,6 +59,20 @@ fun getFullDateFormat(date: Date): String {
     return "$dayOfWeek $month $day, $year"
 }
 
+fun getDateFromFullDateFormat(dateString: String): Date {
+    val words = dateString.split(" ")
+    val month = words[1]
+    val day = words[2]
+    val year = words[3]
+
+    val cal = Calendar.getInstance()
+    cal.set(Calendar.YEAR, year.toInt())
+    cal.set(Calendar.MONTH, getMonthNumber(month))
+    cal.set(Calendar.DAY_OF_MONTH, day.dropLast(3).toInt()) //remove "th,"
+
+    return cal.time
+}
+
 fun getDay(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
@@ -79,6 +93,18 @@ fun getMonthNumber(date: Date): Int {
     val monthNumber = cal.get(Calendar.MONTH)
     val monthNames = arrayOf(Calendar.JANUARY, Calendar.FEBRUARY, Calendar.MARCH, Calendar.APRIL, Calendar.MAY, Calendar.JUNE, Calendar.JULY, Calendar.AUGUST, Calendar.SEPTEMBER, Calendar.OCTOBER, Calendar.NOVEMBER, Calendar.DECEMBER)
     return monthNames[monthNumber] + 1
+}
+
+fun getMonthNumber(monthString: String): Int {
+    val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+    var monthNumber = -1
+    for (month in monthNames) {
+        monthNumber++
+        if (month == monthString) {
+            return monthNumber
+        }
+    }
+    return monthNumber
 }
 
 fun getYear(date: Date): Int {

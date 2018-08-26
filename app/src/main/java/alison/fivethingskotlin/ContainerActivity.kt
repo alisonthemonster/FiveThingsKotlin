@@ -1,25 +1,40 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Fragments.AnalyticsFragment
-import alison.fivethingskotlin.Fragments.DesignsFragment
-import alison.fivethingskotlin.Fragments.FiveThingsFragment
-import alison.fivethingskotlin.Fragments.SettingsFragment
+import alison.fivethingskotlin.Fragments.*
+import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.Util.clearAuthState
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import kotlinx.android.synthetic.main.activity_container.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
-class ContainerActivity : AppCompatActivity() {
+class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
+
+    override fun onDateSelected(date: String) {
+        val fragment = FiveThingsFragment()
+        val bundle = Bundle()
+        bundle.putString("dateeee", date)
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                .replace(R.id.content_frame, fragment)
+                .addToBackStack("search results")
+                .commitAllowingStateLoss()
+        navigation_view.setCheckedItem(R.id.five_things_item)
+    }
 
     private lateinit var drawerLayout: DrawerLayout
 
@@ -52,8 +67,10 @@ class ContainerActivity : AppCompatActivity() {
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
+        } else if (fragmentManager.backStackEntryCount > 0) {
+            fragmentManager.popBackStack()
         } else {
-            finish()
+            super.onBackPressed()
         }
     }
 
@@ -76,8 +93,7 @@ class ContainerActivity : AppCompatActivity() {
         title = ""
         drawerToggle.syncState()
 
-        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
-        navigationView.setNavigationItemSelectedListener { menuItem ->
+        navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
                     loadFragment(FiveThingsFragment())
@@ -89,6 +105,10 @@ class ContainerActivity : AppCompatActivity() {
                 }
                 R.id.templates_item -> {
                     loadFragment(DesignsFragment())
+                    true
+                }
+                R.id.search_item -> {
+                    loadFragment(SearchFragment())
                     true
                 }
                 R.id.settings_item -> {
@@ -104,7 +124,7 @@ class ContainerActivity : AppCompatActivity() {
                 }
             }
         }
-        navigationView.setCheckedItem(R.id.five_things_item)
+        navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
     private fun loadFragment(fragment: android.support.v4.app.Fragment) {

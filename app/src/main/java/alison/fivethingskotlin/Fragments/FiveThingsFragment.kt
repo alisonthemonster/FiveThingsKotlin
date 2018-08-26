@@ -1,15 +1,16 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
-import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.Util.*
 import alison.fivethingskotlin.ViewModels.FiveThingsViewModel
+import alison.fivethingskotlin.ViewModels.FiveThingsViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -31,35 +32,32 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
+        binding.loading = true
 
         context?.let {
             val authorizationService = AuthorizationService(it)
             val authState = restoreAuthState(it)
 
-            authState?.performActionWithFreshTokens(authorizationService, { accessToken, idToken, ex ->
-                if (ex != null) {
-                    Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                    showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
-                    //TODO show error here
-                } else {
-                    idToken?.let {
-                        viewModel = FiveThingsViewModel("Bearer $it", FiveThingsRepositoryImpl()) //TODO switch to viewmodelprovider
+            viewModel = ViewModelProviders.of(this,
+                    FiveThingsViewModelFactory(FiveThingsRepositoryImpl(), authState, authorizationService))
+                    .get(FiveThingsViewModel::class.java)
 
-                        binding.viewModel = viewModel
+            binding.viewModel = viewModel
 
-                        currentDate = Date()
+            val passedInDate = arguments?.getString("dateeee") //TODO move to constant
 
-                        getFiveThings()
+            currentDate = if (passedInDate != null)
+                getDateFromFullDateFormat(passedInDate) else Date()
 
-                        getWrittenDays()
-                    }
-                }
-            })
+            getFiveThings()
+
+            getWrittenDays()
         }
+
+
         return binding.root
     }
 
@@ -96,27 +94,19 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
-    private fun openLogInScreen(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ ->
-            val intent = Intent(context, PromoActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-    }
-
     private fun getFiveThings() {
 
         binding.loading = true
 
-        viewModel.getFiveThings(Date()).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
+        viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
             when (fiveThings?.status) {
                 Status.SUCCESS -> {
-                    Log.d("blerg", "bloop")
                     binding.fiveThings = fiveThings.data
                     fiveThings.data?.let {
                         binding.naguDate = it.date
                         binding.month = getMonth(it.date) + " " + getYear(it.date)
                         compactcalendar_view.setCurrentDate(it.date)
+                        binding.loading = false
                     }
                 }
                 Status.ERROR -> {
@@ -131,7 +121,6 @@ class FiveThingsFragment : Fragment() {
     private fun getWrittenDays() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            binding.loading = false
             days?.let{
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
@@ -144,7 +133,6 @@ class FiveThingsFragment : Fragment() {
     }
 
     private fun addEventsToCalendar(dates: List<Date>?) {
-        Log.d("blerg", "updating calendar")
         compactcalendar_view.removeAllEvents()
         dates?.let {
             val events = it.map { convertDateToEvent(it) }
@@ -153,6 +141,7 @@ class FiveThingsFragment : Fragment() {
                 buildYearDialog(it)
             }
         }
+        binding.loading = false
     }
 
     private fun buildYearDialog(dates: List<Date>) {
@@ -167,12 +156,12 @@ class FiveThingsFragment : Fragment() {
                 val dialogBuilder = AlertDialog.Builder(context)
                 dialogBuilder
                         .setTitle("Select a year")
-                        .setItems(yearList.toTypedArray(), { _, year ->
+                        .setItems(yearList.toTypedArray()) { _, year ->
                             val newDate = getDateInAYear(currentDate, yearList[year].toInt())
                             currentDate = newDate
                             binding.month = getMonth(newDate) + " " + getYear(newDate)
                             compactcalendar_view.setCurrentDate(newDate)
-                        })
+                        }
                         .create()
                         .show()
             }

@@ -4,7 +4,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="loading">Loading</string>
     <string name="blurb">Write easily about your day, see trends and patterns in your life, reflect on the past, and order printed diaries.</string>
-    <string name="print_designs">Print Designs</string>
+    <string name="search">Search</string>
     <string name="analytics">Analytics</string>
     <string name="five_things">Five Things</string>
     <string name="settings">Settings</string>
@@ -18,4 +18,5 @@
     <string name="let_s_get_started">Let\'s get started!</string>
     <string name="create_account">Create Account</string>
     <string name="already_exists">Email ID exists</string>
+    <string name="print_your_five_things">Print your Five Things</string>
 </resources>

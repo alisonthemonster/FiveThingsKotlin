@@ -6,13 +6,17 @@
             android:icon="@drawable/ic_hand"
             android:title="@string/five_things" />
         <item
+            android:id="@+id/search_item"
+            android:icon="@drawable/ic_search"
+            android:title="@string/search" />
+        <item
             android:id="@+id/analytics_item"
             android:icon="@drawable/ic_analytics"
             android:title="@string/analytics" />
         <item
             android:id="@+id/templates_item"
             android:icon="@drawable/ic_book"
-            android:title="@string/print_designs" />
+            android:title="@string/print_your_five_things" />
         <item
             android:id="@+id/settings_item"
             android:icon="@drawable/ic_settings"
