@@ -13,6 +13,7 @@ class NotificationScheduler {
 
     companion object {
         const val ALARM_TYPE_RTC = 100
+        const val PENDING_INTENT = 101
     }
 
     private var alarmManager: AlarmManager? = null
@@ -22,40 +23,52 @@ class NotificationScheduler {
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
 
-        val prefTime = sharedPref.getString("pref_time", "default")
-        Log.d("blerg", "preftime: $prefTime")
+        val alarmIsOn = sharedPref.getBoolean("notif_parent", true)
 
-        val hour = parseHour(prefTime)
-        val minute = parseMinute(prefTime)
+        if (alarmIsOn) {
 
-        val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
-        }
+            val prefTime = sharedPref.getString("pref_time", "default")
+            Log.d("blerg", "preftime: $prefTime")
 
-        //if the current time is before the alarm time then we can set the alarm
-        if (System.currentTimeMillis() < calendar.timeInMillis) {
+            val hour = parseHour(prefTime)
+            val minute = parseMinute(prefTime)
 
-            alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-            val intent = Intent(context, ReminderReceiver::class.java)
-            alarmIntent = intent.let {
-                PendingIntent.getBroadcast(context, 0, it, 0)
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
             }
 
-            alarmManager?.setInexactRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    calendar.timeInMillis,
-                    AlarmManager.INTERVAL_DAY,
-                    alarmIntent
-            )
+            //if the current time is before the alarm time then we can set the alarm
+            if (System.currentTimeMillis() < calendar.timeInMillis) {
+
+                alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+                val intent = Intent(context, ReminderReceiver::class.java)
+                alarmIntent = intent.let {
+                    PendingIntent.getBroadcast(context, PENDING_INTENT, it, 0)
+                }
+
+                alarmManager?.setInexactRepeating(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.timeInMillis,
+                        AlarmManager.INTERVAL_DAY,
+                        alarmIntent)
+            }
+        } else {
+            cancelNotifications(context)
         }
     }
 
     fun cancelNotifications(context: Context) {
+        Log.d("blerg", "in cancelNotifs")
+
         val intent = Intent(context, ReminderReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+        val pendingIntent = intent.let {
+            PendingIntent.getBroadcast(context, PENDING_INTENT, it, 0)
+        }
+
+        pendingIntent.cancel()
 
         alarmManager?.cancel(pendingIntent)
 

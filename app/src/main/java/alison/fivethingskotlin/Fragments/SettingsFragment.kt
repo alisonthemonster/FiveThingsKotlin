@@ -1,14 +1,17 @@
 package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.util.NotificationScheduler
 import android.os.Bundle
 import android.support.v7.preference.PreferenceFragmentCompat
 import alison.fivethingskotlin.util.TimePreference
+import android.content.SharedPreferences
 import android.support.v4.app.DialogFragment
 import android.support.v7.preference.Preference
+import android.util.Log
 
 
-class SettingsFragment : PreferenceFragmentCompat() {
+class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.app_preferences)
     }
@@ -30,6 +33,27 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
     }
 
+    override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
+        Log.d("blerg", "in onchanged")
+        val scheduler = NotificationScheduler()
+        val allowNotifs = prefs.getBoolean("notif_parent", true)
+        if (!allowNotifs) {
+            Log.d("blerg", "cancelling")
+            scheduler.cancelNotifications(context!!)
+        } else {
+            Log.d("blerg", "setting")
+            scheduler.setReminderNotification(context!!)
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        preferenceScreen.sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+    }
 
 }
