@@ -1,12 +1,15 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.Fragments.*
+import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.clearAuthState
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.view.GravityCompat
@@ -57,7 +60,15 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         }
 
         createNotificationChannel()
-        NotificationScheduler().setReminderNotification(this, 17, 36) //TODO check shared prefs
+
+        val receiver = ComponentName(this, AlarmBootReceiver::class.java)
+
+        packageManager.setComponentEnabledSetting(
+                receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        )
+        NotificationScheduler().setReminderNotification(this, 18, 30) //TODO check shared prefs
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

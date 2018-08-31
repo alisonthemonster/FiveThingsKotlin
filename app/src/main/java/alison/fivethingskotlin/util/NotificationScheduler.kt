@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import java.util.*
 
 
@@ -17,6 +18,8 @@ class NotificationScheduler {
     private lateinit var alarmIntent: PendingIntent
 
     fun setReminderNotification(context: Context, hour: Int, minute: Int) {
+
+        Log.d("blerg", "blerg")
 
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
