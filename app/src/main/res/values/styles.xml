@@ -11,9 +11,8 @@
     </style>
 
     <style name="PrefTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
-        <item name="android:textColor">@color/white</item>
-        <item name="android:textColorSecondary">@color/white</item>
-
+        <item name="android:textColor">@color/white_text</item>
+        <item name="android:textColorSecondary">@color/white_text</item>
     </style>
 
     <style name="Text">

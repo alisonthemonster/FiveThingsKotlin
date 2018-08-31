@@ -15,12 +15,13 @@ class NotificationScheduler {
         const val ALARM_TYPE_RTC = 100
     }
 
-    private var alarmMgr: AlarmManager? = null
+    private var alarmManager: AlarmManager? = null
     private lateinit var alarmIntent: PendingIntent
 
     fun setReminderNotification(context: Context) {
 
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+
         val prefTime = sharedPref.getString("pref_time", "default")
         Log.d("blerg", "preftime: $prefTime")
 
@@ -36,20 +37,27 @@ class NotificationScheduler {
         //if the current time is before the alarm time then we can set the alarm
         if (System.currentTimeMillis() < calendar.timeInMillis) {
 
-            alarmMgr = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
             val intent = Intent(context, ReminderReceiver::class.java)
             alarmIntent = intent.let {
                 PendingIntent.getBroadcast(context, 0, it, 0)
             }
 
-            alarmMgr?.setInexactRepeating(
+            alarmManager?.setInexactRepeating(
                     AlarmManager.RTC_WAKEUP,
                     calendar.timeInMillis,
                     AlarmManager.INTERVAL_DAY,
                     alarmIntent
             )
         }
+    }
+
+    fun cancelNotifications(context: Context) {
+        val intent = Intent(context, ReminderReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
+
+        alarmManager?.cancel(pendingIntent)
 
     }
 }
