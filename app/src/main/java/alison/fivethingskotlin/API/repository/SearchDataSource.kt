@@ -4,8 +4,8 @@ import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.Models.NetworkState
 import alison.fivethingskotlin.Models.PaginatedSearchResults
 import alison.fivethingskotlin.Models.SearchResult
-import alison.fivethingskotlin.Util.getDateFromDatabaseStyle
-import alison.fivethingskotlin.Util.getFullDateFormat
+import alison.fivethingskotlin.util.getDateFromDatabaseStyle
+import alison.fivethingskotlin.util.getFullDateFormat
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
 import org.json.JSONObject

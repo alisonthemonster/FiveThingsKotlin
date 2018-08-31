@@ -1,9 +1,8 @@
 package alison.fivethingskotlin.API.repository
 
 import alison.fivethingskotlin.Models.Listing
-import alison.fivethingskotlin.Models.PaginatedSearchResults
 import alison.fivethingskotlin.Models.SearchResult
-import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.util.Resource
 import android.arch.lifecycle.LiveData
 
 interface SearchRepository {

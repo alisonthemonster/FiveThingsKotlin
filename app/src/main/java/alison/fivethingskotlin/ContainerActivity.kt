@@ -1,19 +1,19 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.Fragments.*
-import alison.fivethingskotlin.Models.SearchResult
-import alison.fivethingskotlin.Util.clearAuthState
+import alison.fivethingskotlin.util.NotificationScheduler
+import alison.fivethingskotlin.util.clearAuthState
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.os.Parcelable
-import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
@@ -21,6 +21,12 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
+
+    companion object {
+        const val CHANNEL_ID = "FiveThingsChannel"
+    }
+
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onDateSelected(date: String) {
         val fragment = FiveThingsFragment()
@@ -36,8 +42,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
-    private lateinit var drawerLayout: DrawerLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_container)
@@ -51,6 +55,9 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
             fragmentTransaction.commitAllowingStateLoss()
         }
+
+        createNotificationChannel()
+        NotificationScheduler().setReminderNotification(this, 17, 36) //TODO check shared prefs
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -65,12 +72,10 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else if (fragmentManager.backStackEntryCount > 0) {
-            fragmentManager.popBackStack()
-        } else {
-            super.onBackPressed()
+        when {
+            drawerLayout.isDrawerOpen(GravityCompat.START) -> drawerLayout.closeDrawer(GravityCompat.START)
+            fragmentManager.backStackEntryCount > 0 -> fragmentManager.popBackStack()
+            else -> super.onBackPressed()
         }
     }
 
@@ -142,6 +147,22 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         val intent = Intent(applicationContext, PromoActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
+    }
+
+    private fun createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = getString(R.string.channel_name)
+            val description = getString(R.string.channel_description)
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(ContainerActivity.CHANNEL_ID, name, importance)
+            channel.description = description
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 }

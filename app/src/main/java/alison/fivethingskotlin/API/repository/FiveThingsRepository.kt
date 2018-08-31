@@ -1,7 +1,7 @@
 package alison.fivethingskotlin.API.repository
 
 import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Util.Resource
+import alison.fivethingskotlin.util.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import java.util.*

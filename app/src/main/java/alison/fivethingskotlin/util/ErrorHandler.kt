@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.Util
+package alison.fivethingskotlin.util
 
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status

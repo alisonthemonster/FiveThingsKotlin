@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.Util
+package alison.fivethingskotlin.util
 
 import android.graphics.Color
 import com.github.sundeepk.compactcalendarview.domain.Event

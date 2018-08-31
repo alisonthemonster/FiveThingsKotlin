@@ -1,9 +1,9 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Util.AUTH_STATE
-import alison.fivethingskotlin.Util.SHARED_PREFERENCES_NAME
-import alison.fivethingskotlin.Util.restoreAuthState
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
+import alison.fivethingskotlin.util.AUTH_STATE
+import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME
+import alison.fivethingskotlin.util.restoreAuthState
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -15,21 +15,23 @@ import android.util.Log
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import android.R.attr.action
-
-
 
 
 class PromoActivity : AppCompatActivity() {
 
-    private val USED_INTENT = "USED_INTENT"
 
+
+    private val USED_INTENT = "USED_INTENT"
     private lateinit var binding: ActivityPromoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("blerg", "oncreate")
+
         setContentView(R.layout.activity_promo)
 
+        //TODO can this be moved after checking for auth or nah?
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
 
         binding.loading = true
