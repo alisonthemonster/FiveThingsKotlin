@@ -12,6 +12,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
@@ -119,6 +120,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                     loadFragment(AnalyticsFragment())
                     true
                 }
+
                 R.id.templates_item -> {
                     loadFragment(DesignsFragment())
                     true
@@ -143,7 +145,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
-    private fun loadFragment(fragment: android.support.v4.app.Fragment) {
+    private fun loadFragment(fragment: Fragment) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out)

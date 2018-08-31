@@ -7,6 +7,7 @@
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
         <item name="colorControlNormal">@color/white</item>
         <item name="android:colorBackground">@color/grey</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
     <style name="Text">

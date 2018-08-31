@@ -34,6 +34,7 @@ dependencies {
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.android.support:palette-v7:27.1.1'
+    implementation 'com.android.support:preference-v7:27.1.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'com.github.sundeepk:compact-calendar-view:2.0.2.2'
@@ -48,6 +49,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.9.1'
     implementation 'net.openid:appauth:0.7.1'
     implementation 'android.arch.paging:runtime:1.0.1'
+
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'

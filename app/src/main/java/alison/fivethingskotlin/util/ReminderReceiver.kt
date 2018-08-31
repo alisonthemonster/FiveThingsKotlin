@@ -20,29 +20,16 @@ class ReminderReceiver: BroadcastReceiver() {
         Log.d("blerg", "Alarm received by BR")
 
 
-//        val setHour = intent.getIntExtra("HOUR_OF_DAY", -1)
-//        val setMinute = intent.getIntExtra("MINUTE", -1)
-//        val rightNow = Calendar.getInstance()
-//        val currentHour = rightNow.get(Calendar.HOUR_OF_DAY)
-//        val currentMinute = rightNow.get(Calendar.MINUTE)
-//
-//        if (setHour == currentHour && currentMinute == setMinute) {
-
-            val intentToRepeat = Intent(context, PromoActivity::class.java)
-            intentToRepeat.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //set flag to restart/relaunch the app
-            val pendingIntent = PendingIntent.getActivity(context, ALARM_TYPE_RTC, intentToRepeat, PendingIntent.FLAG_UPDATE_CURRENT)
+        val intentToRepeat = Intent(context, PromoActivity::class.java)
+        intentToRepeat.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //set flag to restart/relaunch the app
+        val pendingIntent = PendingIntent.getActivity(context, ALARM_TYPE_RTC, intentToRepeat, PendingIntent.FLAG_UPDATE_CURRENT)
 
 
-            //Build notification
-            createLocalNotification(context, pendingIntent)
-//        } else {
-//            Log.d("blerg", "Failure")
-//        }
+        //Build notification
+        createLocalNotification(context, pendingIntent)
 
-        if (intent.action == "android.intent.action.BOOT_COMPLETED") {
-            //Intent to invoke app when click on notification.
+        //TODO check intent action
 
-        }
     }
 
     private fun createLocalNotification(context: Context, pendingIntent: PendingIntent) {

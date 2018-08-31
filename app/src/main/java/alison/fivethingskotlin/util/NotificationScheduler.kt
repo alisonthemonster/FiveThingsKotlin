@@ -19,8 +19,6 @@ class NotificationScheduler {
 
     fun setReminderNotification(context: Context, hour: Int, minute: Int) {
 
-        Log.d("blerg", "blerg")
-
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, hour)
@@ -44,11 +42,6 @@ class NotificationScheduler {
                     alarmIntent
             )
         }
-
-
-
-
-
 
     }
 }
