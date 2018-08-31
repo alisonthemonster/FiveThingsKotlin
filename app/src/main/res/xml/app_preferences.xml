@@ -13,6 +13,6 @@
         android:dependency="notif_parent"
         android:title="Adjust Reminder Notifications"
         android:summary="Change your daily reminder time"
-        android:dialogTitle="Dialog Title"
+        android:dialogTitle="Daily Reminder Time"
         android:defaultValue="23:00" />
 </PreferenceScreen>

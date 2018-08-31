@@ -29,14 +29,14 @@ class PromoActivity : AppCompatActivity() {
 
         Log.d("blerg", "oncreate")
 
+        enablePostAuthorizationFlows()
+
         setContentView(R.layout.activity_promo)
 
         //TODO can this be moved after checking for auth or nah?
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
 
         binding.loading = true
-
-        enablePostAuthorizationFlows()
 
         google_auth_button.setOnClickListener {
             binding.loading = true
@@ -148,6 +148,7 @@ class PromoActivity : AppCompatActivity() {
                 val intent = Intent(applicationContext, ContainerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                //TODO handle this animation more smoothly
             } else {
                 binding.loading = false
                 //we need to log in!
