@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_sync"
-        android:title="Check box"
-        android:summary="Hey there you can check that thang"
-        android:defaultValue="true" />
 
     <alison.fivethingskotlin.util.TimePreference
         android:key="pref_time"
-        android:title="Daily Reminders"
+        android:title="Reminder Notifications"
+        android:summary="Adjust your daily reminder time"
         android:dialogTitle="Dialog Title"
-        android:defaultValue="23:00"/>
+        android:defaultValue="23:00" />
 </PreferenceScreen>
