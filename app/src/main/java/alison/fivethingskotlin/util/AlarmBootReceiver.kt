@@ -12,7 +12,7 @@ class AlarmBootReceiver: BroadcastReceiver() {
             Log.d("blerg", "in onReceive for AlarmBootReceiver")
 
             val notificationScheduler = NotificationScheduler()
-            notificationScheduler.setReminderNotification(context, 18, 30) //TODO get time from shared prefs settings
+            notificationScheduler.setReminderNotification(context)
         }
     }
 }

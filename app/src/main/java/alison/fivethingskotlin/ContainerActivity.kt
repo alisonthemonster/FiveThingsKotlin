@@ -22,6 +22,9 @@ import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import android.content.SharedPreferences
+import android.support.v7.preference.PreferenceManager
+import android.util.Log
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
@@ -69,7 +72,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP
         )
-        NotificationScheduler().setReminderNotification(this, 18, 30) //TODO check shared prefs
+
+        NotificationScheduler().setReminderNotification(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
