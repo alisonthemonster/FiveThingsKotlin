@@ -5,9 +5,10 @@
         android:title="Check box"
         android:summary="Hey there you can check that thang"
         android:defaultValue="true" />
-    <!--<alison.fivethingskotlin.util.TimePreference-->
-        <!--android:dependency="pref_sync"-->
-        <!--android:key="pref_syncConnectionType"-->
-        <!--android:title="Idk this is a list preference"-->
-        <!--android:dialogTitle="Dialog Title" />-->
+
+    <alison.fivethingskotlin.util.TimePreference
+        android:key="pref_time"
+        android:title="Daily Reminders"
+        android:dialogTitle="Dialog Title"
+        android:defaultValue="23:00"/>
 </PreferenceScreen>

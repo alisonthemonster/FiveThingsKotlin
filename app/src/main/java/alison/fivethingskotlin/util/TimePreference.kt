@@ -2,9 +2,11 @@ package alison.fivethingskotlin.util
 
 import alison.fivethingskotlin.R
 import android.content.Context
-import android.preference.DialogPreference
 import android.util.AttributeSet
 import android.content.res.TypedArray
+import android.support.v7.preference.DialogPreference
+import android.widget.TimePicker
+
 
 class TimePreference(context: Context, attrs: AttributeSet) : DialogPreference(context, attrs) {
 
@@ -15,28 +17,40 @@ class TimePreference(context: Context, attrs: AttributeSet) : DialogPreference(c
         dialogLayoutResource = R.layout.pref_time_dialog
     }
 
-    override fun onGetDefaultValue(array: TypedArray, index: Int): Any {
-        // Default value from attribute. Fallback value is set to 0.
-        return array.getInt(index, 0)
+    var hour = 0
+    var minute = 0
+
+    fun parseHour(value: String): Int {
+        val time = value.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        return Integer.parseInt(time[0])
     }
 
-    override fun onSetInitialValue(restorePersistedValue: Boolean,
-                                   defaultValue: Any) {
-        // Read the value. Use the default value if it is not possible.
-        setTime(if (restorePersistedValue)
-            getPersistedInt(time)
-        else
-            defaultValue as Int)
+    fun parseMinute(value: String): Int {
+        val time = value.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        return Integer.parseInt(time[1])
     }
 
-    fun getTime(): Int {
-        return time
+    fun timeToString(h: Int, m: Int): String {
+        return String.format("%02d", h) + ":" + String.format("%02d", m)
     }
 
-    fun setTime(time: Int) {
-        this.time = time
-        // Save to Shared Preferences
-        persistInt(time)
+    override fun onGetDefaultValue(a: TypedArray, index: Int): Any? {
+        return a.getString(index)
+    }
+
+    override fun onSetInitialValue(restoreValue: Boolean, defaultValue: Any) {
+        val value: String =
+            if (restoreValue)
+                getPersistedString(defaultValue.toString())
+            else
+                defaultValue.toString()
+
+        hour = parseHour(value)
+        minute = parseMinute(value)
+    }
+
+    fun persistStringValue(value: String) {
+        persistString(value)
     }
 
 }
