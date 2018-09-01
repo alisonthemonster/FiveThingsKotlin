@@ -37,7 +37,6 @@ class PromoActivity : AppCompatActivity() {
     }
 
     private fun startAuthorizationRequest(view: View) {
-        startAuthorizationRequest(view)
         binding.loading = true
         val serviceConfiguration = AuthorizationServiceConfiguration(
                 Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
