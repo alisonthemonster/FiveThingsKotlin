@@ -1,7 +1,7 @@
 package alison.fivethingskotlin.util
 
-import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Models.Status
+import alison.fivethingskotlin.model.FiveThings
+import alison.fivethingskotlin.model.Status
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface

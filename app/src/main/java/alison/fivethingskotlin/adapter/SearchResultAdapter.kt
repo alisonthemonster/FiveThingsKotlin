@@ -1,7 +1,7 @@
 package alison.fivethingskotlin.adapter
 
 import alison.fivethingskotlin.ContainerActivity
-import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater

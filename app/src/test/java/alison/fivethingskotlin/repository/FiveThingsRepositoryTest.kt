@@ -1,11 +1,11 @@
 package alison.fivethingskotlin.repository
 
-import alison.fivethingskotlin.API.FiveThingsService
-import alison.fivethingskotlin.API.repository.FiveThingsRepository
-import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.api.FiveThingsService
+import alison.fivethingskotlin.api.repository.FiveThingsRepository
+import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.LiveDataTestUtil
-import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Models.Thing
+import alison.fivethingskotlin.model.FiveThings
+import alison.fivethingskotlin.model.Thing
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import io.kotlintest.mock.`when`
 import io.kotlintest.mock.mock
