@@ -1,11 +1,11 @@
 package alison.fivethingskotlin.repository
 
-import alison.fivethingskotlin.API.FiveThingsService
-import alison.fivethingskotlin.API.repository.SearchRepository
-import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
-import alison.fivethingskotlin.Models.Listing
-import alison.fivethingskotlin.Models.PaginatedSearchResults
-import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.api.FiveThingsService
+import alison.fivethingskotlin.api.repository.SearchRepository
+import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
+import alison.fivethingskotlin.model.Listing
+import alison.fivethingskotlin.model.PaginatedSearchResults
+import alison.fivethingskotlin.model.SearchResult
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
 import android.arch.paging.PagedList

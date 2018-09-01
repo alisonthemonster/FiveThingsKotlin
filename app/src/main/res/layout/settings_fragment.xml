@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="alison.fivethingskotlin.Fragments.DesignsFragment"
+    tools:context="alison.fivethingskotlin.fragment.DesignsFragment"
     android:id="@+id/designs_container">
 
     <ListView

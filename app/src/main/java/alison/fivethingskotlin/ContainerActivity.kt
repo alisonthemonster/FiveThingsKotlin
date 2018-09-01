@@ -1,6 +1,6 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.Fragments.*
+import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.clearAuthState

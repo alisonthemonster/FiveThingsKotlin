@@ -1,11 +1,11 @@
 package alison.fivethingskotlin.repository
 
-import alison.fivethingskotlin.API.FiveThingsService
-import alison.fivethingskotlin.API.repository.SearchDataSource
+import alison.fivethingskotlin.api.FiveThingsService
+import alison.fivethingskotlin.api.repository.SearchDataSource
 import alison.fivethingskotlin.LiveDataTestUtil
-import alison.fivethingskotlin.Models.NetworkState
-import alison.fivethingskotlin.Models.PaginatedSearchResults
-import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.model.NetworkState
+import alison.fivethingskotlin.model.PaginatedSearchResults
+import alison.fivethingskotlin.model.SearchResult
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockito_kotlin.any
 import io.kotlintest.matchers.shouldEqual

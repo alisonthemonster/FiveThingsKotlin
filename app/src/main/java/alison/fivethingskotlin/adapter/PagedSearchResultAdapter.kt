@@ -1,8 +1,8 @@
 package alison.fivethingskotlin.adapter
 
 import alison.fivethingskotlin.ContainerActivity
-import alison.fivethingskotlin.Models.NetworkState
-import alison.fivethingskotlin.Models.SearchResult
+import alison.fivethingskotlin.model.NetworkState
+import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil

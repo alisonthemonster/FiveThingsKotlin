@@ -10,11 +10,11 @@
 
         <variable
             name="viewModel"
-            type="alison.fivethingskotlin.ViewModels.FiveThingsViewModel" />
+            type="alison.fivethingskotlin.viewmodel.FiveThingsViewModel" />
 
         <variable
             name="fiveThings"
-            type="alison.fivethingskotlin.Models.FiveThings" />
+            type="alison.fivethingskotlin.model.FiveThings" />
 
         <variable
             name="naguDate"
@@ -37,7 +37,7 @@
         android:id="@+id/five_things_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="alison.fivethingskotlin.Fragments.FiveThingsFragment">
+        tools:context="alison.fivethingskotlin.fragment.FiveThingsFragment">
 
         <ScrollView
             android:layout_width="match_parent"
