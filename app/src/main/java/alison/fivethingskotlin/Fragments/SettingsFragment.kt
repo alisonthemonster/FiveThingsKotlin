@@ -8,8 +8,6 @@ import alison.fivethingskotlin.util.TimePreference
 import android.content.SharedPreferences
 import android.support.v4.app.DialogFragment
 import android.support.v7.preference.Preference
-import android.util.Log
-
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -34,14 +32,11 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
-        Log.d("blerg", "in onchanged")
         val scheduler = NotificationScheduler()
         val allowNotifs = prefs.getBoolean("notif_parent", true)
         if (!allowNotifs) {
-            Log.d("blerg", "cancelling")
             scheduler.cancelNotifications(context!!)
         } else {
-            Log.d("blerg", "setting")
             scheduler.setReminderNotification(context!!)
         }
     }

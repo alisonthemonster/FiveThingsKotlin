@@ -11,7 +11,7 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
+import android.view.View
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -19,51 +19,48 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class PromoActivity : AppCompatActivity() {
 
-
-
     private val USED_INTENT = "USED_INTENT"
     private lateinit var binding: ActivityPromoBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("blerg", "oncreate")
-
         enablePostAuthorizationFlows()
 
         setContentView(R.layout.activity_promo)
 
-        //TODO can this be moved after checking for auth or nah?
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
-
         binding.loading = true
 
-        google_auth_button.setOnClickListener {
-            binding.loading = true
-            val serviceConfiguration = AuthorizationServiceConfiguration(
-                    Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
-                    Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
-            )
+        google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
 
-            val clientId = "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com"
-            val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
-            val builder = AuthorizationRequest.Builder(
-                    serviceConfiguration,
-                    clientId,
-                    ResponseTypeValues.CODE,
-                    redirectUri
-            )
-            builder.setScopes("profile email")
-            val request = builder.build()
+    }
 
-            val authorizationService = AuthorizationService(it.context)
-            val action = "HANDLE_AUTHORIZATION_RESPONSE"
-            val postAuthorizationIntent = Intent(it.context, PromoActivity::class.java)
-            postAuthorizationIntent.action = action
-            val pendingIntent = PendingIntent.getActivity(it.context, request.hashCode(), postAuthorizationIntent, 0)
-            authorizationService.performAuthorizationRequest(request, pendingIntent)
-        }
+    private fun startAuthorizationRequest(view: View) {
+        startAuthorizationRequest(view)
+        binding.loading = true
+        val serviceConfiguration = AuthorizationServiceConfiguration(
+                Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
+                Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
+        )
 
+        val clientId = "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com"
+        val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
+        val builder = AuthorizationRequest.Builder(
+                serviceConfiguration,
+                clientId,
+                ResponseTypeValues.CODE,
+                redirectUri
+        )
+        builder.setScopes("profile email")
+        val request = builder.build()
+
+        val authorizationService = AuthorizationService(view.context)
+        val action = "HANDLE_AUTHORIZATION_RESPONSE"
+        val postAuthorizationIntent = Intent(view.context, PromoActivity::class.java)
+        postAuthorizationIntent.action = action
+        val pendingIntent = PendingIntent.getActivity(view.context, request.hashCode(), postAuthorizationIntent, 0)
+        authorizationService.performAuthorizationRequest(request, pendingIntent)
     }
 
     override fun onStart() {
@@ -79,7 +76,7 @@ class PromoActivity : AppCompatActivity() {
         intent?.let {
             val action = intent.action
             when (action) {
-                "HANDLE_AUTHORIZATION_RESPONSE" ->  {
+                "HANDLE_AUTHORIZATION_RESPONSE" -> {
                     if (!intent.hasExtra(USED_INTENT)) {
                         handleAuthorizationResponse(intent)
                         intent.putExtra(USED_INTENT, true)
@@ -112,17 +109,15 @@ class PromoActivity : AppCompatActivity() {
         //exchange that authorization code for the refresh and access tokens
         //update the AuthState instance with that response
         response?.let {
-            Log.i("blerg", String.format("Handled Authorization Response %s ", authState.jsonSerializeString()))
             val service = AuthorizationService(this)
             service.performTokenRequest(response.createTokenExchangeRequest()) { tokenResponse, exception ->
                 if (exception != null) {
                     binding.loading = false
-                    Log.w("blerg", "Token Exchange failed", exception)
+                    //Token Exchange failed
                 } else {
                     if (tokenResponse != null) {
                         authState.update(tokenResponse, exception)
                         persistAuthState(authState)
-                        Log.i("blerg", String.format("Token Response [ Access Token: %s, ID Token: %s ]", tokenResponse.accessToken, tokenResponse.idToken))
                     }
                 }
             }
@@ -144,7 +139,6 @@ class PromoActivity : AppCompatActivity() {
         mAuthState?.let {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!
-                Log.d("blerg", "yo yo yo we in bitches")
                 val intent = Intent(applicationContext, ContainerActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
@@ -152,7 +146,6 @@ class PromoActivity : AppCompatActivity() {
             } else {
                 binding.loading = false
                 //we need to log in!
-                Log.d("blerg", "bitches gotta log in")
             }
         }
     }

@@ -22,9 +22,6 @@ import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import android.content.SharedPreferences
-import android.support.v7.preference.PreferenceManager
-import android.util.Log
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {

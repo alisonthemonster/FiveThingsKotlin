@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.support.v7.preference.PreferenceManager
-import android.util.Log
 import java.util.*
 
 
@@ -28,7 +27,6 @@ class NotificationScheduler {
         if (alarmIsOn) {
 
             val prefTime = sharedPref.getString("pref_time", "default")
-            Log.d("blerg", "preftime: $prefTime")
 
             val hour = parseHour(prefTime)
             val minute = parseMinute(prefTime)
@@ -61,8 +59,6 @@ class NotificationScheduler {
     }
 
     fun cancelNotifications(context: Context) {
-        Log.d("blerg", "in cancelNotifs")
-
         val intent = Intent(context, ReminderReceiver::class.java)
         val pendingIntent = intent.let {
             PendingIntent.getBroadcast(context, PENDING_INTENT, it, 0)
