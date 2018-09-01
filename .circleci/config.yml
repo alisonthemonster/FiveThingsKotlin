@@ -21,6 +21,9 @@ jobs:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
+          name: Gradle clean
+          command: ./gradlew clean
+      - run:
           name: Run Tests
           command: ./gradlew lint test
       - store_artifacts:
