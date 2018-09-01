@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.Util
+package alison.fivethingskotlin.util
 
 import android.content.Context
 import android.text.TextUtils

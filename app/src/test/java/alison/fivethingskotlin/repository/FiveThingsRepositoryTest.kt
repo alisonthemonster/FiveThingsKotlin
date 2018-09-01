@@ -5,11 +5,8 @@ import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import alison.fivethingskotlin.API.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.Models.FiveThings
-import alison.fivethingskotlin.Models.Status
 import alison.fivethingskotlin.Models.Thing
-import alison.fivethingskotlin.Util.Resource
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.mock.`when`
 import io.kotlintest.mock.mock
 import okhttp3.ResponseBody

@@ -1,10 +1,12 @@
-package alison.fivethingskotlin.Util
+package alison.fivethingskotlin.util
 
 import android.graphics.Color
 import java.text.SimpleDateFormat
 import java.util.*
 import com.github.sundeepk.compactcalendarview.domain.Event
 import org.joda.time.DateTime
+
+private val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 
 
 //TODO convert all NaguDate objects to be something else like JodaTime or DateTime
@@ -83,7 +85,6 @@ fun getMonth(date: Date): String {
     val cal = Calendar.getInstance()
     cal.time = date
     val monthNumber = cal.get(Calendar.MONTH)
-    val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
     return monthNames[monthNumber]
 }
 
@@ -96,7 +97,6 @@ fun getMonthNumber(date: Date): Int {
 }
 
 fun getMonthNumber(monthString: String): Int {
-    val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
     var monthNumber = -1
     for (month in monthNames) {
         monthNumber++

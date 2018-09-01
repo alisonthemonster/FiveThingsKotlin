@@ -2,16 +2,14 @@ package alison.fivethingskotlin.Fragments
 
 import alison.fivethingskotlin.API.FiveThingsService
 import alison.fivethingskotlin.API.repository.SearchRepositoryImpl
-import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.Models.SearchResult
 import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.Util.restoreAuthState
-import alison.fivethingskotlin.Util.showErrorDialog
+import alison.fivethingskotlin.util.restoreAuthState
+import alison.fivethingskotlin.util.showErrorDialog
 import alison.fivethingskotlin.ViewModels.SearchViewModel
 import alison.fivethingskotlin.ViewModels.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
-import alison.fivethingskotlin.adapter.SearchResultAdapter
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -31,9 +29,6 @@ import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.concurrent.Executors
-import android.os.Parcelable
-
-
 
 
 class SearchFragment : Fragment() {

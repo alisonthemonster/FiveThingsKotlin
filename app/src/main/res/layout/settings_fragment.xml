@@ -1,13 +1,15 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="alison.fivethingskotlin.Fragments.SettingsFragment"
-    android:id="@+id/settings_container">
+    tools:context="alison.fivethingskotlin.Fragments.DesignsFragment"
+    android:id="@+id/designs_container">
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Settings will be here one dayyyyyy" />
+        android:layout_height="wrap_content"
+        android:id="@+id/list"/>
 
-</FrameLayout>
+</android.support.constraint.ConstraintLayout>

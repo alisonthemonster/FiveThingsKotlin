@@ -7,4 +7,6 @@
     <color name="bluegreen">#3AAFAB</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
+    <color name="disabled_white">#969696</color>
+
 </resources>

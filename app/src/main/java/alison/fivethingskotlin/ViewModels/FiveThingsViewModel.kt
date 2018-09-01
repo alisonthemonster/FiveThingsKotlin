@@ -3,9 +3,9 @@ package alison.fivethingskotlin.ViewModels
 import alison.fivethingskotlin.API.repository.FiveThingsRepository
 import alison.fivethingskotlin.Models.FiveThings
 import alison.fivethingskotlin.Models.Status
-import alison.fivethingskotlin.Util.Resource
-import alison.fivethingskotlin.Util.getNextDate
-import alison.fivethingskotlin.Util.getPreviousDate
+import alison.fivethingskotlin.util.Resource
+import alison.fivethingskotlin.util.getNextDate
+import alison.fivethingskotlin.util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

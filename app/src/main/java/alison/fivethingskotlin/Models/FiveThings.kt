@@ -1,6 +1,6 @@
 package alison.fivethingskotlin.Models
 
-import alison.fivethingskotlin.Util.getFullDateFormat
+import alison.fivethingskotlin.util.getFullDateFormat
 import java.util.*
 
 data class FiveThings(
