@@ -23,6 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:padding="8dp"
+            android:tint="@color/primary_text_color"
             app:srcCompat="@drawable/ic_white_search" />
 
         <EditText
@@ -36,8 +37,8 @@
             android:inputType="text"
             android:padding="12dp"
             android:singleLine="true"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white"
+            android:textColor="@color/primary_text_color"
+            android:textColorHint="@color/secondary_text_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

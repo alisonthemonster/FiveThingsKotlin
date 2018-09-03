@@ -58,7 +58,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
         }
 
-
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_container)

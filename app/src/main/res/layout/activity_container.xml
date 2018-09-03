@@ -21,7 +21,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/toolbar_color"
                 android:minHeight="@dimen/abc_action_bar_default_height_material">
             </android.support.v7.widget.Toolbar>
 
@@ -30,7 +29,8 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:contentDescription="Five Things Logo"
-                android:src="@drawable/five_things_logo" />
+                android:src="@drawable/five_things_logo"
+                android:tint="@color/primary_text_color"/>
         </FrameLayout>
 
         <!-- The main content view where fragments are loaded -->
@@ -38,8 +38,7 @@
             android:id="@+id/content_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:layout_editor_absoluteX="3dp" />
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </LinearLayout>
 

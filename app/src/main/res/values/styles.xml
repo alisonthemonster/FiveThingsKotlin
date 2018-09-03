@@ -9,10 +9,6 @@
         <item name="preferenceTheme">@style/PrefTheme</item>
     </style>
 
-    <style name="AppTheme.Light" >
-        <item name="android:colorBackground">@color/white</item>
-    </style>
-
     <style name="PrefTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
