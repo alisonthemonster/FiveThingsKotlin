@@ -7,7 +7,6 @@
         <item name="colorPrimaryDark">#277976</item>
         <item name="colorAccent">#3aafab</item>
         <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
-        <item name="colorControlNormal">@color/white</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
         <item name="android:background">@color/background_color</item>

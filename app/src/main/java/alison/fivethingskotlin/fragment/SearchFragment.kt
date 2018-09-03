@@ -10,6 +10,7 @@ import alison.fivethingskotlin.util.showErrorDialog
 import alison.fivethingskotlin.viewmodel.SearchViewModel
 import alison.fivethingskotlin.viewmodel.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
+import alison.fivethingskotlin.util.openLogInScreen
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -84,8 +85,7 @@ class SearchFragment : Fragment() {
     private fun getPaginatedResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                showErrorDialog(ex.localizedMessage, context!!, "Log in again", openLogInScreen())
+                showErrorDialog("Negotiation for fresh tokens failed: $ex", context!!, "Log in again", openLogInScreen(context!!))
             } else {
                 idToken?.let {
                     adapter.submitList(null)
@@ -97,13 +97,7 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun openLogInScreen(): DialogInterface.OnClickListener {
-        return DialogInterface.OnClickListener { _, _ ->
-            val intent = Intent(context, PromoActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-        }
-    }
+
 
     // Container Activity must implement this interface
     interface OnDateSelectedListener {

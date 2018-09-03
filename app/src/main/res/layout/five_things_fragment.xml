@@ -55,6 +55,7 @@
                     android:layout_marginStart="20dp"
                     android:background="@drawable/arrow_left"
                     android:onClick="@{() -> viewModel.getPreviousDay(naguDate)}"
+                    android:backgroundTint="@color/primary_text_color"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -83,6 +84,7 @@
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/arrow_right"
                     android:onClick="@{() -> viewModel.getNextDay(naguDate)}"
+                    android:backgroundTint="@color/primary_text_color"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

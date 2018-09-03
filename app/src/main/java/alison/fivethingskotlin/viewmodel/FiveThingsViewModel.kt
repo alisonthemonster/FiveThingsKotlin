@@ -24,7 +24,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                fiveThingsData.postValue(Resource(Status.ERROR, "Log in again", null))
+                fiveThingsData.postValue(Resource(Status.ERROR, "Unable to get fresh tokens", null))
             } else {
                 idToken?.let {
                     val things = fiveThingsRepository.getFiveThings("Bearer $idToken", date, fiveThingsData)
@@ -40,7 +40,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                datesLiveData.postValue(Resource(Status.ERROR, "Log in again", null))
+                datesLiveData.postValue(Resource(Status.ERROR, "Unable to get fresh tokens", null))
             } else {
                 idToken?.let {
                     val dates = fiveThingsRepository.saveFiveThings("Bearer $idToken", fiveThings, fiveThingsData, datesLiveData)
@@ -54,7 +54,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                datesLiveData.postValue(Resource(Status.ERROR, "Log in again", null))
+                datesLiveData.postValue(Resource(Status.ERROR, "Unable to get fresh tokens", null))
             } else {
                 idToken?.let {
                     val dates = fiveThingsRepository.getWrittenDates("Bearer $idToken", datesLiveData)
