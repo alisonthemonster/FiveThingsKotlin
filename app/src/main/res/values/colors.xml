@@ -11,8 +11,8 @@
 
 
 
-    <color name="text_box_color">#fcfcfc</color>
-    <color name="search_result_background">#797878</color>
+    <color name="text_box_color">#ededed</color>
+    <color name="search_result_background">#b9b9b9</color>
 
     <color name="primary_text_color">#000000</color>
     <color name="secondary_text_color">#545454</color>
@@ -20,6 +20,6 @@
     <color name="toolbar_color">#3AAFAB</color>
     <color name="background_color">#ffffff</color>
 
-
+ <!--TODO test login screen theme-->
 
 </resources>
