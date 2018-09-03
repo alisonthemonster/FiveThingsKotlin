@@ -24,6 +24,8 @@
                 android:minHeight="@dimen/abc_action_bar_default_height_material">
             </android.support.v7.widget.Toolbar>
 
+            <!--TODO change hamburger color-->
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
@@ -47,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/white"
         app:menu="@menu/drawer_view"
         app:itemTextColor="@color/primary_text_color"
         app:itemIconTint="@color/primary_text_color"/>
