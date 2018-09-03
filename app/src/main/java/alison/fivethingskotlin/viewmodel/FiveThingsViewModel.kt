@@ -14,7 +14,7 @@ import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
 
-class FiveThingsViewModel(val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
+class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
     private val datesLiveData = MutableLiveData<Resource<List<Date>>>()

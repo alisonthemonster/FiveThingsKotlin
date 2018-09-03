@@ -17,6 +17,8 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
+import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -47,7 +49,18 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        val isLightMode = sharedPref.getBoolean("dark_light_mode", false) //default is dark mode
+
+        if (isLightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
+        }
+
+
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_container)
 
         setUpNavigationDrawer()
@@ -71,6 +84,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         )
 
         NotificationScheduler().setReminderNotification(this)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
