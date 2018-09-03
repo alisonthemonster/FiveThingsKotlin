@@ -8,13 +8,15 @@
     android:background="@drawable/rounded_text_box"
     android:padding="8dp">
 
+    <!--TODO style search results in dark mode-->
+
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="March 2, 2018"
         android:textAlignment="center"
-        android:textColor="@color/bluegreen"
+        android:textColor="@color/secondary_text_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:minLines="2"
-        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
