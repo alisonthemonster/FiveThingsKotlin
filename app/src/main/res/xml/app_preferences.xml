@@ -15,4 +15,11 @@
         android:summary="Change your daily reminder time"
         android:dialogTitle="Daily Reminder Time"
         android:defaultValue="23:00" />
+
+    <SwitchPreference
+        android:key="dark_light_mode"
+        android:title="Activate Light Mode"
+        android:summaryOff="Switch to the light mode"
+        android:summaryOn="Switch to the dark mode"
+        android:defaultValue="false"/>
 </PreferenceScreen>

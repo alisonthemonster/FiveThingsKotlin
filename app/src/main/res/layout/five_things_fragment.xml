@@ -42,7 +42,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loading ?  View.GONE : View.VISIBLE}" >
+            android:visibility="@{loading ?  View.GONE : View.VISIBLE}">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -52,7 +52,6 @@
                     android:id="@+id/previous_day"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginBottom="0dp"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/arrow_left"
                     android:onClick="@{() -> viewModel.getPreviousDay(naguDate)}"
@@ -70,7 +69,6 @@
                     android:layout_weight="1"
                     android:text="@{fiveThings.fullDateString}"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
                     android:textSize="23sp"
                     app:layout_constraintEnd_toStartOf="@+id/next_day"
                     app:layout_constraintStart_toEndOf="@+id/previous_day"
@@ -111,7 +109,6 @@
                         android:layout_marginTop="10dp"
                         android:onClick="@{() -> viewModel.getToday()}"
                         android:text="Today"
-                        android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="@+id/month_year"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -124,7 +121,6 @@
                         android:layout_marginTop="8dp"
                         android:gravity="center_horizontal"
                         android:text="@{month}"
-                        android:textColor="@color/white"
                         android:textSize="20sp"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -137,12 +133,12 @@
                         android:layout_marginBottom="8dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        app:compactCalendarBackgroundColor="@color/bluegreen"
                         app:compactCalendarCurrentDayBackgroundColor="@color/another_grey"
                         app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
-                        app:compactCalendarBackgroundColor="@color/bluegreen"
-                        app:compactCalendarMultiEventIndicatorColor="#fff"
+                        app:compactCalendarMultiEventIndicatorColor="@color/white"
                         app:compactCalendarTargetHeight="250dp"
-                        app:compactCalendarTextColor="#fff"
+                        app:compactCalendarTextColor="@color/white"
                         app:compactCalendarTextSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -168,7 +164,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/one"
-                        android:textColor="@android:color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -184,14 +179,12 @@
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.things[0].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white" />
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/two"
-                        android:textColor="@android:color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -206,15 +199,13 @@
                         android:minLines="4"
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"
-                        android:text="@={fiveThings.things[1].content}"  />
+                        android:text="@={fiveThings.things[1].content}"
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/three"
-                        android:textColor="@android:color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -230,14 +221,12 @@
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.things[2].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/four"
-                        android:textColor="@android:color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -253,14 +242,12 @@
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.things[3].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
+                        android:textSize="15sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/five"
-                        android:textColor="@android:color/white"
                         android:textSize="17sp" />
 
                     <EditText
@@ -276,8 +263,7 @@
                         android:onTextChanged="@{() -> viewModel.onEditText()}"
                         android:padding="4dp"
                         android:text="@={fiveThings.things[4].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
+                        android:textSize="15sp" />
 
                     <Button
                         android:id="@+id/save_button"
@@ -286,8 +272,7 @@
                         android:layout_gravity="right"
                         android:layout_margin="5dp"
                         android:background="@drawable/rounded_button"
-                        android:text="@{fiveThings.savedString}"
-                        android:textColor="@color/white" />
+                        android:text="@{fiveThings.savedString}" />
                 </LinearLayout>
 
             </android.support.constraint.ConstraintLayout>

@@ -12,8 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/grey">
+        android:orientation="vertical">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -22,7 +21,7 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/darker_grey"
+                android:background="@color/toolbar_color"
                 android:minHeight="@dimen/abc_action_bar_default_height_material">
             </android.support.v7.widget.Toolbar>
 
@@ -49,8 +48,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/white"
-        app:menu="@menu/drawer_view" />
+        android:background="@color/white"
+        app:menu="@menu/drawer_view"
+        app:itemTextColor="@color/primary_text_color"
+        app:itemIconTint="@color/primary_text_color"/>
 
 
 </android.support.v4.widget.DrawerLayout>
