@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <SwitchPreference
-        android:key="notif_parent"
-        android:title="Daily Reminder Notifications"
-        android:summaryOff="Daily reminder notifications are off"
-        android:summaryOn="Daily reminder notifications are on"
-        android:defaultValue="true"/>
+    <PreferenceCategory
+        android:title="Notifications">
 
-    <alison.fivethingskotlin.util.TimePreference
-        android:key="pref_time"
-        android:dependency="notif_parent"
-        android:title="Adjust Reminder Notifications"
-        android:summary="Change your daily reminder time"
-        android:dialogTitle="Daily Reminder Time"
-        android:defaultValue="23:00" />
+        <SwitchPreference
+            android:key="notif_parent"
+            android:title="Daily Reminder Notifications"
+            android:summaryOff="Daily reminder notifications are off"
+            android:summaryOn="Daily reminder notifications are on"
+            android:defaultValue="true"/>
 
-    <SwitchPreference
-        android:key="dark_light_mode"
-        android:title="Activate Light Mode"
-        android:summaryOff="Switch to the light mode"
-        android:summaryOn="Switch to the dark mode"
-        android:defaultValue="false"/>
+        <alison.fivethingskotlin.util.TimePreference
+            android:key="pref_time"
+            android:dependency="notif_parent"
+            android:title="Adjust Reminder Notifications"
+            android:summary="Change your daily reminder time"
+            android:dialogTitle="Daily Reminder Time"
+            android:defaultValue="23:00" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Appearance">
+
+        <SwitchPreference
+            android:key="dark_light_mode"
+            android:title="Activate Light Mode"
+            android:summaryOff="Switch to the light mode"
+            android:summaryOn="Switch to the dark mode"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
+
 </PreferenceScreen>
