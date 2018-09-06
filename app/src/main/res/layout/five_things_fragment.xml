@@ -98,6 +98,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_button"
                     android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
+                    tools:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/current_date">
@@ -179,6 +180,7 @@
                     android:padding="4dp"
                     android:text="@={fiveThings.things[0].content}"
                     android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -210,6 +212,7 @@
                     android:padding="4dp"
                     android:text="@={fiveThings.things[1].content}"
                     android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -241,6 +244,7 @@
                     android:padding="4dp"
                     android:text="@={fiveThings.things[2].content}"
                     android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -271,6 +275,7 @@
                     android:padding="4dp"
                     android:text="@={fiveThings.things[3].content}"
                     android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -301,6 +306,7 @@
                     android:padding="4dp"
                     android:text="@={fiveThings.things[4].content}"
                     android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
@@ -310,17 +316,19 @@
                     android:id="@+id/save_button"
                     android:layout_width="150dp"
                     android:layout_height="42dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="32dp"
                     android:layout_marginEnd="20dp"
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_button"
                     android:text="@{fiveThings.savedString}"
                     android:textAlignment="center"
+                    android:textAllCaps="false"
                     android:textColor="@color/white"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five"
-                    tools:text="save" />
+                    tools:text="Save" />
 
             </android.support.constraint.ConstraintLayout>
 

@@ -25,7 +25,7 @@
 
         <SwitchPreference
             android:key="dark_light_mode"
-            android:title="Activate Light Mode"
+            android:title="Toggle Light/Dark Mode"
             android:summaryOff="Switch to the light mode"
             android:summaryOn="Switch to the dark mode"
             android:defaultValue="false"/>
