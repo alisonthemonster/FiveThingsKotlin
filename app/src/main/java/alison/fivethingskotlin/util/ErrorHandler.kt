@@ -37,27 +37,23 @@ fun showErrorDialog(message: String,
 
     val dialogBuilder = AlertDialog.Builder(context)
 
-    //TODO comment back in when not on a plane lol
-//    dialogBuilder.apply {
-//        setTitle("Oh no! Something went wrong!") //TODO move to resource
-//        if (message == "Unable to get fresh tokens") {
-//            setNegativeButton("Log in again", openLogInScreen(context))
-//        } else {
-//            setNegativeButton(buttonText, buttonAction)
-//        }
-//        setMessage(message)
-//        show()
-//    }
-
-    dialogBuilder
-            .setTitle("Oh no! Something went wrong!") //TODO move to resource
-            .setNegativeButton(buttonText, buttonAction)
-            .setMessage(message)
-            .show()
+    dialogBuilder.apply {
+        setTitle("Oh no! Something went wrong!") //TODO move to resource
+        if (message.contains("Log in failed")) {
+            setNegativeButton("Log in again", openLogInScreen(context))
+        } else {
+            setNegativeButton(buttonText, buttonAction)
+        }
+        setMessage(message)
+        setCancelable(false)
+        show()
+    }
 }
 
 fun openLogInScreen(context: Context): DialogInterface.OnClickListener {
     return DialogInterface.OnClickListener { _, _ ->
+        clearAuthState(context) //log user out
+
         val intent = Intent(context, PromoActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         context.startActivity(intent)

@@ -85,7 +85,7 @@ class SearchFragment : Fragment() {
     private fun getPaginatedResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                showErrorDialog("Negotiation for fresh tokens failed: $ex", context!!, "Log in again", openLogInScreen(context!!))
+                showErrorDialog("Unable to log in: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
             } else {
                 idToken?.let {
                     adapter.submitList(null)
