@@ -8,9 +8,7 @@
         <item name="colorAccent">#3aafab</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
-        <!--<item name="android:background">@color/background_color</item>-->
-        <item name="android:colorControlNormal">@android:color/holo_red_dark</item>
-
+        <item name="colorControlNormal">@color/primary_text_color</item>
     </style>
 
 </resources>

@@ -19,7 +19,8 @@
 
     <color name="toolbar_color">#3AAFAB</color>
     <color name="background_color">#ffffff</color>
+    <color name="foreground_material_dark_1">#b72424</color>
 
- <!--TODO test login screen theme-->
+    <!--TODO test login screen theme-->
 
 </resources>

@@ -6,7 +6,7 @@
         <item name="colorAccent">#3aafab</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
-        <item name="android:colorControlNormal">@color/primary_text_color</item>
+        <item name="colorControlNormal">@color/primary_text_color</item>
     </style>
 
     <!--TODO detail text for dialogs needs fixed-->

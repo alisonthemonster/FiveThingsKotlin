@@ -30,7 +30,6 @@
                 android:layout_width="200dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
-                android:background="@color/toolbar_color"
                 android:tint="@color/primary_text_color"
                 android:contentDescription="Five Things Logo"
                 android:src="@drawable/five_things_logo"/>
