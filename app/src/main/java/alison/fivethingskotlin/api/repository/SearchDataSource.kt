@@ -84,7 +84,7 @@ class SearchDataSource(private val service: FiveThingsService,
                 retry = {
                     loadInitial(params, callback)
                 }
-                networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
+                networkState.postValue(NetworkState.error("Error getting search results"))
             }
         })
     }
@@ -123,7 +123,7 @@ class SearchDataSource(private val service: FiveThingsService,
                 retry = {
                     loadAfter(params, callback)
                 }
-                networkState.postValue(NetworkState.error(t.message ?: "unknown err"))
+                networkState.postValue(NetworkState.error("Error getting search results"))
             }
         })
     }

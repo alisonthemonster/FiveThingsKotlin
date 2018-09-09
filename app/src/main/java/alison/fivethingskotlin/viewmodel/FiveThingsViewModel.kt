@@ -3,7 +3,7 @@ package alison.fivethingskotlin.viewmodel
 import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Status
-import alison.fivethingskotlin.util.Resource
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.util.getNextDate
 import alison.fivethingskotlin.util.getPreviousDate
 import android.arch.lifecycle.LiveData

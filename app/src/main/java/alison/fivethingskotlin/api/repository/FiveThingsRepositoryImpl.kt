@@ -2,6 +2,7 @@ package alison.fivethingskotlin.api.repository
 
 import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.model.FiveThings
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
@@ -26,11 +27,11 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                 if (response.isSuccessful) {
                     if (!response.body()!!.isEmpty()) {
                         //if there is data from DB then we know its inDatabase
-                        fiveThingsData.value =  Resource(Status.SUCCESS, "",
-                                FiveThings(date, response.body()!!,  false, true))
+                        fiveThingsData.value = Resource(Status.SUCCESS, "",
+                                FiveThings(date, response.body()!!, false, true))
                     } else {
-                        fiveThingsData.value =  Resource(Status.SUCCESS, "",
-                                FiveThings(date, response.body()!!,  false, false))
+                        fiveThingsData.value = Resource(Status.SUCCESS, "",
+                                FiveThings(date, response.body()!!, false, false))
                     }
                 } else {
                     if (response.code() == 404) {
