@@ -29,6 +29,21 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
+    companion object {
+
+        const val DATE = "date_key"
+
+        fun newInstance(date: String): FiveThingsFragment {
+            val fragment = FiveThingsFragment()
+
+            val bundle = Bundle()
+            bundle.putString(DATE, date)
+            fragment.arguments = bundle
+
+            return fragment
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
@@ -44,7 +59,7 @@ class FiveThingsFragment : Fragment() {
 
             binding.viewModel = viewModel
 
-            val passedInDate = arguments?.getString("dateeee") //TODO move to constant
+            val passedInDate = arguments?.getString(DATE)
 
             currentDate = if (passedInDate != null)
                 getDateFromFullDateFormat(passedInDate) else Date()
@@ -63,6 +78,7 @@ class FiveThingsFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
+                currentDate = dateClicked
                 viewModel.changeDate(dateClicked)
                 binding.calendarVisible = false
             }

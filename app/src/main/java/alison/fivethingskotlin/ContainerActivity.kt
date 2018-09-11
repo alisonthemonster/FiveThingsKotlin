@@ -35,10 +35,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     private lateinit var drawerLayout: DrawerLayout
 
     override fun onDateSelected(date: String) {
-        val fragment = FiveThingsFragment()
-        val bundle = Bundle()
-        bundle.putString("dateeee", date)
-        fragment.arguments = bundle
+        val fragment = FiveThingsFragment.newInstance(date)
 
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
