@@ -16,7 +16,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/feature_coming_soon"
-        android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

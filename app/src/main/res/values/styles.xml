@@ -4,19 +4,20 @@
         <item name="colorPrimary">#3AAFAB</item>
         <item name="colorPrimaryDark">#277976</item>
         <item name="colorAccent">#3aafab</item>
-        <item name="toolbarStyle">@style/Widget.AppCompat.Toolbar</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="android:colorBackground">@color/grey</item>
+        <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
+        <item name="colorControlNormal">@color/primary_text_color</item>
     </style>
 
+    <!--TODO detail text for dialogs needs fixed-->
+
     <style name="PrefTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
-        <item name="android:textColor">@color/white_text</item>
-        <item name="android:textColorSecondary">@color/white_text</item>
+        <item name="android:textColor">@color/primary_text_color</item>
+        <item name="android:textColorSecondary">@color/secondary_text_color</item>
     </style>
 
     <style name="Text">
-        <item name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/primary_text_color</item>
     </style>
 
     <style name="Text.Loading">

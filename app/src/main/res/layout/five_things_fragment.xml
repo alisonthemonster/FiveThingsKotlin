@@ -42,7 +42,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loading ?  View.GONE : View.VISIBLE}" >
+            android:visibility="@{loading ?  View.GONE : View.VISIBLE}">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -52,9 +52,9 @@
                     android:id="@+id/previous_day"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginBottom="0dp"
                     android:layout_marginStart="20dp"
                     android:background="@drawable/arrow_left"
+                    android:backgroundTint="@color/primary_text_color"
                     android:onClick="@{() -> viewModel.getPreviousDay(naguDate)}"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintStart_toStartOf="parent"
@@ -70,7 +70,6 @@
                     android:layout_weight="1"
                     android:text="@{fiveThings.fullDateString}"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
                     android:textSize="23sp"
                     app:layout_constraintEnd_toStartOf="@+id/next_day"
                     app:layout_constraintStart_toEndOf="@+id/previous_day"
@@ -84,6 +83,7 @@
                     android:layout_marginBottom="0dp"
                     android:layout_marginEnd="20dp"
                     android:background="@drawable/arrow_right"
+                    android:backgroundTint="@color/primary_text_color"
                     android:onClick="@{() -> viewModel.getNextDay(naguDate)}"
                     app:layout_constraintBottom_toBottomOf="@+id/current_date"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -98,6 +98,7 @@
                     android:layout_marginTop="8dp"
                     android:background="@drawable/rounded_button"
                     android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
+                    tools:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/current_date">
@@ -106,7 +107,6 @@
                         android:id="@+id/todayButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="0dp"
                         android:layout_marginEnd="20dp"
                         android:layout_marginTop="10dp"
                         android:onClick="@{() -> viewModel.getToday()}"
@@ -135,14 +135,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
+                        app:compactCalendarBackgroundColor="@color/bluegreen"
                         app:compactCalendarCurrentDayBackgroundColor="@color/another_grey"
                         app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
-                        app:compactCalendarBackgroundColor="@color/bluegreen"
-                        app:compactCalendarMultiEventIndicatorColor="#fff"
+                        app:compactCalendarMultiEventIndicatorColor="@color/white"
                         app:compactCalendarTargetHeight="250dp"
-                        app:compactCalendarTextColor="#fff"
+                        app:compactCalendarTextColor="@color/white"
                         app:compactCalendarTextSize="12sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -151,144 +153,182 @@
                         app:layout_constraintTop_toBottomOf="@+id/month_year" />
                 </android.support.constraint.ConstraintLayout>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/one_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/one"
+                    android:textSize="17sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/calendar" />
+
+                <EditText
+                    android:id="@+id/one"
+                    fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="vertical"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="5dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rounded_text_box"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="4"
+                    android:onTextChanged="@{() -> viewModel.onEditText()}"
+                    android:padding="4dp"
+                    android:text="@={fiveThings.things[0].content}"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/calendar">
+                    app:layout_constraintTop_toBottomOf="@+id/one_label" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/one"
-                        android:textColor="@android:color/white"
-                        android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/two_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/two"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/one" />
 
-                    <EditText
-                        android:id="@+id/one"
-                        fontPath="fonts/Larsseit.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rounded_text_box"
-                        android:gravity="top"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:minLines="4"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:padding="4dp"
-                        android:text="@={fiveThings.things[0].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white" />
+                <EditText
+                    android:id="@+id/two"
+                    fontPath="fonts/Larsseit.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rounded_text_box"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="4"
+                    android:onTextChanged="@{() -> viewModel.onEditText()}"
+                    android:padding="4dp"
+                    android:text="@={fiveThings.things[1].content}"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/two_label" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/two"
-                        android:textColor="@android:color/white"
-                        android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/three_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/three"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/two" />
 
-                    <EditText
-                        android:id="@+id/two"
-                        fontPath="fonts/Larsseit.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rounded_text_box"
-                        android:gravity="top"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:minLines="4"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:padding="4dp"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"
-                        android:text="@={fiveThings.things[1].content}"  />
+                <EditText
+                    android:id="@+id/three"
+                    fontPath="fonts/Larsseit.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rounded_text_box"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="4"
+                    android:onTextChanged="@{() -> viewModel.onEditText()}"
+                    android:padding="4dp"
+                    android:text="@={fiveThings.things[2].content}"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/three_label" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/three"
-                        android:textColor="@android:color/white"
-                        android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/four_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/four"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/three" />
 
-                    <EditText
-                        android:id="@+id/three"
-                        fontPath="fonts/Larsseit.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rounded_text_box"
-                        android:gravity="top"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:minLines="4"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:padding="4dp"
-                        android:text="@={fiveThings.things[2].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/four"
+                    fontPath="fonts/Larsseit.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rounded_text_box"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="4"
+                    android:onTextChanged="@{() -> viewModel.onEditText()}"
+                    android:padding="4dp"
+                    android:text="@={fiveThings.things[3].content}"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/four_label" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/four"
-                        android:textColor="@android:color/white"
-                        android:textSize="17sp" />
+                <TextView
+                    android:id="@+id/five_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:text="@string/five"
+                    android:textSize="17sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/four" />
 
-                    <EditText
-                        android:id="@+id/four"
-                        fontPath="fonts/Larsseit.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rounded_text_box"
-                        android:gravity="top"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:minLines="4"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:padding="4dp"
-                        android:text="@={fiveThings.things[3].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
+                <EditText
+                    android:id="@+id/five"
+                    fontPath="fonts/Larsseit.ttf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginStart="20dp"
+                    android:background="@drawable/rounded_text_box"
+                    android:gravity="top"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:minLines="4"
+                    android:onTextChanged="@{() -> viewModel.onEditText()}"
+                    android:padding="4dp"
+                    android:text="@={fiveThings.things[4].content}"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_text_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/five_label" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/five"
-                        android:textColor="@android:color/white"
-                        android:textSize="17sp" />
 
-                    <EditText
-                        android:id="@+id/five"
-                        fontPath="fonts/Larsseit.ttf"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/rounded_text_box"
-                        android:gravity="top"
-                        android:inputType="textCapSentences|textMultiLine"
-                        android:minLines="4"
-                        android:onTextChanged="@{() -> viewModel.onEditText()}"
-                        android:padding="4dp"
-                        android:text="@={fiveThings.things[4].content}"
-                        android:textSize="15sp"
-                        android:textColor="@color/white"/>
-
-                    <Button
-                        android:id="@+id/save_button"
-                        android:layout_width="70dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="right"
-                        android:layout_margin="5dp"
-                        android:background="@drawable/rounded_button"
-                        android:text="@{fiveThings.savedString}"
-                        android:textColor="@color/white" />
-                </LinearLayout>
+                <Button
+                    android:id="@+id/save_button"
+                    android:layout_width="150dp"
+                    android:layout_height="42dp"
+                    android:layout_marginBottom="32dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/rounded_button"
+                    android:text="@{fiveThings.savedString}"
+                    android:textAlignment="center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/five"
+                    tools:text="Save" />
 
             </android.support.constraint.ConstraintLayout>
 

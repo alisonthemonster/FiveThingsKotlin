@@ -1,6 +1,4 @@
-package alison.fivethingskotlin.util
-
-import alison.fivethingskotlin.model.Status
+package alison.fivethingskotlin.model
 
 data class Resource<out T>(
         val status: Status,

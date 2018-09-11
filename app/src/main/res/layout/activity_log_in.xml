@@ -51,8 +51,7 @@
                     android:id="@+id/email_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:textColor="@color/white" />
+                    android:inputType="textEmailAddress" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,8 +70,7 @@
                     android:id="@+id/password_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
-                    android:textColor="@color/white" />
+                    android:imeOptions="actionGo" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -87,7 +85,6 @@
                 android:background="@drawable/rounded_button"
                 android:padding="6dp"
                 android:text="Log In"
-                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/input_password"
@@ -103,7 +100,6 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:text="Create an Account"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />

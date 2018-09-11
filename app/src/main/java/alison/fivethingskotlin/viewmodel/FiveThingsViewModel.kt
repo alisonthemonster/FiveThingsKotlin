@@ -3,7 +3,7 @@ package alison.fivethingskotlin.viewmodel
 import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Status
-import alison.fivethingskotlin.util.Resource
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.util.getNextDate
 import alison.fivethingskotlin.util.getPreviousDate
 import android.arch.lifecycle.LiveData
@@ -14,7 +14,7 @@ import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
 
-class FiveThingsViewModel(val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
+class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
     private val datesLiveData = MutableLiveData<Resource<List<Date>>>()
@@ -24,7 +24,7 @@ class FiveThingsViewModel(val fiveThingsRepository: FiveThingsRepository, privat
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                fiveThingsData.postValue(Resource(Status.ERROR, "Log in again", null))
+                fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
                     val things = fiveThingsRepository.getFiveThings("Bearer $idToken", date, fiveThingsData)
@@ -40,7 +40,7 @@ class FiveThingsViewModel(val fiveThingsRepository: FiveThingsRepository, privat
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
-                datesLiveData.postValue(Resource(Status.ERROR, "Log in again", null))
+                datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
                     val dates = fiveThingsRepository.saveFiveThings("Bearer $idToken", fiveThings, fiveThingsData, datesLiveData)
@@ -54,7 +54,7 @@ class FiveThingsViewModel(val fiveThingsRepository: FiveThingsRepository, privat
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                datesLiveData.postValue(Resource(Status.ERROR, "Log in again", null))
+                datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
                     val dates = fiveThingsRepository.getWrittenDates("Bearer $idToken", datesLiveData)

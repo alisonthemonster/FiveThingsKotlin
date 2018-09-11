@@ -7,6 +7,7 @@ import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
+import alison.fivethingskotlin.model.Resource
 import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

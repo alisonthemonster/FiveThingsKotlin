@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="text_box_color">#484747</color>
+    <color name="search_result_background">#282828</color>
+
+    <color name="primary_text_color">#ffffff</color>
+    <color name="secondary_text_color">#969696</color>
+
+    <color name="toolbar_color">#282828</color>
+
+    <color name="background_color">#333333</color>
+
+
+</resources>

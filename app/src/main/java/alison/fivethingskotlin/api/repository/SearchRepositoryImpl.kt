@@ -4,7 +4,7 @@ import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Status
-import alison.fivethingskotlin.util.Resource
+import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations

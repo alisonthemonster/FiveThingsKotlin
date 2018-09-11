@@ -2,5 +2,5 @@
     <corners
         android:radius="3dp" />
     <solid
-        android:color="@color/darker_grey" />
+        android:color="@color/search_result_background" />
 </shape>
