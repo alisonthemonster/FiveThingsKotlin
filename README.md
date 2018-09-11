@@ -4,7 +4,8 @@
 An app to track your quickly track, review, and reflect on your days.
   - Write about your day in five quick notes
   - Search through your past notes
-  - Notifications and reminders [IN PROGRESS]
+  - Notifications reminders
+  - Light and dark modes
   - Chart your happiness over time [IN PROGRESS]
   - Find your happiest/angriest/saddest days [IN PROGRESS]
   - Turn your digital entries into physical books with a design you can fully customize [IN PROGRESS]
