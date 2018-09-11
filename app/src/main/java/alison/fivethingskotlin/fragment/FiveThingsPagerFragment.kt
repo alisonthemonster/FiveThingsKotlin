@@ -10,16 +10,16 @@ import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.designs_fragment.*
 
-
-class DesignsFragment : Fragment() {
+//swaps in and out different five things fragments
+class FiveThingsPagerFragment : Fragment() {
 
     companion object {
 
         const val INDEX = "index_key"
         var index: Int? = null
 
-        fun newInstance(itemIndex: Int): DesignsFragment {
-            val fragment = DesignsFragment()
+        fun newInstance(itemIndex: Int): FiveThingsPagerFragment {
+            val fragment = FiveThingsPagerFragment()
 
             val bundle = Bundle()
             bundle.putInt(INDEX, itemIndex)

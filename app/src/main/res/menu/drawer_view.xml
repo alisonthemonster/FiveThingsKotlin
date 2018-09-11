@@ -14,14 +14,9 @@
             android:icon="@drawable/ic_analytics"
             android:title="@string/analytics" />
         <item
-            android:id="@+id/templates_item"
-            android:icon="@drawable/ic_book"
-            android:title="@string/print_your_five_things" />
-        <item
             android:id="@+id/settings_item"
             android:icon="@drawable/ic_settings"
             android:title="@string/settings" />
-
         <item
             android:id="@+id/logout_item"
             android:icon="@drawable/ic_signout"

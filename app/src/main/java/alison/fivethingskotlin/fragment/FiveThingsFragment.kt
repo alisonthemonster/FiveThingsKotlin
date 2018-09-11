@@ -177,6 +177,8 @@ class FiveThingsFragment : Fragment() {
         val maxYear = getYear(Collections.max(dates))
         (minYear..maxYear).mapTo(yearList) { it.toString() }
 
+        //TODO fix dialog in dark mode
+
         if (yearList.size > 1) {
             //only show dialog if users have multiple years to choose from
             month_year.setOnClickListener {

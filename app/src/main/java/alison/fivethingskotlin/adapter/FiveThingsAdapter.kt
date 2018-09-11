@@ -12,7 +12,7 @@ class FiveThingsAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAd
 
     companion object {
         const val INFINITY = 1000
-        const val STARTING_DAY = 500
+        const val STARTING_DAY = INFINITY/2
     }
 
     override fun getCount(): Int {

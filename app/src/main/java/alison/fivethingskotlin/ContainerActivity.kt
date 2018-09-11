@@ -41,10 +41,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     override fun onDateSelected(selectedDate: Date) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
-
-
-        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY //TODO THIS FAILS IF SELECTED DATE IS FARTHER THAN 25 AWAY FROM TODAY
-        val fragment = DesignsFragment.newInstance(newDateIndex)
+        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
+        val fragment = FiveThingsPagerFragment.newInstance(newDateIndex)
 
         //TODO this approach loses the backstack for the search results
 
@@ -76,7 +74,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out)
-            fragmentTransaction.replace(R.id.content_frame, DesignsFragment())
+            fragmentTransaction.replace(R.id.content_frame, FiveThingsPagerFragment())
             fragmentTransaction.commitAllowingStateLoss()
         }
 
@@ -140,11 +138,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 }
                 R.id.analytics_item -> {
                     loadFragment(AnalyticsFragment())
-                    true
-                }
-
-                R.id.templates_item -> {
-                    loadFragment(DesignsFragment())
                     true
                 }
                 R.id.search_item -> {
