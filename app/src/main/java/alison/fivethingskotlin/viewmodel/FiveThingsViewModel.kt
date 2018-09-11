@@ -76,21 +76,4 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         fiveThingsData.value = fiveThings
     }
 
-    fun getToday(): LiveData<Resource<FiveThings>> {
-        return getFiveThings(Date())
-    }
-
-    fun getPreviousDay(date: Date): LiveData<Resource<FiveThings>> {
-        val prevDate = getPreviousDate(date)
-        return getFiveThings(prevDate)
-    }
-
-    fun getNextDay(date: Date): LiveData<Resource<FiveThings>>  {
-        val nextDate = getNextDate(date)
-        return getFiveThings(nextDate)
-    }
-
-    fun changeDate(date: Date): LiveData<Resource<FiveThings>> {
-        return getFiveThings(date)
-    }
 }

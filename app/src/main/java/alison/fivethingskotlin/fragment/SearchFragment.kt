@@ -91,8 +91,6 @@ class SearchFragment : Fragment() {
                 idToken?.let {
                     adapter.submitList(null)
                     viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
-
-
                 }
             }
         }
@@ -102,6 +100,6 @@ class SearchFragment : Fragment() {
 
     // Container Activity must implement this interface
     interface OnDateSelectedListener {
-        fun onDateSelected(currentDate: Date, selectedDate: Date)
+        fun onDateSelected(selectedDate: Date)
     }
 }

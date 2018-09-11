@@ -1,5 +1,6 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.adapter.FiveThingsAdapter
 import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
@@ -37,12 +38,12 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private lateinit var drawerLayout: DrawerLayout
 
-    override fun onDateSelected(currentDate: Date, selectedDate: Date) {
+    override fun onDateSelected(selectedDate: Date) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
 
 
-        val newDateIndex = daysBetween + 25
+        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY //TODO THIS FAILS IF SELECTED DATE IS FARTHER THAN 25 AWAY FROM TODAY
         val fragment = DesignsFragment.newInstance(newDateIndex)
 
         //TODO this approach loses the backstack for the search results

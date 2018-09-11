@@ -2,10 +2,7 @@ package alison.fivethingskotlin.fragment
 
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.adapter.FiveThingsAdapter
-import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
-import android.arch.lifecycle.ViewModelProviders
+import alison.fivethingskotlin.adapter.FiveThingsAdapter.Companion.STARTING_DAY
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -47,7 +44,7 @@ class DesignsFragment : Fragment() {
         if (index != null) {
             pager.currentItem = index as Int
         } else {
-            pager.currentItem = 25 //uhoh
+            pager.currentItem = STARTING_DAY
         }
     }
 }

@@ -35,6 +35,8 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
+    //TODO make enter button in keyboard change to be next button and then finally save
+
     companion object {
 
         const val DATE = "date_key"
@@ -84,11 +86,9 @@ class FiveThingsFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
-//                currentDate = dateClicked
-//                viewModel.changeDate(dateClicked)
-//                binding.calendarVisible = false
+                binding.loading = true
                 val activity = context as ContainerActivity
-                activity.onDateSelected(currentDate, dateClicked)
+                activity.onDateSelected(dateClicked)
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -112,6 +112,12 @@ class FiveThingsFragment : Fragment() {
                 }
 
             })
+        }
+
+        todayButton.setOnClickListener {
+            binding.loading = true
+            val activity = context as ContainerActivity
+            activity.onDateSelected(Date())
         }
     }
 

@@ -94,7 +94,7 @@ class PagedResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         itemView.date.text = searchResult.date
         itemView.setOnClickListener {
             val activity = it.context as ContainerActivity
-            activity.onDateSelected(Date(), getDateFromFullDateFormat(searchResult.date))
+            activity.onDateSelected(getDateFromFullDateFormat(searchResult.date))
         }
     }
 
