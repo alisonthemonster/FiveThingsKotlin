@@ -36,8 +36,6 @@ val closeButtonListener: DialogInterface.OnClickListener = DialogInterface.OnCli
     dialog.cancel()
 }
 
-//TODO make dialog not dismissable by clicking outside it
-
 fun showErrorDialog(message: String,
                     context: Context,
                     buttonText: String = "Ok",

@@ -57,9 +57,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
                 }
                 activity?.recreate()
-//                val intent = Intent(activity, ContainerActivity::class.java)
-//                startActivity(intent)
-//                activity?.finish()
             }
         }
 
