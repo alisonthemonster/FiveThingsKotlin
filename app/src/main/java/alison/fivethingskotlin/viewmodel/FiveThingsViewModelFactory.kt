@@ -4,6 +4,7 @@ package alison.fivethingskotlin.viewmodel
 import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
+import android.support.v4.view.ViewPager
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 

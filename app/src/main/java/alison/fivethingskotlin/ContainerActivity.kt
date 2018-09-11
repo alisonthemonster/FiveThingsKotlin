@@ -23,7 +23,10 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
+import org.joda.time.Days
+import org.joda.time.LocalDate
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import java.util.*
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
@@ -34,13 +37,20 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private lateinit var drawerLayout: DrawerLayout
 
-    override fun onDateSelected(date: String) {
-        val fragment = FiveThingsFragment.newInstance(date)
+    override fun onDateSelected(currentDate: Date, selectedDate: Date) {
+
+        val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
+
+
+        val newDateIndex = daysBetween + 25
+        val fragment = DesignsFragment.newInstance(newDateIndex)
+
+        //TODO this approach loses the backstack for the search results
 
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack("search results")
+//                .addToBackStack("search results")
                 .commitAllowingStateLoss()
         navigation_view.setCheckedItem(R.id.five_things_item)
     }
@@ -65,7 +75,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out)
-            fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
+            fragmentTransaction.replace(R.id.content_frame, DesignsFragment())
             fragmentTransaction.commitAllowingStateLoss()
         }
 

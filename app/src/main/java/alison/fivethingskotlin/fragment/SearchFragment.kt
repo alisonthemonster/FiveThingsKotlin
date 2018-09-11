@@ -29,6 +29,7 @@ import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
+import java.util.*
 import java.util.concurrent.Executors
 
 
@@ -101,6 +102,6 @@ class SearchFragment : Fragment() {
 
     // Container Activity must implement this interface
     interface OnDateSelectedListener {
-        fun onDateSelected(date: String)
+        fun onDateSelected(currentDate: Date, selectedDate: Date)
     }
 }

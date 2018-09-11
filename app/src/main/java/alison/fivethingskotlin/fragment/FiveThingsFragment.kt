@@ -1,5 +1,7 @@
 package alison.fivethingskotlin.fragment
 
+import alison.fivethingskotlin.ContainerActivity
+import alison.fivethingskotlin.R
 import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Status
@@ -13,12 +15,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import kotlinx.android.synthetic.main.designs_fragment.*
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
+import org.joda.time.Days
+import org.joda.time.LocalDate
 import java.util.*
 
 
@@ -78,9 +84,11 @@ class FiveThingsFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
-                currentDate = dateClicked
-                viewModel.changeDate(dateClicked)
-                binding.calendarVisible = false
+//                currentDate = dateClicked
+//                viewModel.changeDate(dateClicked)
+//                binding.calendarVisible = false
+                val activity = context as ContainerActivity
+                activity.onDateSelected(currentDate, dateClicked)
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
