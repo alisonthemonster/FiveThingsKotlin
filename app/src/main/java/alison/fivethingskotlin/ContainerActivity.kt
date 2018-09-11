@@ -38,19 +38,18 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private lateinit var drawerLayout: DrawerLayout
 
-    override fun onDateSelected(selectedDate: Date) {
+    override fun onDateSelected(selectedDate: Date, isASearchResult: Boolean) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
         val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
         val fragment = FiveThingsPagerFragment.newInstance(newDateIndex)
 
-        //TODO this approach loses the backstack for the search results
-
-        supportFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .replace(R.id.content_frame, fragment)
-//                .addToBackStack("search results")
-                .commitAllowingStateLoss()
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            replace(R.id.content_frame, fragment)
+            if (isASearchResult) addToBackStack("search results")
+            commitAllowingStateLoss()
+        }
         navigation_view.setCheckedItem(R.id.five_things_item)
     }
 

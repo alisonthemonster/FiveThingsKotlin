@@ -100,6 +100,6 @@ class SearchFragment : Fragment() {
 
     // Container Activity must implement this interface
     interface OnDateSelectedListener {
-        fun onDateSelected(selectedDate: Date)
+        fun onDateSelected(selectedDate: Date, isASearchResult: Boolean)
     }
 }

@@ -88,7 +88,7 @@ class FiveThingsFragment : Fragment() {
             override fun onDayClick(dateClicked: Date) {
                 binding.loading = true
                 val activity = context as ContainerActivity
-                activity.onDateSelected(dateClicked)
+                activity.onDateSelected(dateClicked, false)
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -117,7 +117,7 @@ class FiveThingsFragment : Fragment() {
         todayButton.setOnClickListener {
             binding.loading = true
             val activity = context as ContainerActivity
-            activity.onDateSelected(Date())
+            activity.onDateSelected(Date(), false)
         }
     }
 
