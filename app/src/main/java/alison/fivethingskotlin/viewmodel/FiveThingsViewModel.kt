@@ -2,8 +2,8 @@ package alison.fivethingskotlin.viewmodel
 
 import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import alison.fivethingskotlin.model.FiveThings
-import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.model.Resource
+import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.util.getNextDate
 import alison.fivethingskotlin.util.getPreviousDate
 import android.arch.lifecycle.LiveData
@@ -13,6 +13,7 @@ import android.util.Log
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
+
 
 class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
 
@@ -75,21 +76,4 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         fiveThingsData.value = fiveThings
     }
 
-    fun getToday(): LiveData<Resource<FiveThings>> {
-        return getFiveThings(Date())
-    }
-
-    fun getPreviousDay(date: Date): LiveData<Resource<FiveThings>> {
-        val prevDate = getPreviousDate(date)
-        return getFiveThings(prevDate)
-    }
-
-    fun getNextDay(date: Date): LiveData<Resource<FiveThings>>  {
-        val nextDate = getNextDate(date)
-        return getFiveThings(nextDate)
-    }
-
-    fun changeDate(date: Date): LiveData<Resource<FiveThings>> {
-        return getFiveThings(date)
-    }
 }

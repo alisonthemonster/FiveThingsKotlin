@@ -1,5 +1,7 @@
 package alison.fivethingskotlin.fragment
 
+import alison.fivethingskotlin.ContainerActivity
+import alison.fivethingskotlin.R
 import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Status
@@ -13,12 +15,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import kotlinx.android.synthetic.main.designs_fragment.*
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
+import org.joda.time.Days
+import org.joda.time.LocalDate
 import java.util.*
 
 
@@ -28,6 +34,23 @@ class FiveThingsFragment : Fragment() {
     private lateinit var binding: FiveThingsFragmentBinding
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
+
+    //TODO make enter button in keyboard change to be next button and then finally save
+
+    companion object {
+
+        const val DATE = "date_key"
+
+        fun newInstance(date: String): FiveThingsFragment {
+            val fragment = FiveThingsFragment()
+
+            val bundle = Bundle()
+            bundle.putString(DATE, date)
+            fragment.arguments = bundle
+
+            return fragment
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
@@ -44,7 +67,7 @@ class FiveThingsFragment : Fragment() {
 
             binding.viewModel = viewModel
 
-            val passedInDate = arguments?.getString("dateeee") //TODO move to constant
+            val passedInDate = arguments?.getString(DATE)
 
             currentDate = if (passedInDate != null)
                 getDateFromFullDateFormat(passedInDate) else Date()
@@ -63,8 +86,9 @@ class FiveThingsFragment : Fragment() {
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
-                viewModel.changeDate(dateClicked)
-                binding.calendarVisible = false
+                binding.loading = true
+                val activity = context as ContainerActivity
+                activity.onDateSelected(dateClicked, false)
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -88,6 +112,12 @@ class FiveThingsFragment : Fragment() {
                 }
 
             })
+        }
+
+        todayButton.setOnClickListener {
+            binding.loading = true
+            val activity = context as ContainerActivity
+            activity.onDateSelected(Date(), false)
         }
     }
 
@@ -146,6 +176,8 @@ class FiveThingsFragment : Fragment() {
         val minYear = getYear(Collections.min(dates))
         val maxYear = getYear(Collections.max(dates))
         (minYear..maxYear).mapTo(yearList) { it.toString() }
+
+        //TODO fix dialog in dark mode
 
         if (yearList.size > 1) {
             //only show dialog if users have multiple years to choose from

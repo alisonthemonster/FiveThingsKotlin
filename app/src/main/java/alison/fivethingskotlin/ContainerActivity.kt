@@ -1,5 +1,6 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.adapter.FiveThingsAdapter
 import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
@@ -23,7 +24,10 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import kotlinx.android.synthetic.main.activity_container.*
+import org.joda.time.Days
+import org.joda.time.LocalDate
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import java.util.*
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
@@ -34,17 +38,18 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private lateinit var drawerLayout: DrawerLayout
 
-    override fun onDateSelected(date: String) {
-        val fragment = FiveThingsFragment()
-        val bundle = Bundle()
-        bundle.putString("dateeee", date)
-        fragment.arguments = bundle
+    override fun onDateSelected(selectedDate: Date, isASearchResult: Boolean) {
 
-        supportFragmentManager.beginTransaction()
-                .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
-                .replace(R.id.content_frame, fragment)
-                .addToBackStack("search results")
-                .commitAllowingStateLoss()
+        val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
+        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
+        val fragment = FiveThingsPagerFragment.newInstance(newDateIndex)
+
+        supportFragmentManager.beginTransaction().apply {
+            setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+            replace(R.id.content_frame, fragment)
+            if (isASearchResult) addToBackStack("search results")
+            commitAllowingStateLoss()
+        }
         navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
@@ -68,7 +73,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             val fragmentTransaction = supportFragmentManager.beginTransaction()
             fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                     android.R.anim.fade_out)
-            fragmentTransaction.replace(R.id.content_frame, FiveThingsFragment())
+            fragmentTransaction.replace(R.id.content_frame, FiveThingsPagerFragment())
             fragmentTransaction.commitAllowingStateLoss()
         }
 
@@ -132,11 +137,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 }
                 R.id.analytics_item -> {
                     loadFragment(AnalyticsFragment())
-                    true
-                }
-
-                R.id.templates_item -> {
-                    loadFragment(DesignsFragment())
                     true
                 }
                 R.id.search_item -> {

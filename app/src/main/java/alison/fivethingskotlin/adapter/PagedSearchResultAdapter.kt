@@ -4,6 +4,7 @@ import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.model.NetworkState
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.util.getDateFromFullDateFormat
 import android.arch.paging.PagedListAdapter
 import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
@@ -11,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_result.view.*
+import java.util.*
 
 class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<SearchResult, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
@@ -92,7 +94,7 @@ class PagedResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         itemView.date.text = searchResult.date
         itemView.setOnClickListener {
             val activity = it.context as ContainerActivity
-            activity.onDateSelected(searchResult.date)
+            activity.onDateSelected(getDateFromFullDateFormat(searchResult.date), true)
         }
     }
 
