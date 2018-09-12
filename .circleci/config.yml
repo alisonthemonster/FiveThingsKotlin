@@ -24,6 +24,9 @@ jobs:
           name: Gradle clean
           command: ./gradlew clean
       - run:
+          name: Bundle install
+          command: bundle install
+      - run:
           name: Run Tests
           command: bundle exec fastlane android test
       - store_artifacts:
