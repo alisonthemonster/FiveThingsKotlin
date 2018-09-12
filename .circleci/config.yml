@@ -64,7 +64,3 @@ workflows:
     jobs:
       - build
       - crashlytics_beta
-        filters:
-          branches:
-            only:
-              - beta
