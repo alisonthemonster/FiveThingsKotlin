@@ -1,49 +1,37 @@
-workflows:
-  version: 2
+version: 2
+jobs:
 
-  pr_builder:
-    jobs:
-      - build
-
-  relase_alpha_crashlytics:
-    jobs:
-      - crashlytics
-
-  jobs:
-
-    build:
-      working_directory: ~/repo
-      docker:
-        - image: circleci/android:api-27-alpha
-      environment:
-        JVM_OPTS: -Xmx3200m
-      steps:
-        - checkout
-        - restore_cache:
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-        - run:
-            name: Download Dependencies
-            command: ./gradlew androidDependencies
-        - save_cache:
-            paths:
-              - ~/.gradle
-            key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-        - run:
-            name: Gradle clean
-            command: ./gradlew clean
-        - run:
-            name: Bundle install
-            command: bundle install
-        - run:
-            name: Run Tests
-            command: bundle exec fastlane android test
-        - store_artifacts:
-            path: app/build/reports
-            destination: reports
-        - store_test_results:
-            path: app/build/test-results
-
-
+  build:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Gradle clean
+          command: ./gradlew clean
+      - run:
+          name: Bundle install
+          command: bundle install
+      - run:
+          name: Run Tests
+          command: bundle exec fastlane android test
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - store_test_results:
+          path: app/build/test-results
     crashlytics_beta:
       working_directory: ~/repo
       docker:
@@ -71,3 +59,14 @@ workflows:
             name: Create crashlytics beta
             command: bundle exec fastlane android beta
 
+workflows:
+  version: 2
+
+  pr_builder:
+    jobs:
+      - build
+      - crashlytics
+        filters:
+          branches:
+            only:
+              - beta
