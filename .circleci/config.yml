@@ -73,5 +73,5 @@ workflows:
             tags:
               only: /.*/
             branches:
-              only: beta
+              only: /beta.*/
 
