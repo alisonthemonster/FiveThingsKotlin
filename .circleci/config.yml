@@ -1,6 +1,5 @@
 version: 2
 jobs:
-
   build:
     working_directory: ~/repo
     docker:
@@ -61,11 +60,10 @@ jobs:
 
 workflows:
   version: 2
-
   pr_builder:
     jobs:
       - build
-      - crashlytics
+      - crashlytics_beta
         filters:
           branches:
             only:
