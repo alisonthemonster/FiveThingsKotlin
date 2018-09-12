@@ -24,8 +24,6 @@
                 android:minHeight="@dimen/abc_action_bar_default_height_material">
             </android.support.v7.widget.Toolbar>
 
-            <!--TODO change hamburger color-->
-
             <ImageView
                 android:layout_width="200dp"
                 android:layout_height="30dp"

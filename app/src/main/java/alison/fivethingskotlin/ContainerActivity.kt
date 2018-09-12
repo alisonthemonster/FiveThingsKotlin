@@ -109,7 +109,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private fun setUpNavigationDrawer() {
-        //TODO come back and replace with view binding?
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 

@@ -155,6 +155,5 @@ class FiveThingsTest: FreeSpec( {
         }
     }
 
-    //TODO write tests for the date string getter
 })
 

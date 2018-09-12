@@ -8,17 +8,15 @@
     android:background="@drawable/rounded_text_box"
     android:padding="8dp">
 
-    <!--TODO style search results in dark mode-->
-
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="March 2, 2018"
         android:textAlignment="center"
         android:textColor="@color/secondary_text_color"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="March 2, 2018" />
 
     <TextView
         android:id="@+id/content"

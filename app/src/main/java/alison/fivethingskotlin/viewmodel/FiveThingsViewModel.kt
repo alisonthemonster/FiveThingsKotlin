@@ -40,7 +40,6 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Log.e("blerg", "Negotiation for fresh tokens failed: $ex")
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -67,13 +66,16 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         return datesLiveData
     }
 
+    var editCount = 0
+
     fun onEditText() {
-        //TODO: BUG when bindings get executed and text placed in edittexts for the first time
-        //it counts as an edit, which overwrites the edited field to cause the save button to always
-        //say save instead of saved
-        val fiveThings = fiveThingsData.value
-        fiveThings?.data?.edited = true
-        fiveThingsData.value = fiveThings
+        if (editCount >= 5) {
+            //FIX: ignores the first five edit texts that occur thanks to data binding
+            val fiveThings = fiveThingsData.value
+            fiveThings?.data?.edited = true
+            fiveThingsData.value = fiveThings
+        }
+        editCount++
     }
 
 }

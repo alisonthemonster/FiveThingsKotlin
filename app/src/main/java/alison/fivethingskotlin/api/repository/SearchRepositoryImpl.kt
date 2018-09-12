@@ -27,7 +27,6 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
         call.enqueue(object : Callback<List<SearchResult>> {
             override fun onResponse(call: Call<List<SearchResult>>?, response: Response<List<SearchResult>>) {
                 if (response.isSuccessful) {
-                    Log.d("blerg", "call is happy")
                     searchResults.value = Resource(Status.SUCCESS, "", response.body())
                 } else {
                     val json = JSONObject(response.errorBody()?.string())
