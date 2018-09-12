@@ -56,7 +56,7 @@ jobs:
           command: bundle install
       - run:
           name: Create crashlytics beta
-          command: bundle exec fastlane android beta
+          command: bundle exec fastlane android beta api_token=$CRASHLYTICS_API_TOKEN build_secret=CRASHLYTICS_BUILD_SECRET
 
 workflows:
   version: 2

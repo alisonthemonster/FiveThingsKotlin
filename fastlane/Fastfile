@@ -10,9 +10,11 @@ platform :android do
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"
-  lane :beta do
+  lane :beta do |options|
     gradle(task: "clean assembleRelease")
-    crashlytics
+    crashlytics(
+        api_token: options[:api_token]
+        build_secret: options[:build_secret])
   end
 
   desc "Deploy a new version to the Google Play"
