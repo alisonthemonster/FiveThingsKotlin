@@ -13,7 +13,7 @@ platform :android do
   lane :beta do |options|
     gradle(task: "clean assembleRelease")
     crashlytics(
-        api_token: "options[:api_token]",
+        api_token: options[:api_token],
         build_secret: options[:build_secret])
   end
 
