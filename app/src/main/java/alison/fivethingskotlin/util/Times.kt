@@ -1,7 +1,5 @@
 package alison.fivethingskotlin.util
 
-//TODO unit tests
-
 fun parseHour(value: String): Int {
     val time = value.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
     return Integer.parseInt(time[0])

@@ -10,9 +10,6 @@ jobs:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-#      - run:
-#         name: Chmod permissions #if permission for Gradlew Dependencies fail, use this.
-#         command: sudo chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
@@ -24,11 +21,57 @@ jobs:
           name: Gradle clean
           command: ./gradlew clean
       - run:
+          name: Bundle install
+          command: bundle install
+      - run:
           name: Run Tests
-          command: ./gradlew lint test
+          command: bundle exec fastlane android test
       - store_artifacts:
           path: app/build/reports
           destination: reports
       - store_test_results:
           path: app/build/test-results
-      # See https://circleci.com/docs/2.0/deployment-integrations/ for deploy examples
+  hockey_beta:
+    working_directory: ~/repo
+    docker:
+      - image: circleci/android:api-27-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Gradle clean
+          command: ./gradlew clean
+      - run:
+          name: Bundle install
+          command: bundle install
+      - run:
+          name: Create crashlytics beta
+          command: bundle exec fastlane android beta api_token:$HOCKEY_API_TOKEN
+
+workflows:
+  version: 2
+  build-n-deploy:
+    jobs:
+      - build:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - hockey_beta:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: beta
+

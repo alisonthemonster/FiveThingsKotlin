@@ -3,7 +3,6 @@ package alison.fivethingskotlin
 import android.app.Application
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
-
 class FiveThingsApplication : Application() {
 
     override fun onCreate() {
