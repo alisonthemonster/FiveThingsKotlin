@@ -63,9 +63,4 @@ workflows:
   pr_builder:
     jobs:
       - build
-      - hockey_beta:
-        requires:
-          - build
-        filters:
-          branches:
-            only: beta
+      - hockey_beta
