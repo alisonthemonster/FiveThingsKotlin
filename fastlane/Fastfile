@@ -9,7 +9,7 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Submit a new Beta Build to Crashlytics Beta"
+  desc "Submit a new Beta Build to Hockey"
   lane :beta do |options|
     gradle(task: "clean assembleRelease")
     hockey(api_token: options[:api_token])

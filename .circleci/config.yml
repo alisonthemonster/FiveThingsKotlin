@@ -31,7 +31,7 @@ jobs:
           destination: reports
       - store_test_results:
           path: app/build/test-results
-  crashlytics_beta:
+  hockey_beta:
     working_directory: ~/repo
     docker:
       - image: circleci/android:api-27-alpha
@@ -63,4 +63,7 @@ workflows:
   pr_builder:
     jobs:
       - build
-      - crashlytics_beta
+      - hockey_beta:
+        filters:
+          branches:
+            only: beta
