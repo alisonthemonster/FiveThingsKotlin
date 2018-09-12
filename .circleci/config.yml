@@ -60,7 +60,18 @@ jobs:
 
 workflows:
   version: 2
-  pr_builder:
+  build-n-deploy:
     jobs:
-      - build
-      - hockey_beta
+      - build:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - hockey_beta:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: beta
+
