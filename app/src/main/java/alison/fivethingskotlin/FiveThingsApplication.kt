@@ -1,8 +1,6 @@
 package alison.fivethingskotlin
 
 import android.app.Application
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig
 
 class FiveThingsApplication : Application() {
@@ -16,8 +14,6 @@ class FiveThingsApplication : Application() {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         )
-
-        Fabric.with(this, Crashlytics())
 
     }
 
