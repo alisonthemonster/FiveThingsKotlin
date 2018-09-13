@@ -10,9 +10,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -42,9 +39,8 @@ fun showErrorDialog(message: String,
     val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 
     dialogBuilder.apply {
-        val title = SpannableString("Oh no! Something went wrong!")  //TODO move to resource
-        title.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_color)), 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        setTitle(title)
+        setTitle("Oh no! Something went wrong!")
+        setMessage(message)
 
         if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
             setNegativeButton("Log in again", openLogInScreen(context))
@@ -52,9 +48,6 @@ fun showErrorDialog(message: String,
         } else {
             setNegativeButton(buttonText, buttonAction)
         }
-        val messageSpan = SpannableString(message)
-        messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_color)), 0, title.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        setMessage(messageSpan)
     }
     val alert = dialogBuilder.create()
     alert.show()
