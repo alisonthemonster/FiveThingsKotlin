@@ -87,6 +87,7 @@ class PromoActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent) {
         checkIntent(intent)
+        //blerg
     }
 
     private fun checkIntent(intent: Intent?) {
