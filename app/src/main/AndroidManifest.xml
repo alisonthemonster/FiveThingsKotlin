@@ -8,8 +8,8 @@
         android:name=".FiveThingsApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -48,9 +48,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
-        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="ece4e17ab7aa4858b927af656cc82e91" />
-
     </application>
 
 </manifest>

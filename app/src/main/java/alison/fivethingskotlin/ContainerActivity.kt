@@ -38,7 +38,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private lateinit var drawerLayout: DrawerLayout
 
-    override fun onDateSelected(selectedDate: Date, isASearchResult: Boolean) {
+    override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
         val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
@@ -70,11 +70,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         setUpNavigationDrawer()
 
         if (savedInstanceState == null) {
-            val fragmentTransaction = supportFragmentManager.beginTransaction()
-            fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
-                    android.R.anim.fade_out)
-            fragmentTransaction.replace(R.id.content_frame, FiveThingsPagerFragment())
-            fragmentTransaction.commitAllowingStateLoss()
+            selectDate(Date(), false)
         }
 
         createNotificationChannel()
@@ -115,7 +111,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private fun setUpNavigationDrawer() {
-        //TODO come back and replace with view binding?
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
 
@@ -132,7 +127,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
-                    loadFragment(FiveThingsFragment())
+                    selectDate(Date(), false)
+                    drawerLayout.closeDrawers()
                     true
                 }
                 R.id.analytics_item -> {

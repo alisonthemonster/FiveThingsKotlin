@@ -1,17 +1,14 @@
 package alison.fivethingskotlin.fragment
 
-import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.NotificationScheduler
-import android.os.Bundle
-import android.support.v7.preference.PreferenceFragmentCompat
 import alison.fivethingskotlin.util.TimePreference
-import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.Preference
-import android.util.Log
+import android.support.v7.preference.PreferenceFragmentCompat
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -36,8 +33,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     }
 
     override fun onSharedPreferenceChanged(prefs: SharedPreferences, key: String?) {
-        Log.d("blerg", "key: $key")
-
         when(key) {
             "notif_parent" -> {
                 val scheduler = NotificationScheduler()

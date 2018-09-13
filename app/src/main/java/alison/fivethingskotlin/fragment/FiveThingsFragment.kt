@@ -10,22 +10,18 @@ import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import alison.fivethingskotlin.model.Resource
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import kotlinx.android.synthetic.main.designs_fragment.*
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
-import org.joda.time.Days
-import org.joda.time.LocalDate
 import java.util.*
+import android.support.v7.app.AlertDialog
 
 
 class FiveThingsFragment : Fragment() {
@@ -88,7 +84,7 @@ class FiveThingsFragment : Fragment() {
             override fun onDayClick(dateClicked: Date) {
                 binding.loading = true
                 val activity = context as ContainerActivity
-                activity.onDateSelected(dateClicked, false)
+                activity.selectDate(dateClicked, false)
             }
 
             override fun onMonthScroll(firstDayOfNewMonth: Date) {
@@ -117,7 +113,7 @@ class FiveThingsFragment : Fragment() {
         todayButton.setOnClickListener {
             binding.loading = true
             val activity = context as ContainerActivity
-            activity.onDateSelected(Date(), false)
+            activity.selectDate(Date(), false)
         }
     }
 
@@ -177,12 +173,10 @@ class FiveThingsFragment : Fragment() {
         val maxYear = getYear(Collections.max(dates))
         (minYear..maxYear).mapTo(yearList) { it.toString() }
 
-        //TODO fix dialog in dark mode
-
         if (yearList.size > 1) {
             //only show dialog if users have multiple years to choose from
             month_year.setOnClickListener {
-                val dialogBuilder = AlertDialog.Builder(context)
+                val dialogBuilder = AlertDialog.Builder(context!!, R.style.CustomDialogTheme)
                 dialogBuilder
                         .setTitle("Select a year")
                         .setItems(yearList.toTypedArray()) { _, year ->

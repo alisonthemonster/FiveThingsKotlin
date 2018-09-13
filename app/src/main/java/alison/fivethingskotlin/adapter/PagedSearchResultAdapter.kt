@@ -12,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_result.view.*
-import java.util.*
 
 class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<SearchResult, RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
@@ -94,7 +93,7 @@ class PagedResultViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
         itemView.date.text = searchResult.date
         itemView.setOnClickListener {
             val activity = it.context as ContainerActivity
-            activity.onDateSelected(getDateFromFullDateFormat(searchResult.date), true)
+            activity.selectDate(getDateFromFullDateFormat(searchResult.date), true)
         }
     }
 

@@ -17,7 +17,7 @@
             android:title="Adjust Reminder Notifications"
             android:summary="Change your daily reminder time"
             android:dialogTitle="Daily Reminder Time"
-            android:defaultValue="23:00" />
+            android:defaultValue="23:00"/>
     </PreferenceCategory>
 
     <PreferenceCategory
