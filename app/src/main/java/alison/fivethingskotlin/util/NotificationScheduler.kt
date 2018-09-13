@@ -26,7 +26,7 @@ class NotificationScheduler {
 
         if (alarmIsOn) {
 
-            val prefTime = sharedPref.getString("pref_time", "default")
+            val prefTime = sharedPref.getString("pref_time", "23:00")
 
             val hour = parseHour(prefTime)
             val minute = parseMinute(prefTime)

@@ -10,7 +10,7 @@ platform :android do
 
   desc "Submit a new Beta Build to Hockey"
   lane :beta do |options|
-    gradle(task: "clean assembleRelease")
+    gradle(task: "clean assembleDebug")
     hockey(api_token: options[:api_token])
   end
 
