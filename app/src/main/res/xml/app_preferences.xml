@@ -1,38 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="Notifications">
+    <PreferenceCategory android:title="Notifications">
 
         <SwitchPreference
+            android:defaultValue="true"
             android:key="notif_parent"
-            android:title="Daily Reminder Notifications"
             android:summaryOff="Daily reminder notifications are off"
             android:summaryOn="Daily reminder notifications are on"
-            android:defaultValue="true"/>
+            android:title="Daily Reminder Notifications" />
 
         <alison.fivethingskotlin.util.TimePreference
-            android:key="pref_time"
+            android:defaultValue="23:00"
             android:dependency="notif_parent"
-            android:title="Adjust Reminder Notifications"
-            android:summary="Change your daily reminder time"
             android:dialogTitle="Daily Reminder Time"
-            android:defaultValue="23:00"/>
+            android:key="pref_time"
+            android:summary="Change your daily reminder time"
+            android:title="Adjust Reminder Notifications" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="Appearance">
+    <PreferenceCategory android:title="Appearance">
 
         <SwitchPreference
+            android:defaultValue="false"
             android:key="dark_light_mode"
-            android:title="Toggle Light/Dark Mode"
             android:summaryOff="Switch to the light mode"
             android:summaryOn="Switch to the dark mode"
-            android:defaultValue="false"/>
+            android:title="Toggle Light/Dark Mode" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="App Information">
+    <PreferenceCategory android:title="App Information">
 
         <Preference
             android:key="privacy_policy"
@@ -41,6 +38,10 @@
         <Preference
             android:key="terms_conditions"
             android:title="Terms &amp; Conditions" />
+
+        <Preference
+            android:key="open_source"
+            android:title="Open Source Libraries" />
 
     </PreferenceCategory>
 

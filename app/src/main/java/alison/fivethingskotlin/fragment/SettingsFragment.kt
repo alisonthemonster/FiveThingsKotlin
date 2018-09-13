@@ -13,6 +13,8 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -20,6 +22,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
         buildWebViewPreference("privacy_policy", BuildConfig.PRIVACY_POLICY_URL)
         buildWebViewPreference("terms_conditions", BuildConfig.TERMS_CONDITIONS_URL)
+        buildOssLiscenceActivity()
     }
 
     private fun buildWebViewPreference(preferenceKey: String, webViewUrl: String) {
@@ -29,6 +32,14 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 putExtra(WEBVIEW_URL, webViewUrl)
             }
             startActivity(intent)
+            true
+        }
+    }
+
+    private fun buildOssLiscenceActivity() {
+        val preference = findPreference("open_source")
+        preference.setOnPreferenceClickListener {
+            startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             true
         }
     }
