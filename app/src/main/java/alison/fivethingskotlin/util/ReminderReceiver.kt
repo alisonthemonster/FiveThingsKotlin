@@ -25,8 +25,10 @@ class ReminderReceiver : BroadcastReceiver() {
 
     private fun createLocalNotification(context: Context, pendingIntent: PendingIntent) {
 
+        //ENHANCEMENT if user has streak let them know they'll break it
+
         val notificationBuilder = NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.five_things_logo)
+                .setSmallIcon(R.drawable.ic_five_wide)
                 .setContentTitle("Five Things Reminder")
                 .setContentText("It's time to write down your Five Things!")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
