@@ -55,7 +55,7 @@ jobs:
           name: Bundle install
           command: bundle install
       - run:
-          name: Create crashlytics beta
+          name: Create hockey beta
           command: bundle exec fastlane android beta api_token:$HOCKEY_API_TOKEN
 
 workflows:

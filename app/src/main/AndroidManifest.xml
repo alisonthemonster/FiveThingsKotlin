@@ -31,7 +31,6 @@
             </intent-filter>
         </activity>
 
-
         <activity android:name="net.openid.appauth.RedirectUriReceiverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
@@ -49,6 +48,9 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="${ece4e17ab7aa4858b927af656cc82e91}" />
+
     </application>
 
 </manifest>

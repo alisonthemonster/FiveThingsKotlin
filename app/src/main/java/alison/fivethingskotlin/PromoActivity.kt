@@ -13,8 +13,10 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_promo.*
+import net.hockeyapp.android.UpdateManager
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import net.hockeyapp.android.CrashManager
 
 
 class PromoActivity : AppCompatActivity() {
@@ -34,6 +36,27 @@ class PromoActivity : AppCompatActivity() {
 
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
 
+        checkForUpdates()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        checkForCrashes()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterManagers()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterManagers()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        checkIntent(intent)
     }
 
     private fun startAuthorizationRequest(view: View) {
@@ -62,11 +85,6 @@ class PromoActivity : AppCompatActivity() {
         authorizationService.performAuthorizationRequest(request, pendingIntent)
     }
 
-    override fun onStart() {
-        super.onStart()
-        checkIntent(intent)
-    }
-
     override fun onNewIntent(intent: Intent) {
         checkIntent(intent)
     }
@@ -87,7 +105,6 @@ class PromoActivity : AppCompatActivity() {
             }
         }
     }
-
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
@@ -147,6 +164,19 @@ class PromoActivity : AppCompatActivity() {
                 //we need to log in!
             }
         }
+    }
+
+    private fun checkForCrashes() {
+        CrashManager.register(this)
+    }
+
+    private fun checkForUpdates() {
+        // Remove this for store builds!
+        UpdateManager.register(this)
+    }
+
+    private fun unregisterManagers() {
+        UpdateManager.unregister()
     }
 
 }
