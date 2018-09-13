@@ -1,6 +1,7 @@
 package alison.fivethingskotlin.fragment
 
 import alison.fivethingskotlin.ContainerActivity
+import alison.fivethingskotlin.R
 import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Status
@@ -9,7 +10,6 @@ import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
 import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
 import alison.fivethingskotlin.model.Resource
-import android.app.AlertDialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -21,6 +21,7 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
+import android.support.v7.app.AlertDialog
 
 
 class FiveThingsFragment : Fragment() {
@@ -172,12 +173,10 @@ class FiveThingsFragment : Fragment() {
         val maxYear = getYear(Collections.max(dates))
         (minYear..maxYear).mapTo(yearList) { it.toString() }
 
-        //TODO fix dialog in dark mode
-
         if (yearList.size > 1) {
             //only show dialog if users have multiple years to choose from
             month_year.setOnClickListener {
-                val dialogBuilder = AlertDialog.Builder(context)
+                val dialogBuilder = AlertDialog.Builder(context!!, R.style.CustomDialogTheme)
                 dialogBuilder
                         .setTitle("Select a year")
                         .setItems(yearList.toTypedArray()) { _, year ->

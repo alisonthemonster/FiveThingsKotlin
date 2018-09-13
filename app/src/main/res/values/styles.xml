@@ -7,6 +7,12 @@
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
         <item name="colorControlNormal">@color/primary_text_color</item>
+        <item name="android:alertDialogTheme">@style/CustomDialogTheme</item>
+    </style>
+
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:background">@color/background_color</item>
+        <item name="textColorAlertDialogListItem">@color/primary_text_color</item>
     </style>
 
     <!--TODO detail text for dialogs needs fixed-->
