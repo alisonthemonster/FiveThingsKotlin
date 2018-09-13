@@ -56,3 +56,6 @@ freeline_project_description.json
 
 #DS Files
 .DS_Store
+
+#fabric keys
+fabric.properties
