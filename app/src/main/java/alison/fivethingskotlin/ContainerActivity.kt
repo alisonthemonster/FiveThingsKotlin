@@ -69,7 +69,9 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
         setUpNavigationDrawer()
 
-        selectDate(Date(), false)
+        if (savedInstanceState == null) {
+            selectDate(Date(), false)
+        }
 
         createNotificationChannel()
 
