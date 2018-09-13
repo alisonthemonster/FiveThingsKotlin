@@ -31,4 +31,13 @@
             android:defaultValue="false"/>
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="App Information">
+
+        <Preference
+            android:key="privacy_policy"
+            android:title="Privacy Policy" />
+
+    </PreferenceCategory>
+
 </PreferenceScreen>

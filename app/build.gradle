@@ -16,10 +16,17 @@ android {
         manifestPlaceholders = ['appAuthRedirectScheme': 'alison.fivethingskotlin']
     }
     buildTypes {
+        debug {
+            debuggable true
+            buildConfigField('String', 'PRIVACY_POLICY_URL', '"https://rawgit.com/alisonthemonster/FiveThingsKotlin/master/privacy_policy.html"')
+        }
+
         release {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField('String', 'PRIVACY_POLICY_URL', '"https://cdn.rawgit.com/alisonthemonster/FiveThingsKotlin/c7862740/privacy_policy.html"')
+
         }
     }
     dataBinding {

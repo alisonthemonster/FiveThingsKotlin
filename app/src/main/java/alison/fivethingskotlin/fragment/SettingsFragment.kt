@@ -1,8 +1,11 @@
 package alison.fivethingskotlin.fragment
 
+import alison.fivethingskotlin.BuildConfig
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.WebViewActivity
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.TimePreference
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -13,6 +16,15 @@ import android.support.v7.preference.PreferenceFragmentCompat
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.app_preferences)
+
+        val privacyPolicyPreference = findPreference("privacy_policy") as Preference
+        privacyPolicyPreference.setOnPreferenceClickListener {
+            val intent = Intent(context, WebViewActivity::class.java).apply {
+                putExtra("WEBVIEW_URL", BuildConfig.PRIVACY_POLICY_URL)
+            }
+            startActivity(intent)
+            true
+        }
     }
 
     override fun onDisplayPreferenceDialog(preference: Preference) {
@@ -54,7 +66,6 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
                 activity?.recreate()
             }
         }
-
     }
 
     override fun onResume() {
