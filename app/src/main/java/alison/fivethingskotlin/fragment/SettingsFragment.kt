@@ -3,6 +3,7 @@ package alison.fivethingskotlin.fragment
 import alison.fivethingskotlin.BuildConfig
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.WebViewActivity
+import alison.fivethingskotlin.WebViewActivity.Companion.WEBVIEW_URL
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.TimePreference
 import android.content.Intent
@@ -17,10 +18,15 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.app_preferences)
 
-        val privacyPolicyPreference = findPreference("privacy_policy") as Preference
-        privacyPolicyPreference.setOnPreferenceClickListener {
+        buildWebViewPreference("privacy_policy", BuildConfig.PRIVACY_POLICY_URL)
+        buildWebViewPreference("terms_conditions", BuildConfig.TERMS_CONDITIONS_URL)
+    }
+
+    private fun buildWebViewPreference(preferenceKey: String, webViewUrl: String) {
+        val preference = findPreference(preferenceKey)
+        preference.setOnPreferenceClickListener {
             val intent = Intent(context, WebViewActivity::class.java).apply {
-                putExtra("WEBVIEW_URL", BuildConfig.PRIVACY_POLICY_URL)
+                putExtra(WEBVIEW_URL, webViewUrl)
             }
             startActivity(intent)
             true

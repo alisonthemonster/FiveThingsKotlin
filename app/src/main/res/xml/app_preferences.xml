@@ -38,6 +38,10 @@
             android:key="privacy_policy"
             android:title="Privacy Policy" />
 
+        <Preference
+            android:key="terms_conditions"
+            android:title="Terms &amp; Conditions" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
