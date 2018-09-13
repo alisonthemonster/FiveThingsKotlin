@@ -41,7 +41,7 @@
 
         <Preference
             android:key="open_source"
-            android:title="Open Source Libraries" />
+            android:title="Open Source Licenses" />
 
     </PreferenceCategory>
 
