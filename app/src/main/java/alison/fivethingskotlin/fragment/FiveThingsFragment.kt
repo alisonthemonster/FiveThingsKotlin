@@ -13,6 +13,7 @@ import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +23,9 @@ import kotlinx.android.synthetic.main.five_things_fragment.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
 import android.support.v7.app.AlertDialog
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 
 
 class FiveThingsFragment : Fragment() {
@@ -101,19 +105,66 @@ class FiveThingsFragment : Fragment() {
         }
 
         save_button.setOnClickListener {
-            viewModel.writeFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-                when (it?.status) {
-                    Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
-                }
-
-            })
+            saveFiveThings()
         }
 
         todayButton.setOnClickListener {
             binding.loading = true
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
+        }
+
+        val delay: Long = 1000 // 1 seconds after user stops typing
+        var lastEditText: Long = 0
+        val handler = Handler()
+
+        val inputFinished = Runnable {
+            if (System.currentTimeMillis() > lastEditText + delay - 500) {
+                // TODO: do what you need here
+                // ............
+                // ............
+                saveFiveThings()
+            }
+        }
+
+        val textWatcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int,
+                                           after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int,
+                                       count: Int) {
+                //You need to remove this to run only once
+                handler.removeCallbacks(inputFinished)
+
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                lastEditText = System.currentTimeMillis()
+                handler.postDelayed(inputFinished, delay)
+            }
+        }
+
+
+        one.addTextChangedListener(textWatcher)
+        two.addTextChangedListener(textWatcher)
+        three.addTextChangedListener(textWatcher)
+        four.addTextChangedListener(textWatcher)
+        five.addTextChangedListener(textWatcher)
+    }
+
+    private fun saveFiveThings() {
+        if (binding.fiveThings!!.savedString == "Save") {
+            Log.d("blerg", "about to save")
+            viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
+                when (it?.status) {
+                    Status.SUCCESS -> addEventsToCalendar(it.data)
+                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                }
+
+            })
+        } else {
+            Log.d("blerg", "already saved")
         }
     }
 

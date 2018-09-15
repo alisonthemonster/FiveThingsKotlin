@@ -36,7 +36,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         return fiveThingsData
     }
 
-    fun writeFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
+    fun saveFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
@@ -66,7 +66,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         return datesLiveData
     }
 
-    var editCount = 0
+    private var editCount = 0
 
     fun onEditText() {
         if (editCount >= 5) {
