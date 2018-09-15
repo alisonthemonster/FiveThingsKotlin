@@ -38,6 +38,8 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun saveFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
 
+        Log.d("blargle", "wazzup bitch i'm saving")
+
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
@@ -66,16 +68,19 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         return datesLiveData
     }
 
-    private var editCount = 0
+    private var editCount = -1
 
     fun onEditText() {
-        if (editCount >= 5) {
-            //FIX: ignores the first five edit texts that occur thanks to data binding
-            val fiveThings = fiveThingsData.value
-            fiveThings?.data?.edited = true
-            fiveThingsData.value = fiveThings
+        when {
+            editCount == -1 -> editCount = fiveThingsData.value?.data?.thingsCount!! - 1
+            editCount <= 0 -> {
+                //HACKY FIX: ignores the first edit texts that occur thanks to data binding
+                val fiveThings = fiveThingsData.value
+                fiveThings?.data?.edited = true
+                fiveThingsData.value = fiveThings
+            }
+            else -> editCount--
         }
-        editCount++
     }
 
 }

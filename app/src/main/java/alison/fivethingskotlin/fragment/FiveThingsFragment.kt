@@ -104,10 +104,6 @@ class FiveThingsFragment : Fragment() {
             }
         }
 
-        save_button.setOnClickListener {
-            saveFiveThings()
-        }
-
         todayButton.setOnClickListener {
             binding.loading = true
             val activity = context as ContainerActivity
@@ -120,10 +116,13 @@ class FiveThingsFragment : Fragment() {
 
         val inputFinished = Runnable {
             if (System.currentTimeMillis() > lastEditText + delay - 500) {
-                // TODO: do what you need here
-                // ............
-                // ............
-                saveFiveThings()
+                //this goes off everytime an edit text is edited
+                //but data binding edits the texts and fires this when saved data is
+                //pulled in. Edited checks if it was actually user edits or just data binding
+                if (binding.fiveThings!!.edited)
+                    saveFiveThings()
+                else
+                    Log.d("blerg", "already saved")
             }
         }
 
@@ -154,18 +153,12 @@ class FiveThingsFragment : Fragment() {
     }
 
     private fun saveFiveThings() {
-        if (binding.fiveThings!!.savedString == "Save") {
-            Log.d("blerg", "about to save")
-            viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-                when (it?.status) {
-                    Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
-                }
-
-            })
-        } else {
-            Log.d("blerg", "already saved")
-        }
+        viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
+            when (it?.status) {
+                Status.SUCCESS -> addEventsToCalendar(it.data)
+                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+            }
+        })
     }
 
     private fun getFiveThings() {
@@ -195,7 +188,7 @@ class FiveThingsFragment : Fragment() {
     private fun getWrittenDays() {
         //build calendar when days come back from server
         viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            days?.let{
+            days?.let {
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
                     Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)

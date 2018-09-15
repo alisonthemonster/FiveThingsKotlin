@@ -28,16 +28,24 @@ data class FiveThings(
                 !things[4].isEmpty
         }
 
+    //TODO instead of showing the words saved what about a check next to the date
     val savedString: String
         get() {
-            if (!inDatabase) return "Save"
-
-            return if (edited) "Save" else "Saved"
+            return if (edited) "Saving" else "Saved"
         }
 
     val fullDateString: String
         get() {
             return getFullDateFormat(date)
+        }
+
+    val thingsCount: Int
+        get() {
+            var count = 0
+            for (thing in things) {
+                if (!thing.isEmpty) count++
+            }
+            return count
         }
 }
 
