@@ -36,6 +36,11 @@ class PromoActivity : AppCompatActivity() {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        checkIntent(intent)
+    }
+
     private fun startAuthorizationRequest(view: View) {
         binding.loading = true
         val serviceConfiguration = AuthorizationServiceConfiguration(

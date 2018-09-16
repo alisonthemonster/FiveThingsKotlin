@@ -94,7 +94,7 @@ class FiveThingsTest: FreeSpec( {
                             Thing("MM-DD-YYYY", "five", 5)),
                     true,
                     true)
-            things.savedString shouldEqual "Save"
+            things.savedString shouldEqual "Saving"
         }
         "In the database and not edited" {
             val things = FiveThings(
@@ -118,7 +118,7 @@ class FiveThingsTest: FreeSpec( {
                             Thing("MM-DD-YYYY", "five", 5)),
                     false,
                     false)
-            things.savedString shouldEqual "Save"
+            things.savedString shouldEqual "Saved"
         }
         "Not in the database but edited" {
             val things = FiveThings(
@@ -130,7 +130,7 @@ class FiveThingsTest: FreeSpec( {
                             Thing("MM-DD-YYYY", "five", 5)),
                     true,
                     false)
-            things.savedString shouldEqual "Save"
+            things.savedString shouldEqual "Saving"
         }
     }
 
@@ -152,6 +152,45 @@ class FiveThingsTest: FreeSpec( {
                     false,
                     false)
             things.fullDateString shouldEqual "Sunday January 22nd, 2017"
+        }
+    }
+
+    "detects the number of things in a five things" - {
+        "with complete things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    listOf(Thing("MM-DD-YYYY", "one", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
+                    false,
+                    false)
+            completeThings.thingsCount shouldEqual 5
+        }
+        "with some empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "four", 4),
+                            Thing("MM-DD-YYYY", "five", 5)),
+                    false,
+                    false)
+            completeThings.thingsCount shouldEqual 4
+        }
+        "with more empty things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    listOf(Thing("MM-DD-YYYY", "", 1),
+                            Thing("MM-DD-YYYY", "", 2),
+                            Thing("MM-DD-YYYY", "", 3),
+                            Thing("MM-DD-YYYY", "", 4),
+                            Thing("MM-DD-YYYY", "", 5)),
+                    false,
+                    false)
+            completeThings.thingsCount shouldEqual 0
         }
     }
 

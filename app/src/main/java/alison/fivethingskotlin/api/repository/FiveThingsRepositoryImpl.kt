@@ -71,12 +71,15 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                         writtenDates.value = Resource(Status.SUCCESS, "Date updated", days)
                     } else {
                         try {
-                            val json = JSONObject(response.errorBody()?.string())
-                            val messageString = json.getString("message")
+                            val messageString = if (response.code() == 500) {
+                                "Internal Server Error. Hang tight we'll fix it!"
+                            } else {
+                                val json = JSONObject(response.errorBody()?.string())
+                                json.getString("detail")
+                            }
                             writtenDates.value = Resource(Status.ERROR, messageString, null)
                         } catch (e: Exception) {
-                            //if there's malformed json
-                            writtenDates.value = Resource(Status.ERROR, "", null)
+                            writtenDates.value = Resource(Status.ERROR, "Unknown error occured", null)
                         }
                     }
                 }
@@ -99,7 +102,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     } else {
                         try {
                             val json = JSONObject(response.errorBody()?.string())
-                            val messageString = json.getString("message")
+                            val messageString = json.getString("detail")
                             writtenDates.value = Resource(Status.ERROR, messageString, null)
                         } catch (e: Exception) {
                             //if there's malformed json

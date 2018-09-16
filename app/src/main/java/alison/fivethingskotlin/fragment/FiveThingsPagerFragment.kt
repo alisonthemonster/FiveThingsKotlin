@@ -8,7 +8,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import kotlinx.android.synthetic.main.designs_fragment.*
+import kotlinx.android.synthetic.main.container_five_things.*
 
 //swaps in and out different five things fragments
 class FiveThingsPagerFragment : Fragment() {
@@ -35,7 +35,7 @@ class FiveThingsPagerFragment : Fragment() {
         index = arguments?.getInt(INDEX)
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.designs_fragment, container, false)
+        return inflater.inflate(R.layout.container_five_things, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

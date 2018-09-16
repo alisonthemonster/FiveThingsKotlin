@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:textColor="@color/white"
+        android:textColor="@color/primary_text_color"
         android:textSize="18sp"
         tools:text="Sample error message" />
     <ProgressBar
@@ -24,7 +24,7 @@
     <Button
         android:id="@+id/retry_button"
         android:background="@drawable/rounded_button"
-        android:textColor="@color/white"
+        android:textColor="@color/primary_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
