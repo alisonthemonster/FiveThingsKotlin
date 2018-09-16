@@ -1,4 +1,9 @@
 version: 2
+
+dependencies:
+  pre:
+    - openssl aes-256-cbc -d -in fabric-prop-encrypted -out fabric.properties -k $FABRIC_PROPERTIES_KEY
+
 jobs:
   build:
     working_directory: ~/repo

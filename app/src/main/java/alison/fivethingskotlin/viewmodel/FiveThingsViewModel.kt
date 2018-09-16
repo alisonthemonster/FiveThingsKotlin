@@ -26,7 +26,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while getting five things")
+                Crashlytics.logException(ex)
                 fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -44,7 +44,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while saving five things")
+                Crashlytics.logException(ex)
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -59,7 +59,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while getting written days")
+                Crashlytics.logException(ex)
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {

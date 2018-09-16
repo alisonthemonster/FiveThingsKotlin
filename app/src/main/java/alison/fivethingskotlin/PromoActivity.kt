@@ -17,6 +17,10 @@ import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
+
+
 
 
 class PromoActivity : AppCompatActivity() {
@@ -24,10 +28,15 @@ class PromoActivity : AppCompatActivity() {
     private val USED_INTENT = "USED_INTENT"
     private lateinit var binding: ActivityPromoBinding
 
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enablePostAuthorizationFlows()
+
+        Fabric.with(this, Crashlytics())
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_promo)
 
@@ -114,7 +123,7 @@ class PromoActivity : AppCompatActivity() {
                 if (exception != null) {
                     binding.loading = false
                     //Token Exchange failed
-                    Crashlytics.log(Log.ERROR, "Authentication", "${exception.errorDescription} in promo activity")
+                    Crashlytics.logException(exception)
                 } else {
                     if (tokenResponse != null) {
                         authState.update(tokenResponse, exception)

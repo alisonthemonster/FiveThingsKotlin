@@ -23,6 +23,7 @@ import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
 import org.joda.time.Days
 import org.joda.time.LocalDate
@@ -37,6 +38,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private lateinit var drawerLayout: DrawerLayout
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
+
 
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 
@@ -66,6 +69,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_container)
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setUpNavigationDrawer()
 

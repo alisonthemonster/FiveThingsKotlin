@@ -17,6 +17,7 @@ import android.util.Log
 import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Response
+import java.lang.Exception
 
 
 fun <T> buildErrorResource(response: Response<T>): Resource<FiveThings>? {
@@ -41,7 +42,7 @@ fun showErrorDialog(message: String,
                     buttonText: String = "Ok",
                     buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
 
-    Crashlytics.log(Log.ERROR, "DialogError", message)
+    Crashlytics.logException(Exception(message))
 
     val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 

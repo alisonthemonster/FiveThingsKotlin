@@ -87,7 +87,7 @@ class SearchFragment : Fragment() {
     private fun getPaginatedResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} in search fragment")
+                Crashlytics.logException(ex)
                 showErrorDialog("Unable to log in: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
             } else {
                 idToken?.let {
