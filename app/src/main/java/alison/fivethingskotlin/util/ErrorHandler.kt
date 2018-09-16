@@ -10,6 +10,9 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -40,7 +43,10 @@ fun showErrorDialog(message: String,
 
     dialogBuilder.apply {
         setTitle("Oh no! Something went wrong!")
-        setMessage(message)
+        val messageSpan = SpannableString(message)
+        messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        setMessage(messageSpan)
 
         if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
             setNegativeButton("Log in again", openLogInScreen(context))
