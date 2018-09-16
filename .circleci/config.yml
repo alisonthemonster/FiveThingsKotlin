@@ -21,7 +21,7 @@ jobs:
       - run:
           name: Decrypt Fabric File
           command: openssl aes-256-cbc -d -md sha256 -in fabric-prop-encrypted -out fabric.properties -k $FABRIC_PROPERTIES_KEY
-       - run:
+      - run:
           name: Decrypt Google Services File
           command: openssl aes-256-cbc -d -md sha256 -in app/google-services-enc -out app/google-services.json -k $FABRIC_PROPERTIES_KEY
       - run:
