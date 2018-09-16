@@ -20,7 +20,7 @@ jobs:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
       - run:
           name: Decrypt Fabric File
-          command: openssl aes-256-cbc -d -in fabric-prop-encrypted -out fabric.properties -k $FABRIC_PROPERTIES_KEY
+          command: openssl aes-256-cbc -d -md sha256 -in fabric-prop-encrypted -out fabric.properties -k $FABRIC_PROPERTIES_KEY
       - run:
           name: Gradle clean
           command: ./gradlew clean
