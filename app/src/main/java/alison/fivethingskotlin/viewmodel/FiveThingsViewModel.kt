@@ -72,8 +72,6 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun onEditText() {
         //HACKY FIX: ignores the first edit texts that occur thanks to data binding
-
-        Log.d("blerg", "editcount: $editCount")
         val fiveThings = fiveThingsData.value
         when {
             editCount == -1 -> {

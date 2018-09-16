@@ -110,19 +110,27 @@ class FiveThingsFragment : Fragment() {
             activity.selectDate(Date(), false)
         }
 
+        setUpAutoSave()
+    }
+
+    private fun saveFiveThings() {
+        viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
+            when (it?.status) {
+                Status.SUCCESS -> addEventsToCalendar(it.data)
+                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+            }
+        })
+    }
+
+    private fun setUpAutoSave() {
         val delay: Long = 1000 // 1 seconds after user stops typing
         var lastEditText: Long = 0
         val handler = Handler()
 
         val inputFinished = Runnable {
             if (System.currentTimeMillis() > lastEditText + delay - 500) {
-                //this goes off everytime an edit text is edited
-                //but data binding edits the texts and fires this when saved data is
-                //pulled in. Edited checks if it was actually user edits or just data binding
                 if (binding.fiveThings!!.edited)
                     saveFiveThings()
-                else
-                    Log.d("blerg", "already saved")
             }
         }
 
@@ -144,21 +152,11 @@ class FiveThingsFragment : Fragment() {
             }
         }
 
-
         one.addTextChangedListener(textWatcher)
         two.addTextChangedListener(textWatcher)
         three.addTextChangedListener(textWatcher)
         four.addTextChangedListener(textWatcher)
         five.addTextChangedListener(textWatcher)
-    }
-
-    private fun saveFiveThings() {
-        viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-            when (it?.status) {
-                Status.SUCCESS -> addEventsToCalendar(it.data)
-                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
-            }
-        })
     }
 
     private fun getFiveThings() {
