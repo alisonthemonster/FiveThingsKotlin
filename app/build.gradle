@@ -62,6 +62,8 @@ dependencies {
     implementation 'net.openid:appauth:0.7.1'
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.3'
+    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -81,3 +83,5 @@ dependencies {
 
     kapt 'com.android.databinding:compiler:3.1.4'
 }
+
+apply plugin: 'com.google.gms.google-services'

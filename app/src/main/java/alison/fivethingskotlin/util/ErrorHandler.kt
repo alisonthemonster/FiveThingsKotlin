@@ -13,6 +13,8 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
+import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -38,6 +40,8 @@ fun showErrorDialog(message: String,
                     context: Context,
                     buttonText: String = "Ok",
                     buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
+
+    Crashlytics.log(Log.ERROR, "DialogError", message)
 
     val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 

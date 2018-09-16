@@ -26,6 +26,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.search_fragment.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
@@ -86,6 +87,7 @@ class SearchFragment : Fragment() {
     private fun getPaginatedResultsWithFreshToken(text: String) {
         authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
+                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} in search fragment")
                 showErrorDialog("Unable to log in: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
             } else {
                 idToken?.let {

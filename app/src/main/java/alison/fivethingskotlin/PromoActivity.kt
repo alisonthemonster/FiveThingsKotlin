@@ -11,7 +11,9 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -112,6 +114,7 @@ class PromoActivity : AppCompatActivity() {
                 if (exception != null) {
                     binding.loading = false
                     //Token Exchange failed
+                    Crashlytics.log(Log.ERROR, "Authentication", "${exception.errorDescription} in promo activity")
                 } else {
                     if (tokenResponse != null) {
                         authState.update(tokenResponse, exception)

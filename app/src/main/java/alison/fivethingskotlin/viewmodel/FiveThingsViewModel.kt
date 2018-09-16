@@ -10,6 +10,7 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
+import com.crashlytics.android.Crashlytics
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
@@ -25,6 +26,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
+                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while getting five things")
                 fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -42,6 +44,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
+                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while saving five things")
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -56,6 +59,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
+                Crashlytics.log(Log.ERROR, "Authentication", "${ex.errorDescription} while getting written days")
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
