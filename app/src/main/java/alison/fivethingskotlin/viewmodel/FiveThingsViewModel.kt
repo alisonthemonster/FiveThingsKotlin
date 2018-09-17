@@ -7,6 +7,7 @@ import alison.fivethingskotlin.model.Status
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
@@ -34,6 +35,10 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     }
 
     fun saveFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
+
+        Log.d("blerg", "IN DB?: ${fiveThings.inDatabase}")
+        //type fast in one box
+        //and then another
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
@@ -63,16 +68,28 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         return datesLiveData
     }
 
-    private var editCount = -1
+    private var editCount = -1000
 
     fun onEditText() {
         //HACKY FIX: ignores the first edit texts that occur thanks to data binding
+            //except in the case of a brand new day, because empty strings dont execute bindings
         val fiveThings = fiveThingsData.value
+        Log.d("blerggg", "${fiveThings?.data?.date}: $editCount")
+
         when {
-            editCount == -1 -> {
-                editCount = fiveThings?.data?.thingsCount!! - 1
+            editCount == -1000 -> {
+                val thingsCount = fiveThings?.data?.thingsCount!!
+                if (thingsCount == 0 ) {
+                    Log.d("blerggg", "there are no thangs")
+                    editCount = 0
+                    fiveThings.data.edited = true
+                    fiveThingsData.value = fiveThings
+                } else {
+                    editCount = fiveThings.data.thingsCount - 1
+                }
             }
             editCount <= 0 -> {
+                Log.d("blerggg", "an actual edit")
                 fiveThings?.data?.edited = true
                 fiveThingsData.value = fiveThings
             }
