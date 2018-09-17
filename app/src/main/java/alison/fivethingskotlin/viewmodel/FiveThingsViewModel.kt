@@ -74,22 +74,21 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
         //HACKY FIX: ignores the first edit texts that occur thanks to data binding
             //except in the case of a brand new day, because empty strings dont execute bindings
         val fiveThings = fiveThingsData.value
-        Log.d("blerggg", "${fiveThings?.data?.date}: $editCount")
-
         when {
             editCount == -1000 -> {
                 val thingsCount = fiveThings?.data?.thingsCount!!
                 if (thingsCount == 0 ) {
-                    Log.d("blerggg", "there are no thangs")
+                    //the actual very first time a day has been written by the user
                     editCount = 0
                     fiveThings.data.edited = true
                     fiveThingsData.value = fiveThings
                 } else {
+                    //this is a data binding execution by the system!
                     editCount = fiveThings.data.thingsCount - 1
                 }
             }
             editCount <= 0 -> {
-                Log.d("blerggg", "an actual edit")
+                //this is a user edit
                 fiveThings?.data?.edited = true
                 fiveThingsData.value = fiveThings
             }
