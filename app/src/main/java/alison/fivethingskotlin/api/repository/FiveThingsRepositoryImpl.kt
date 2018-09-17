@@ -8,6 +8,7 @@ import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -43,6 +44,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                                         false, false)
                         fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
                     } else {
+                        Crashlytics.logException(java.lang.Exception(response.message()))
                         fiveThingsData.value = buildErrorResource(response)
                     }
                 }
@@ -50,6 +52,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
 
             override fun onFailure(call: Call<List<Thing>>?, t: Throwable?) {
                 fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
+                Crashlytics.logException(java.lang.Exception(t?.localizedMessage))
             }
         })
         return fiveThingsData
@@ -78,13 +81,16 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                                 json.getString("detail")
                             }
                             writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            Crashlytics.logException(java.lang.Exception(Exception(messageString)))
                         } catch (e: Exception) {
+                            Crashlytics.logException(java.lang.Exception(e))
                             writtenDates.value = Resource(Status.ERROR, "Unknown error occured", null)
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
+                    Crashlytics.logException(java.lang.Exception(t?.localizedMessage))
                     writtenDates.value = Resource(Status.ERROR, t?.message, null)
                 }
             })
@@ -104,14 +110,17 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                             val json = JSONObject(response.errorBody()?.string())
                             val messageString = json.getString("detail")
                             writtenDates.value = Resource(Status.ERROR, messageString, null)
+                            Crashlytics.logException(java.lang.Exception(Exception(messageString)))
                         } catch (e: Exception) {
                             //if there's malformed json
+                            Crashlytics.logException(java.lang.Exception(e))
                             writtenDates.value = Resource(Status.ERROR, "", null)
                         }
                     }
                 }
 
                 override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
+                    Crashlytics.logException(java.lang.Exception(t?.localizedMessage))
                     fiveThingsData.value = Resource(Status.ERROR, t?.message, null)
                 }
             })
@@ -132,10 +141,12 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
                     writtenDates.value = Resource(Status.ERROR, messageString, null)
+                    Crashlytics.logException(java.lang.Exception(Exception(messageString)))
                 }
             }
 
             override fun onFailure(call: Call<List<String>>?, t: Throwable?) {
+                Crashlytics.logException(java.lang.Exception(t?.localizedMessage))
                 writtenDates.value = Resource(Status.ERROR, t?.message, null)
             }
         })

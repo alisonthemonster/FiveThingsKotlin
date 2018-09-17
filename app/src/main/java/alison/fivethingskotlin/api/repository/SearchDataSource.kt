@@ -8,6 +8,7 @@ import alison.fivethingskotlin.util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.util.getFullDateFormat
 import android.arch.lifecycle.MutableLiveData
 import android.arch.paging.PageKeyedDataSource
+import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -77,6 +78,7 @@ class SearchDataSource(private val service: FiveThingsService,
                         loadInitial(params, callback)
                     }
                     networkState.postValue(NetworkState.error(messageString))
+                    Crashlytics.logException(java.lang.Exception(messageString))
                 }
             }
 
@@ -85,6 +87,7 @@ class SearchDataSource(private val service: FiveThingsService,
                     loadInitial(params, callback)
                 }
                 networkState.postValue(NetworkState.error("Error getting search results"))
+                Crashlytics.logException(java.lang.Exception(t.localizedMessage))
             }
         })
     }
@@ -116,6 +119,7 @@ class SearchDataSource(private val service: FiveThingsService,
                         loadAfter(params, callback)
                     }
                     networkState.postValue(NetworkState.error(messageString))
+                    Crashlytics.logException(java.lang.Exception(messageString))
                 }
             }
 
@@ -124,6 +128,7 @@ class SearchDataSource(private val service: FiveThingsService,
                     loadAfter(params, callback)
                 }
                 networkState.postValue(NetworkState.error("Error getting search results"))
+                Crashlytics.logException(java.lang.Exception(t.localizedMessage))
             }
         })
     }

@@ -11,21 +11,21 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
-import com.google.firebase.analytics.FirebaseAnalytics
-import io.fabric.sdk.android.Fabric
-
-
-
 
 class PromoActivity : AppCompatActivity() {
 
-    private val USED_INTENT = "USED_INTENT"
+    companion object {
+        const val USED_INTENT = "USED_INTENT"
+        const val HANDLE_AUTHORIZATION_RESPONSE = "HANDLE_AUTHORIZATION_RESPONSE"
+    }
+
     private lateinit var binding: ActivityPromoBinding
 
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
@@ -59,11 +59,10 @@ class PromoActivity : AppCompatActivity() {
                 Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
         )
 
-        val clientId = "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com"
         val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
         val builder = AuthorizationRequest.Builder(
                 serviceConfiguration,
-                clientId,
+                BuildConfig.GOOGLE_AUTH_CLIENT_ID,
                 ResponseTypeValues.CODE,
                 redirectUri
         )
@@ -71,7 +70,7 @@ class PromoActivity : AppCompatActivity() {
         val request = builder.build()
 
         val authorizationService = AuthorizationService(view.context)
-        val action = "HANDLE_AUTHORIZATION_RESPONSE"
+        val action = HANDLE_AUTHORIZATION_RESPONSE
         val postAuthorizationIntent = Intent(view.context, PromoActivity::class.java)
         postAuthorizationIntent.action = action
         val pendingIntent = PendingIntent.getActivity(view.context, request.hashCode(), postAuthorizationIntent, 0)
@@ -86,7 +85,7 @@ class PromoActivity : AppCompatActivity() {
         intent?.let {
             val action = intent.action
             when (action) {
-                "HANDLE_AUTHORIZATION_RESPONSE" -> {
+                HANDLE_AUTHORIZATION_RESPONSE -> {
                     if (!intent.hasExtra(USED_INTENT)) {
                         handleAuthorizationResponse(intent)
                         intent.putExtra(USED_INTENT, true)
