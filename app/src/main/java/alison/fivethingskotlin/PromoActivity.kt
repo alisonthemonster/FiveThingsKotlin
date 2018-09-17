@@ -62,7 +62,7 @@ class PromoActivity : AppCompatActivity() {
         val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
         val builder = AuthorizationRequest.Builder(
                 serviceConfiguration,
-                BuildConfig.GOOGLE_AUTH_CLIENT_ID,
+                "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com",
                 ResponseTypeValues.CODE,
                 redirectUri
         )
