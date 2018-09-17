@@ -4,13 +4,9 @@ import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
-import alison.fivethingskotlin.util.getNextDate
-import alison.fivethingskotlin.util.getPreviousDate
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
-import com.crashlytics.android.Crashlytics
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
@@ -26,7 +22,6 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.logException(ex)
                 fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -40,11 +35,8 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun saveFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
 
-        Log.d("blargle", "wazzup bitch i'm saving")
-
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.logException(ex)
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {
@@ -59,7 +51,6 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                Crashlytics.logException(ex)
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
             } else {
                 idToken?.let {

@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.crashlytics.android.Crashlytics
-import com.google.firebase.analytics.FirebaseAnalytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
@@ -28,17 +27,15 @@ class PromoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPromoBinding
 
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enablePostAuthorizationFlows()
-
         Fabric.with(this, Crashlytics())
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_promo)
+
+        enablePostAuthorizationFlows()
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
         binding.loading = true
@@ -53,6 +50,7 @@ class PromoActivity : AppCompatActivity() {
     }
 
     private fun startAuthorizationRequest(view: View) {
+
         binding.loading = true
         val serviceConfiguration = AuthorizationServiceConfiguration(
                 Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
@@ -143,7 +141,6 @@ class PromoActivity : AppCompatActivity() {
 
     private fun enablePostAuthorizationFlows() {
         val mAuthState = restoreAuthState(this)
-
 
         mAuthState?.let {
             if (mAuthState.isAuthorized) {

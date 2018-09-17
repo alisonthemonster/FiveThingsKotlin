@@ -13,7 +13,6 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import android.util.Log
 import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Response
@@ -42,14 +41,14 @@ fun showErrorDialog(message: String,
                     buttonText: String = "Ok",
                     buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
 
-    Crashlytics.logException(Exception(message))
+
 
     val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 
     dialogBuilder.apply {
         setTitle("Oh no! Something went wrong!")
         val messageSpan = SpannableString(message)
-        messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_color)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         setMessage(messageSpan)
 

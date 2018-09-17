@@ -26,6 +26,8 @@ import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import com.crashlytics.android.Crashlytics
+import java.lang.Exception
 
 
 class FiveThingsFragment : Fragment() {
@@ -117,7 +119,11 @@ class FiveThingsFragment : Fragment() {
         viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
             when (it?.status) {
                 Status.SUCCESS -> addEventsToCalendar(it.data)
-                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                Status.ERROR -> {
+                    val message = it.message!!.capitalize()
+                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date.toString()}  Message: $message"))
+                    showErrorDialog(message, context!!)
+                }
             }
         })
     }

@@ -9,7 +9,6 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
-import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -32,13 +31,11 @@ class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
                     val json = JSONObject(response.errorBody()?.string())
                     val messageString = json.getString("detail")
                     searchResults.value = Resource(Status.ERROR, messageString, null)
-                    Crashlytics.logException(java.lang.Exception(messageString))
                 }
             }
 
             override fun onFailure(call: Call<List<SearchResult>>?, t: Throwable?) {
                 searchResults.value = Resource(Status.ERROR, t?.message, null)
-                Crashlytics.logException(java.lang.Exception(t?.localizedMessage))
             }
         })
 
