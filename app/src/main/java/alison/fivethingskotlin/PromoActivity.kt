@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
@@ -26,12 +27,13 @@ class PromoActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityPromoBinding
-
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         Fabric.with(this, Crashlytics())
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_promo)
 
