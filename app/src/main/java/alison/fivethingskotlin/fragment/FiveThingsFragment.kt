@@ -121,7 +121,7 @@ class FiveThingsFragment : Fragment() {
                 Status.SUCCESS -> addEventsToCalendar(it.data)
                 Status.ERROR -> {
                     val message = it.message!!.capitalize()
-                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date.toString()}  Message: $message"))
+                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date}  Message: $message"))
                     showErrorDialog(message, context!!)
                 }
             }
@@ -182,8 +182,9 @@ class FiveThingsFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     binding.loading = false
-                    showErrorDialog(fiveThings.message!!.capitalize(), context!!)
-                    //Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
+                    val message = fiveThings.message!!.capitalize()
+                    Crashlytics.logException(Exception("GET things error, date: $currentDate  Message: $message"))
+                    showErrorDialog(message, context!!)
                 }
             }
         })
@@ -195,7 +196,11 @@ class FiveThingsFragment : Fragment() {
             days?.let {
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                    Status.ERROR -> {
+                        val message = it.message!!.capitalize()
+                        Crashlytics.logException(Exception("GET days error, Message: $message"))
+                        showErrorDialog(message, context!!)
+                    }
                 }
             }
         })

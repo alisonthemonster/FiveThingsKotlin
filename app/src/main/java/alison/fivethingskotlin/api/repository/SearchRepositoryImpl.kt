@@ -19,6 +19,7 @@ import java.util.concurrent.Executor
 class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
                            private val networkExecutor: Executor): SearchRepository {
 
+    //TODO delete, no longer in use
     override fun getSearchResults(token: String, keyword: String): LiveData<Resource<List<SearchResult>>> {
         val searchResults = MutableLiveData<Resource<List<SearchResult>>>()
 
