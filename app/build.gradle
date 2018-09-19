@@ -60,6 +60,7 @@ dependencies {
     implementation 'net.openid:appauth:0.7.1'
     implementation 'android.arch.paging:runtime:1.0.1'
     implementation 'com.google.android.gms:play-services-oss-licenses:16.0.0'
+    implementation 'com.romandanylyk:pageindicatorview:1.0.2'
 
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'

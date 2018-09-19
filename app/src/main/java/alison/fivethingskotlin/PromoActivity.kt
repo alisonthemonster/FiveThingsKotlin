@@ -1,5 +1,6 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.adapter.IntroAdapter
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import alison.fivethingskotlin.util.AUTH_STATE
 import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME
@@ -33,6 +34,9 @@ class PromoActivity : AppCompatActivity() {
         binding.loading = true
 
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
+
+        promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
+//        promo_view_pager.setPageTransformer(false, IntroPageTransformer())
 
     }
 
