@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,18 +16,27 @@
         android:textColor="@color/primary_text_color"
         android:textSize="18sp"
         tools:text="Sample error message" />
+
     <ProgressBar
         android:id="@+id/progress_bar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center" />
+
     <Button
         android:id="@+id/retry_button"
-        android:background="@drawable/rounded_button"
-        android:textColor="@color/primary_text_color"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Retry"/>
+        android:background="@drawable/rounded_button"
+        android:text="Retry"
+        android:textColor="@color/primary_text_color" />
+
+    <ImageView
+        android:id="@+id/no_results"
+        android:layout_width="150dp"
+        android:layout_height="160dp"
+        android:layout_gravity="center"
+        app:srcCompat="@drawable/ic_no_results" />
 </LinearLayout>
