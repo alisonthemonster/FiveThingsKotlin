@@ -8,7 +8,7 @@ import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
-import alison.fivethingskotlin.databinding.FiveThingsFragmentBinding
+import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -19,23 +19,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import kotlinx.android.synthetic.main.five_things_fragment.*
+import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
 import android.support.v7.app.AlertDialog
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 
 
 class FiveThingsFragment : Fragment() {
 
     private lateinit var viewModel: FiveThingsViewModel
-    private lateinit var binding: FiveThingsFragmentBinding
+    private lateinit var binding: FragmentFiveThingsBinding
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
-
-    //TODO make enter button in keyboard change to be next button and then finally save
 
     companion object {
 
@@ -54,7 +51,7 @@ class FiveThingsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        binding = FiveThingsFragmentBinding.inflate(inflater, container, false)
+        binding = FragmentFiveThingsBinding.inflate(inflater, container, false)
         binding.loading = true
 
         context?.let {
@@ -233,5 +230,4 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
-    //TODO handle when user tries to leave fragment with un-inDatabase changes
 }
