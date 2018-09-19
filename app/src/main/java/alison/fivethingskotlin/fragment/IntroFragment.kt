@@ -29,10 +29,7 @@ class IntroFragment : Fragment() {
             else -> R.layout.fragment_intro_one
         }
 
-        // Inflate the layout resource file
         val view = activity?.layoutInflater?.inflate(layoutResId, container, false)
-
-        // Set the current page index as the View's tag (useful in the PageTransformer)
         view?.tag = page
 
         return view
@@ -40,7 +37,7 @@ class IntroFragment : Fragment() {
 
     companion object {
 
-        private val PAGE = "page"
+        const val PAGE = "page"
 
         fun newInstance(page: Int): IntroFragment {
             val fragment = IntroFragment()
