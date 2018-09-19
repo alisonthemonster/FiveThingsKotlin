@@ -21,6 +21,7 @@ android {
     buildTypes {
         debug {
             debuggable true
+            buildConfigField('String', 'BASE_URL', '"https://5things.nagkumar.com/api/"')
             buildConfigField('String', 'PRIVACY_POLICY_URL', '"https://rawgit.com/alisonthemonster/FiveThingsKotlin/master/privacy_policy.html"')
             buildConfigField('String', 'TERMS_CONDITIONS_URL', '"https://rawgit.com/alisonthemonster/FiveThingsKotlin/master/terms_and_conditions.html"')
         }
@@ -29,6 +30,7 @@ android {
             debuggable false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField('String', 'BASE_URL', '"https://api.fivethings.me/"')
             buildConfigField('String', 'PRIVACY_POLICY_URL', '"https://cdn.rawgit.com/alisonthemonster/FiveThingsKotlin/c7862740/privacy_policy.html"')
             buildConfigField('String', 'TERMS_CONDITIONS_URL', '"https://cdn.rawgit.com/alisonthemonster/FiveThingsKotlin/e90a0bf5/terms_and_conditions.html"')
         }
