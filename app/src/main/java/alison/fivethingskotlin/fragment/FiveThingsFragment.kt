@@ -3,28 +3,29 @@ package alison.fivethingskotlin.fragment
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.FiveThings
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
-import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
-import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
+import org.reactivestreams.Subscription
 import java.util.*
-import android.support.v7.app.AlertDialog
-import android.text.Editable
-import android.text.TextWatcher
+import java.util.concurrent.TimeUnit
 
 
 class FiveThingsFragment : Fragment() {
@@ -69,13 +70,41 @@ class FiveThingsFragment : Fragment() {
             currentDate = if (passedInDate != null)
                 getDateFromFullDateFormat(passedInDate) else Date()
 
+            startObserving()
             getFiveThings()
-
             getWrittenDays()
         }
 
 
         return binding.root
+    }
+
+    private fun startObserving() {
+        viewModel.datesLiveData().observe(this, Observer<Resource<List<Date>>> { dates ->
+            when (dates?.status) {
+                Status.SUCCESS -> addEventsToCalendar(dates.data)
+                Status.ERROR -> {
+                    binding.loading = false
+                    handleErrorState(dates.message!!.capitalize(), context!!)
+                }
+            }
+        })
+
+        viewModel.thingsLiveData().observe(this, Observer<Resource<FiveThings>> { things ->
+            when (things?.status) {
+                Status.SUCCESS -> {
+                    val date = things.data?.date!!
+                    binding.naguDate = date
+                    binding.month = getMonth(date) + " " + getYear(date)
+                    compactcalendar_view.setCurrentDate(date)
+                    binding.loading = false
+                }
+                Status.ERROR -> {
+                    binding.loading = false
+                    handleErrorState(things.message!!.capitalize(), context!!)
+                }
+            }
+        })
     }
 
     override fun onStart() {
@@ -106,92 +135,33 @@ class FiveThingsFragment : Fragment() {
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
         }
-
-        setUpAutoSave()
     }
 
-    private fun saveFiveThings() {
-        viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-            when (it?.status) {
-                Status.SUCCESS -> addEventsToCalendar(it.data)
-                Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
-            }
-        })
-    }
+    private var subscription: Subscription? = null
 
-    private fun setUpAutoSave() {
-        val delay: Long = 1000 // 1 seconds after user stops typing
-        var lastEditText: Long = 0
-        val handler = Handler()
+    private fun autoSaveRx() {
 
-        val inputFinished = Runnable {
-            if (System.currentTimeMillis() > lastEditText + delay - 500) {
-                if (binding.fiveThings!!.edited)
-                    saveFiveThings()
-            }
-        }
+        //when ever the text in the 1st text box changes send an update to server
+            //TODO how to know when to update vs to add an entry
+        RxTextView.afterTextChangeEvents(one)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { tvChangeEvent ->
+                    val text = tvChangeEvent.view().text.toString()
+                    viewModel.updateThing("token", text, 1, currentDate)
+                }
 
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int,
-                                           after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int,
-                                       count: Int) {
-                //You need to remove this to run only once
-                handler.removeCallbacks(inputFinished)
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                lastEditText = System.currentTimeMillis()
-                handler.postDelayed(inputFinished, delay)
-            }
-        }
-
-        one.addTextChangedListener(textWatcher)
-        two.addTextChangedListener(textWatcher)
-        three.addTextChangedListener(textWatcher)
-        four.addTextChangedListener(textWatcher)
-        five.addTextChangedListener(textWatcher)
     }
 
     private fun getFiveThings() {
-
         binding.loading = true
-
-        viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
-            when (fiveThings?.status) {
-                Status.SUCCESS -> {
-                    binding.fiveThings = fiveThings.data
-                    fiveThings.data?.let {
-                        binding.naguDate = it.date
-                        binding.month = getMonth(it.date) + " " + getYear(it.date)
-                        compactcalendar_view.setCurrentDate(it.date)
-                        binding.loading = false
-                    }
-                }
-                Status.ERROR -> {
-                    binding.loading = false
-                    handleErrorState(fiveThings.message!!.capitalize(), context!!)
-                    //Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
-                }
-            }
-        })
+        viewModel.getThings("token", currentDate)
     }
 
     private fun getWrittenDays() {
-        //build calendar when days come back from server
-        viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            days?.let {
-                when (it.status) {
-                    Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
-                }
-            }
-        })
-
-        binding.calendarVisible = false
+        binding.loading = true
+        viewModel.getDays("token")
     }
 
     private fun addEventsToCalendar(dates: List<Date>?) {

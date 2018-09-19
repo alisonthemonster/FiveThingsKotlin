@@ -8,6 +8,7 @@ import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import io.reactivex.disposables.Disposable
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -61,7 +62,7 @@ class FiveThingsRepositoryImpl(private val fiveThingsService: FiveThingsService 
 
         if (fiveThings.inDatabase) {
             //UPDATE AN ALREADY WRITTEN DAY
-            val call = fiveThingsService.updateFiveThings(token, things)
+            val call = fiveThingsService.updateFiveThings(token, fiveThings.things.toTypedArray())
             call.enqueue(object : Callback<List<String>> {
                 override fun onResponse(call: Call<List<String>>?, response: Response<List<String>>) {
                     if (response.isSuccessful) {
