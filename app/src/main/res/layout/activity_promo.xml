@@ -72,6 +72,18 @@
                 app:piv_unselectedColor="@color/disabled_white"
                 app:piv_viewPager="@id/promo_view_pager" />
 
+            <include
+                android:id="@+id/auth_problems"
+                layout="@layout/layout_auth_problems"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toTopOf="@id/google_auth_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
+
             <Button
                 android:id="@+id/google_auth_button"
                 android:layout_width="0dp"

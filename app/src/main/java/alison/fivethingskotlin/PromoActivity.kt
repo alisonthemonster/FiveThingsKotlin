@@ -5,7 +5,6 @@ import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import alison.fivethingskotlin.util.AUTH_STATE
 import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME
 import alison.fivethingskotlin.util.restoreAuthState
-import alison.fivethingskotlin.util.showErrorDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -27,14 +26,18 @@ class PromoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enablePostAuthorizationFlows()
 
         setContentView(R.layout.activity_promo)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
         binding.loading = true
 
+        enablePostAuthorizationFlows()
+
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
+
+        val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
+        auth_problems.visibility =  if (havingAuthTrouble) View.VISIBLE else View.GONE
 
         promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
     }
@@ -137,8 +140,7 @@ class PromoActivity : AppCompatActivity() {
         val mAuthState = restoreAuthState(this)
 
         if (mAuthState == null) {
-            showErrorDialog("Log in failed", this)
-            //TODO Non fatal
+            binding.loading = false
         } else {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!

@@ -5,11 +5,10 @@ import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.restoreAuthState
-import alison.fivethingskotlin.util.showErrorDialog
+import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.viewmodel.SearchViewModel
 import alison.fivethingskotlin.viewmodel.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
-import alison.fivethingskotlin.util.openLogInScreen
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -80,21 +79,21 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
-        if (authState != null) {
-            showErrorDialog("Log in failed", context!!)
-        } else {
-            authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-                if (ex != null) {
-                    showErrorDialog("Log in failed: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
-                } else {
-                    idToken?.let {
-                        adapter.submitList(null)
-                        viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
-                    }
+        authState = null
+
+        if (authState == null) {
+            handleErrorState("Log in failed", context!!)
+        }
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                handleErrorState("Log in failed: ${ex.errorDescription}", context!!)
+            } else {
+                idToken?.let {
+                    adapter.submitList(null)
+                    viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
                 }
             }
         }
-
     }
 
 
