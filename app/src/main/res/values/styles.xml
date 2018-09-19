@@ -15,8 +15,6 @@
         <item name="textColorAlertDialogListItem">@color/primary_text_color</item>
     </style>
 
-    <!--TODO detail text for dialogs needs fixed-->
-
     <style name="PrefTheme" parent="@style/PreferenceThemeOverlay.v14.Material">
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
@@ -32,6 +30,8 @@
         <item name="android:padding">4dp</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="android:textSize">17sp</item>
+        <item name="android:minHeight">75dp</item>
+        <item name="android:maxLength">65535</item>
     </style>
 
     <style name="Text">
