@@ -55,7 +55,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        val isLightMode = sharedPref.getBoolean("dark_light_mode", false) //default is dark mode
+        val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
 
         if (isLightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE

@@ -36,8 +36,6 @@ class PromoActivity : AppCompatActivity() {
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
 
         promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
-//        promo_view_pager.setPageTransformer(false, IntroPageTransformer())
-
     }
 
     override fun onStart() {
