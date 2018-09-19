@@ -18,7 +18,8 @@ An app to track your quickly track, review, and reflect on your days.
 - Espresso for instrumented tests
 - MockWebServer for instrumented tests
 - ~~Travis CI~~ Circle CI
-- Fastlane + Hockey for CICD
+- Fastlane + HockeyApp for CICD
+- Crashlytics + Firebase for monitoring and analytics
 - CompactCalendarView
 
 
