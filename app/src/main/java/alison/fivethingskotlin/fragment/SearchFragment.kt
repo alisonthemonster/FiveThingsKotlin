@@ -79,8 +79,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
-        authState = null
-
         if (authState == null) {
             handleErrorState("Log in failed", context!!)
         }
