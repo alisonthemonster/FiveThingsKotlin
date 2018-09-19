@@ -5,6 +5,7 @@ import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import alison.fivethingskotlin.util.AUTH_STATE
 import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME
 import alison.fivethingskotlin.util.restoreAuthState
+import alison.fivethingskotlin.util.showErrorDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -135,8 +136,10 @@ class PromoActivity : AppCompatActivity() {
     private fun enablePostAuthorizationFlows() {
         val mAuthState = restoreAuthState(this)
 
-
-        mAuthState?.let {
+        if (mAuthState == null) {
+            showErrorDialog("Log in failed", this)
+            //TODO Non fatal
+        } else {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!
                 val intent = Intent(applicationContext, ContainerActivity::class.java)

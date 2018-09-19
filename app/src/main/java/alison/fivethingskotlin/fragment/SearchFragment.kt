@@ -32,7 +32,7 @@ import java.util.concurrent.Executors
 class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
-    private lateinit var authState: AuthState
+    private var authState: AuthState? = null
     private lateinit var authorizationService: AuthorizationService
     private lateinit var adapter: PagedSearchResultAdapter
 
@@ -46,12 +46,12 @@ class SearchFragment : Fragment() {
 
         context?.let {
             authorizationService = AuthorizationService(it)
-            authState = restoreAuthState(it)!!
+            authState = restoreAuthState(it)
 
             val executor = Executors.newFixedThreadPool(5)
 
             viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl(FiveThingsService.create(), executor)))
-                        .get(SearchViewModel::class.java)
+                    .get(SearchViewModel::class.java)
 
             viewModel.searchResults.observe(this, Observer<PagedList<SearchResult>> {
                 adapter.submitList(it)
@@ -80,18 +80,22 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
-        authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-            if (ex != null) {
-                showErrorDialog("Unable to log in: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
-            } else {
-                idToken?.let {
-                    adapter.submitList(null)
-                    viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
+        if (authState != null) {
+            showErrorDialog("Log in failed", context!!)
+        } else {
+            authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+                if (ex != null) {
+                    showErrorDialog("Log in failed: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
+                } else {
+                    idToken?.let {
+                        adapter.submitList(null)
+                        viewModel.getPaginatedSearchResults("Bearer $it", text, 50, 1)
+                    }
                 }
             }
         }
-    }
 
+    }
 
 
     // Container Activity must implement this interface
