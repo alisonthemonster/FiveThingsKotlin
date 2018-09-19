@@ -7,7 +7,6 @@ import alison.fivethingskotlin.model.Status
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
@@ -21,6 +20,9 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
 
+        if (authState == null) {
+            fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed", null))
+        }
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
@@ -36,9 +38,9 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun saveFiveThings(fiveThings: FiveThings): LiveData<Resource<List<Date>>> {
 
-        Log.d("blerg", "IN DB?: ${fiveThings.inDatabase}")
-        //type fast in one box
-        //and then another
+        if (authState == null) {
+            fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed", null))
+        }
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
@@ -54,6 +56,9 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     }
 
     fun getWrittenDays(): LiveData<Resource<List<Date>>> {
+        if (authState == null) {
+            fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed", null))
+        }
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 datesLiveData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
@@ -72,7 +77,7 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
 
     fun onEditText() {
         //HACKY FIX: ignores the first edit texts that occur thanks to data binding
-            //except in the case of a brand new day, because empty strings dont execute bindings
+        //except in the case of a brand new day, because empty strings dont execute bindings
         val fiveThings = fiveThingsData.value
         when {
             editCount == -1000 -> {

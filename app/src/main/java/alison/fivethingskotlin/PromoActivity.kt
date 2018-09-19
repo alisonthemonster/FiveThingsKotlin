@@ -1,5 +1,6 @@
 package alison.fivethingskotlin
 
+import alison.fivethingskotlin.adapter.IntroAdapter
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import alison.fivethingskotlin.util.AUTH_STATE
 import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
+
 class PromoActivity : AppCompatActivity() {
 
     companion object {
@@ -37,13 +39,17 @@ class PromoActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_promo)
 
-        enablePostAuthorizationFlows()
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
         binding.loading = true
 
+        enablePostAuthorizationFlows()
+
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
 
+        val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
+        auth_problems.visibility =  if (havingAuthTrouble) View.VISIBLE else View.GONE
+
+        promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
     }
 
     override fun onStart() {
@@ -52,17 +58,17 @@ class PromoActivity : AppCompatActivity() {
     }
 
     private fun startAuthorizationRequest(view: View) {
-
         binding.loading = true
         val serviceConfiguration = AuthorizationServiceConfiguration(
                 Uri.parse("https://accounts.google.com/o/oauth2/v2/auth") /* auth endpoint */,
                 Uri.parse("https://www.googleapis.com/oauth2/v4/token") /* token endpoint */
         )
 
+        val clientId = "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com"
         val redirectUri = Uri.parse("alison.fivethingskotlin:/oauth2redirect")
         val builder = AuthorizationRequest.Builder(
                 serviceConfiguration,
-                "142866886118-1hna99dvja9ssjl5mdbms1bj6ctmo55j.apps.googleusercontent.com",
+                clientId,
                 ResponseTypeValues.CODE,
                 redirectUri
         )
@@ -144,7 +150,9 @@ class PromoActivity : AppCompatActivity() {
     private fun enablePostAuthorizationFlows() {
         val mAuthState = restoreAuthState(this)
 
-        mAuthState?.let {
+        if (mAuthState == null) {
+            binding.loading = false
+        } else {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!
                 val intent = Intent(applicationContext, ContainerActivity::class.java)

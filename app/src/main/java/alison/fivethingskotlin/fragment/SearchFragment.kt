@@ -3,30 +3,25 @@ package alison.fivethingskotlin.fragment
 import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.model.SearchResult
-import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.restoreAuthState
-import alison.fivethingskotlin.util.showErrorDialog
+import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.viewmodel.SearchViewModel
 import alison.fivethingskotlin.viewmodel.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
-import alison.fivethingskotlin.util.openLogInScreen
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
 import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import kotlinx.android.synthetic.main.search_fragment.*
+import kotlinx.android.synthetic.main.fragment_search.*
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationService
 import java.util.*
@@ -36,13 +31,13 @@ import java.util.concurrent.Executors
 class SearchFragment : Fragment() {
 
     private lateinit var viewModel: SearchViewModel
-    private lateinit var authState: AuthState
+    private var authState: AuthState? = null
     private lateinit var authorizationService: AuthorizationService
     private lateinit var adapter: PagedSearchResultAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.search_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,12 +45,12 @@ class SearchFragment : Fragment() {
 
         context?.let {
             authorizationService = AuthorizationService(it)
-            authState = restoreAuthState(it)!!
+            authState = restoreAuthState(it)
 
             val executor = Executors.newFixedThreadPool(5)
 
             viewModel = ViewModelProviders.of(this, SearchViewModelFactory(SearchRepositoryImpl(FiveThingsService.create(), executor)))
-                        .get(SearchViewModel::class.java)
+                    .get(SearchViewModel::class.java)
 
             viewModel.searchResults.observe(this, Observer<PagedList<SearchResult>> {
                 adapter.submitList(it)
@@ -84,9 +79,12 @@ class SearchFragment : Fragment() {
     }
 
     private fun getPaginatedResultsWithFreshToken(text: String) {
-        authState.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+        if (authState == null) {
+            handleErrorState("Log in failed", context!!)
+        }
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
-                showErrorDialog("Unable to log in: ${ex.errorDescription}", context!!, "Log in again", openLogInScreen(context!!))
+                handleErrorState("Log in failed: ${ex.errorDescription}", context!!)
             } else {
                 idToken?.let {
                     adapter.submitList(null)
@@ -95,7 +93,6 @@ class SearchFragment : Fragment() {
             }
         }
     }
-
 
 
     // Container Activity must implement this interface

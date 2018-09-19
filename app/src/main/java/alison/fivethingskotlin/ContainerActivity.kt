@@ -26,6 +26,7 @@ import android.support.v7.preference.PreferenceManager
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import kotlinx.android.synthetic.main.activity_container.*
 import org.joda.time.Days
 import org.joda.time.LocalDate
@@ -59,7 +60,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        val isLightMode = sharedPref.getBoolean("dark_light_mode", false) //default is dark mode
+        val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
 
         if (isLightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
@@ -115,19 +116,19 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private fun setUpNavigationDrawer() {
-        val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-
         drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
+        drawerLayout.addDrawerListener(drawerListener)
+
         val drawerToggle = ActionBarDrawerToggle(this,
                 drawerLayout,
                 toolbar,
                 R.string.drawer_open,
                 R.string.drawer_close)
         drawerLayout.addDrawerListener(drawerToggle)
-        title = ""
         drawerToggle.syncState()
 
+        title = ""
         navigation_view.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.five_things_item -> {
@@ -189,6 +190,32 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             // or other notification behaviors after this
             val notificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+    private val drawerListener = object : DrawerLayout.DrawerListener {
+
+        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+            //Called when a drawer's position changes.
+        }
+
+        override fun onDrawerOpened(drawerView: View) {
+            //Called when a drawer has settled in a completely open state.
+            //The drawer is interactive at this point.
+            // If you have 2 drawers (left and right) you can distinguish
+            // them by using id of the drawerView. int id = drawerView.getId();
+            // id will be your layout's id: for example R.id.left_drawer
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+            // Called when a drawer has settled in a completely closed state.
+        }
+
+        override fun onDrawerStateChanged(newState: Int) {
+            //possibly change to lose focus on all edit texts?
+            // Called when the drawer motion state changes. The new state will be one of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
+            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
     }
 

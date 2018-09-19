@@ -26,7 +26,7 @@
             android:background="@drawable/rounded_text_box"
             android:tint="@color/primary_text_color"
             android:padding="8dp"
-            app:srcCompat="@drawable/ic_white_search" />
+            app:srcCompat="@drawable/ic_search" />
 
         <EditText
             android:id="@+id/search_item"

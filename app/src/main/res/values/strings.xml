@@ -22,4 +22,12 @@
     <string name="feature_coming_soon">Feature coming soon!</string>
     <string name="channel_name">FiveThingsChannel</string>
     <string name="channel_description">Five Things Channel</string>
+    <string name="intro_header_write">Write Five Things a day</string>
+    <string name="intro_content_write">Keep track of your days in five manageable pieces.\nIt’s as easy as 1, 2, 3...4, 5</string>
+    <string name="intro_header_help">Here to help</string>
+    <string name="intro_content_help">Once a day is all it takes, and we’ll make sure you stay on track with useful and timely reminders</string>
+    <string name="intro_header_search">Search your Five Things</string>
+    <string name="intro_content_search">Find that time you slam dunked on Kevin</string>
+    <string name="auth_problems_header">Do we know you?</string>
+    <string name="auth_problems_content">Hmmm looks like you need to sign in again to view this content. Sorry about that!</string>
 </resources>

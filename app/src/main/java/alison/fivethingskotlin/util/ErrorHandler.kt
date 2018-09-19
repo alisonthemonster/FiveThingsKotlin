@@ -13,10 +13,8 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import com.crashlytics.android.Crashlytics
 import org.json.JSONObject
 import retrofit2.Response
-import java.lang.Exception
 
 
 fun <T> buildErrorResource(response: Response<T>): Resource<FiveThings>? {
@@ -36,41 +34,39 @@ val closeButtonListener: DialogInterface.OnClickListener = DialogInterface.OnCli
     dialog.cancel()
 }
 
-fun showErrorDialog(message: String,
-                    context: Context,
-                    buttonText: String = "Ok",
-                    buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
+fun handleErrorState(message: String,
+                     context: Context,
+                     buttonText: String = "Ok",
+                     buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
 
+    if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
+        openLogInScreen(context)
+        //TODO add analytics to capture this
+    } else {
 
+        val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 
-    val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
+        dialogBuilder.apply {
+            setTitle("Oh no! Something went wrong!")
 
-    dialogBuilder.apply {
-        setTitle("Oh no! Something went wrong!")
-        val messageSpan = SpannableString(message)
-        messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_color)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            val messageSpan = SpannableString(message)
+            messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setMessage(messageSpan)
 
-        setMessage(messageSpan)
-
-        if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
-            setNegativeButton("Log in again", openLogInScreen(context))
-            setCancelable(false)
-        } else {
             setNegativeButton(buttonText, buttonAction)
         }
+        val alert = dialogBuilder.create()
+        alert.show()
+        val button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+        button.setTextColor(ContextCompat.getColor(context, R.color.bluegreen))
     }
-    val alert = dialogBuilder.create()
-    alert.show()
-    val button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
-    button.setTextColor(ContextCompat.getColor(context, R.color.bluegreen))
 }
 
-fun openLogInScreen(context: Context): DialogInterface.OnClickListener {
-    return DialogInterface.OnClickListener { _, _ ->
-        clearAuthState(context) //log user out
+fun openLogInScreen(context: Context) {
+    clearAuthState(context) //log user out
 
-        val intent = Intent(context, PromoActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        context.startActivity(intent)
-    }
+    val intent = Intent(context, PromoActivity::class.java)
+    intent.putExtra("AUTH_TROUBLE", true)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    context.startActivity(intent)
 }

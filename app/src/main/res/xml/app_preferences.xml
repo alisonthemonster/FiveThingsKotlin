@@ -11,7 +11,7 @@
             android:title="Daily Reminder Notifications" />
 
         <alison.fivethingskotlin.util.TimePreference
-            android:defaultValue="23:00"
+            android:defaultValue="22:00"
             android:dependency="notif_parent"
             android:dialogTitle="Daily Reminder Time"
             android:key="pref_time"
@@ -22,7 +22,7 @@
     <PreferenceCategory android:title="Appearance">
 
         <SwitchPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="dark_light_mode"
             android:summaryOff="Switch to the light mode"
             android:summaryOn="Switch to the dark mode"
