@@ -26,14 +26,18 @@ class PromoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        enablePostAuthorizationFlows()
 
         setContentView(R.layout.activity_promo)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_promo)
         binding.loading = true
 
+        enablePostAuthorizationFlows()
+
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
+
+        val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
+        auth_problems.visibility =  if (havingAuthTrouble) View.VISIBLE else View.GONE
 
         promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
     }
@@ -135,8 +139,9 @@ class PromoActivity : AppCompatActivity() {
     private fun enablePostAuthorizationFlows() {
         val mAuthState = restoreAuthState(this)
 
-
-        mAuthState?.let {
+        if (mAuthState == null) {
+            binding.loading = false
+        } else {
             if (mAuthState.isAuthorized) {
                 //we are logged in!!
                 val intent = Intent(applicationContext, ContainerActivity::class.java)

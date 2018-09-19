@@ -114,7 +114,7 @@ class FiveThingsFragment : Fragment() {
         viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
             when (it?.status) {
                 Status.SUCCESS -> addEventsToCalendar(it.data)
-                Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
             }
         })
     }
@@ -173,7 +173,7 @@ class FiveThingsFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     binding.loading = false
-                    showErrorDialog(fiveThings.message!!.capitalize(), context!!)
+                    handleErrorState(fiveThings.message!!.capitalize(), context!!)
                     //Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
                 }
             }
@@ -186,7 +186,7 @@ class FiveThingsFragment : Fragment() {
             days?.let {
                 when (it.status) {
                     Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> showErrorDialog(it.message!!.capitalize(), context!!)
+                    Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
                 }
             }
         })
