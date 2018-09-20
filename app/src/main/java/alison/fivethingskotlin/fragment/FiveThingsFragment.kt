@@ -34,6 +34,8 @@ class FiveThingsFragment : Fragment() {
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
 
+    private var inCloud: Boolean = false
+
     companion object {
 
         const val DATE = "date_key"
@@ -53,6 +55,7 @@ class FiveThingsFragment : Fragment() {
 
         binding = FragmentFiveThingsBinding.inflate(inflater, container, false)
         binding.loading = true
+        binding.saving = false
 
         viewModel = ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
 
@@ -65,7 +68,6 @@ class FiveThingsFragment : Fragment() {
             getDateFromFullDateFormat(passedInDate) else Date()
 
         startObserving()
-        //setUpTextListeners()
         getFiveThings()
         getWrittenDays()
 
@@ -75,6 +77,8 @@ class FiveThingsFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+
+        //setUpTextListeners()
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
@@ -107,8 +111,11 @@ class FiveThingsFragment : Fragment() {
         viewModel.datesLiveData().observe(this, Observer<Resource<List<Date>>> { dates ->
             when (dates?.status) {
                 Status.SUCCESS -> {
-                    Log.d("blerg", "we got something yo")
                     addEventsToCalendar(dates.data)
+                    Log.d("blergg", "we got an update! ${dates.message}")
+                    if (dates.message == "A day was changed") {
+                        binding.saving = false
+                    }
                 }
                 Status.ERROR -> {
                     binding.loading = false
@@ -126,6 +133,7 @@ class FiveThingsFragment : Fragment() {
                     binding.month = getMonth(date) + " " + getYear(date)
                     compactcalendar_view.setCurrentDate(date)
                     binding.loading = false
+                    inCloud = !things.data.isEmpty //if there's data there it came from the server
                 }
                 Status.ERROR -> {
                     binding.loading = false
@@ -149,13 +157,21 @@ class FiveThingsFragment : Fragment() {
 
                 //when ever the text in the 1st text box changes send an update to server
                 //TODO how to know when to update vs to add an entry
-                RxTextView.afterTextChangeEvents(one)
+                RxTextView.afterTextChangeEvents(five)
                         .debounce(1000, TimeUnit.MILLISECONDS)
                         .distinctUntilChanged()
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { tvChangeEvent ->
                             val text = tvChangeEvent.view().text.toString()
-                            viewModel.updateThing("Bearer $idToken", text, 1, currentDate)
+                            if (inCloud) {
+                                Log.d("blerg", "its in the database so lets update $text")
+                                binding.saving = true
+                                viewModel.updateThing("Bearer $idToken", text, 5, currentDate)
+                            } else {
+                                Log.d("blerg", "its NOT in the database so lets write this $text")
+                                binding.saving = true
+                                viewModel.saveNewThing("Bearer $idToken", text, 5, currentDate)
+                            }
                         }
             }
         }
