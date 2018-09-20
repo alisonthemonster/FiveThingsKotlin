@@ -1,62 +1,28 @@
 package alison.fivethingskotlin.viewmodel
 
 import alison.fivethingskotlin.api.FiveThingsService
-import alison.fivethingskotlin.api.repository.FiveThingsRepository
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import net.openid.appauth.AuthState
-import net.openid.appauth.AuthorizationService
+import retrofit2.adapter.rxjava2.HttpException
 import java.util.*
 
 
-class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository, private val authState: AuthState?, private val authorizationService: AuthorizationService) : ViewModel() {
+class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = FiveThingsService.create()) : ViewModel() {
 
     private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
     private val datesLiveData = MutableLiveData<Resource<List<Date>>>()
 
-    private val fiveThingsService: FiveThingsService = FiveThingsService.create()
-
-
-    fun getFiveThings(date: Date): LiveData<Resource<FiveThings>> {
-
-        if (authState == null) {
-            fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed", null))
-        }
-        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-            if (ex != null) {
-                fiveThingsData.postValue(Resource(Status.ERROR, "Log in failed: ${ex.errorDescription}", null))
-            } else {
-                idToken?.let {
-                    val things = fiveThingsRepository.getFiveThings("Bearer $idToken", date, fiveThingsData)
-                    fiveThingsData.postValue(things.value)
-                }
-            }
-        }
-        return fiveThingsData
-    }
-
     private val disposables = CompositeDisposable()
 
-    fun datesLiveData(): MutableLiveData<Resource<List<Date>>> {
-        return datesLiveData
-    }
-
-    fun thingsLiveData(): MutableLiveData<Resource<FiveThings>> {
-        return fiveThingsData
-    }
-
     fun updateThing(token: String, content: String, order: Int, date: Date) {
-
-
         disposables.add(fiveThingsService.updateFiveThingsRx(token, arrayOf(Thing(getDatabaseStyleDate(date), content, order)))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,7 +38,6 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
     }
 
     fun saveNewThing(token: String, content: String, order: Int, date: Date) {
-
         //TODO doOnSubscribe to handle loading
         disposables.add(fiveThingsService.writeFiveThingsRx(token, arrayOf(Thing(getDatabaseStyleDate(date), content, order)))
                 .subscribeOn(Schedulers.io())
@@ -100,12 +65,24 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
                             fiveThingsData.postValue(Resource(Status.SUCCESS, "", fiveThings))
                         },
                         { error ->
-                            datesLiveData.postValue(Resource(Status.ERROR, error.message, null))
+                            if (error is retrofit2.HttpException && error.code() == 404) {
+                                val things = FiveThings(date, listOf(
+                                        Thing(getDatabaseStyleDate(date), "", 1),
+                                        Thing(getDatabaseStyleDate(date), "", 2),
+                                        Thing(getDatabaseStyleDate(date), "", 3),
+                                        Thing(getDatabaseStyleDate(date), "", 4),
+                                        Thing(getDatabaseStyleDate(date), "", 5)),
+                                        false,
+                                        false)
+                                fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
+                            } else {
+                                datesLiveData.postValue(Resource(Status.ERROR, error.message, null))
+                            }
                         }
                 ))
     }
 
-    fun getDays(token: String): LiveData<Resource<List<Date>>> {
+    fun getDays(token: String) {
         disposables.add(fiveThingsService.getWrittenDatesRx(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -118,6 +95,14 @@ class FiveThingsViewModel(private val fiveThingsRepository: FiveThingsRepository
                             datesLiveData.postValue(Resource(Status.ERROR, error.message, null))
                         }
                 ))
+    }
+
+    fun datesLiveData(): MutableLiveData<Resource<List<Date>>> {
+        return datesLiveData
+    }
+
+    fun thingsLiveData(): MutableLiveData<Resource<FiveThings>> {
+        return fiveThingsData
     }
 
     override fun onCleared() {
