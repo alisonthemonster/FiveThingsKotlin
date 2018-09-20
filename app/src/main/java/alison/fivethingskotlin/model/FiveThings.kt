@@ -9,29 +9,42 @@ data class FiveThings(
         var edited: Boolean = false,
         var inDatabase: Boolean = true) {
 
+    var one = ""
+    var two = ""
+    var three = ""
+    var four = ""
+    var five = ""
+
+    init {
+        for (thing in things) {
+            when (thing.order) {
+                1 -> one = thing.content
+                2 -> two = thing.content
+                3 -> three = thing.content
+                4 -> four = thing.content
+                5 -> five = thing.content
+            }
+        }
+    }
+
+
     val isEmpty: Boolean
         get() {
 
-            return things[0].isEmpty &&
-                    things[1].isEmpty &&
-                    things[2].isEmpty &&
-                    things[3].isEmpty &&
-                    things[4].isEmpty
+            return one.isEmpty() &&
+                    two.isEmpty() &&
+                    three.isEmpty() &&
+                    four.isEmpty() &&
+                    five.isEmpty()
         }
 
     val isComplete: Boolean
         get() {
-            return !things[0].isEmpty &&
-                !things[1].isEmpty &&
-                !things[2].isEmpty &&
-                !things[3].isEmpty &&
-                !things[4].isEmpty
-        }
-
-    //TODO instead of showing the words saved what about a check next to the date
-    val savedString: String
-        get() {
-            return if (edited) "Saving" else "Saved"
+            return !one.isEmpty() &&
+                    !two.isEmpty() &&
+                    !three.isEmpty() &&
+                    !four.isEmpty() &&
+                    !five.isEmpty()
         }
 
     val fullDateString: String
@@ -47,6 +60,7 @@ data class FiveThings(
             }
             return count
         }
+
 }
 
 

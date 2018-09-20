@@ -3,6 +3,7 @@ package alison.fivethingskotlin.api
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Thing
+import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -13,18 +14,18 @@ interface FiveThingsService {
 
     @GET("get_things_for_day/{year}/{month}/{day}")
     fun getFiveThings(@Header("Authorization") token: String,
-                                   @Path("year") year: String,
-                                   @Path("month") month: String,
-                                   @Path("day") day: String): Call<List<Thing>>
+                      @Path("year") year: String,
+                      @Path("month") month: String,
+                      @Path("day") day: String): Observable<List<Thing>>
 
     @PUT("things_for_day/")
-    fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: Array<Thing>): Call<List<String>>
+    fun updateFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: Array<Thing>): Observable<List<String>>
 
     @POST("things_for_day/")
-    fun writeFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: Array<Thing>): Call<List<String>>
+    fun writeFiveThings(@Header("Authorization") token: String, @Body fiveThingsRequest: Array<Thing>): Observable<List<String>>
 
     @GET("get_days_written")
-    fun getWrittenDates(@Header("Authorization") token: String): Call<List<String>>
+    fun getWrittenDates(@Header("Authorization") token: String): Observable<List<String>>
 
     @GET("search_all/{keyword}")
     fun searchAll(@Header("Authorization") token: String, @Path("keyword") keyword: String): Call<List<SearchResult>>
