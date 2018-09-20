@@ -14,7 +14,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,12 +23,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
-import org.reactivestreams.Subscription
-import java.util.*
-import android.support.v7.app.AlertDialog
-import com.crashlytics.android.Crashlytics
 import java.lang.Exception
+import java.util.*
 import java.util.concurrent.TimeUnit
+import com.crashlytics.android.Crashlytics
 
 
 class FiveThingsFragment : Fragment() {
