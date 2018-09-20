@@ -18,12 +18,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.jakewharton.rxbinding2.widget.RxTextView
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
 import org.reactivestreams.Subscription
@@ -119,7 +117,6 @@ class FiveThingsFragment : Fragment() {
                     if (dates.message == "A day was changed") {
                         binding.saving = false
                         inCloud = true
-                        Log.d("blerg", "update went through")
                     }
                 }
                 Status.ERROR -> {
@@ -154,17 +151,11 @@ class FiveThingsFragment : Fragment() {
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
-
-        //TODO there's still a race condition for the different edit texts
-            //if its a new day and the user types in two fields quickly
-            //they both are making a post, when really only the first one should
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 binding.loading = false
                 handleErrorState(ex.localizedMessage, context!!)
             } else {
-
-
                 val one = RxTextView.afterTextChangeEvents(one)
                 val two = RxTextView.afterTextChangeEvents(two)
                 val three = RxTextView.afterTextChangeEvents(three)
@@ -172,7 +163,7 @@ class FiveThingsFragment : Fragment() {
                 val five = RxTextView.afterTextChangeEvents(five)
 
                 Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
-                    listOf( Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
+                    listOf(Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
                             Thing(getDatabaseStyleDate(currentDate), twoEvent.view().text.toString(), 2),
                             Thing(getDatabaseStyleDate(currentDate), threeEvent.view().text.toString(), 3),
                             Thing(getDatabaseStyleDate(currentDate), fourEvent.view().text.toString(), 4),
@@ -182,16 +173,13 @@ class FiveThingsFragment : Fragment() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
                             if (inCloud) {
-                                Log.d("blerg", "its in the database so lets update $it")
                                 binding.saving = true
                                 viewModel.updateThings("Bearer $idToken", it.toTypedArray())
                             } else {
-                                Log.d("blerg", "its NOT in the database so lets write this $it")
                                 binding.saving = true
                                 viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
                             }
                         }
-
             }
         }
 

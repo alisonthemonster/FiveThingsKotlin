@@ -23,8 +23,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     private val disposables = CompositeDisposable()
 
     fun updateThings(token: String, things: Array<Thing>) {
-        Log.d("blerg", "attempting to update: $things")
-        disposables.add(fiveThingsService.updateFiveThingsRx(token, things)
+        disposables.add(fiveThingsService.updateFiveThings(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -39,8 +38,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     }
 
     fun saveNewThings(token: String, things: Array<Thing>) {
-        //TODO doOnSubscribe to handle loading
-        disposables.add(fiveThingsService.writeFiveThingsRx(token, things)
+        disposables.add(fiveThingsService.writeFiveThings(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -55,7 +53,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     }
 
     fun getThings(token: String, date: Date) {
-        disposables.add(fiveThingsService.getFiveThingsRx(token,  getYear(date).toString(),
+        disposables.add(fiveThingsService.getFiveThings(token,  getYear(date).toString(),
                                                 String.format("%02d", getMonthNumber(date)),
                                                 String.format("%02d", getDay(date)))
                 .subscribeOn(Schedulers.io())
@@ -84,7 +82,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     }
 
     fun getDays(token: String) {
-        disposables.add(fiveThingsService.getWrittenDatesRx(token)
+        disposables.add(fiveThingsService.getWrittenDates(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -108,23 +106,6 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
 
     override fun onCleared() {
         disposables.clear()
-    }
-
-    private var editCount = -1
-
-    fun onEditText() {
-        //HACKY FIX: ignores the first edit texts that occur thanks to data binding
-        val fiveThings = fiveThingsData.value
-        when {
-            editCount == -1 -> {
-                editCount = fiveThings?.data?.thingsCount!! - 1
-            }
-            editCount <= 0 -> {
-                fiveThings?.data?.edited = true
-                fiveThingsData.value = fiveThings
-            }
-            else -> editCount--
-        }
     }
 
 }

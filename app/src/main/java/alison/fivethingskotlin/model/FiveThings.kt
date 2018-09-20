@@ -47,12 +47,6 @@ data class FiveThings(
                     !five.isEmpty()
         }
 
-    //TODO instead of showing the words saved what about a check next to the date
-    val savedString: String
-        get() {
-            return if (edited) "Saving" else "Saved"
-        }
-
     val fullDateString: String
         get() {
             return getFullDateFormat(date)
