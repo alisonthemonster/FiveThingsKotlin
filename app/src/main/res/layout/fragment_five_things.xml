@@ -31,6 +31,11 @@
         <variable
             name="month"
             type="String" />
+
+        <variable
+            name="saving"
+            type="Boolean" />
+
     </data>
 
     <FrameLayout
@@ -147,8 +152,7 @@
 
                     fontPath="fonts/Larsseit.ttf"
                     style="@style/ThingField"
-                    android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[0].content}"
+                    android:text="@={fiveThings.one}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -170,8 +174,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
-                    android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[1].content}"
+                    android:text="@={fiveThings.two}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -193,8 +196,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
-                    android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[2].content}"
+                    android:text="@={fiveThings.three}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -216,8 +218,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     style="@style/ThingField"
-                    android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[3].content}"
+                    android:text="@={fiveThings.four}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -239,8 +240,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
-                    android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[4].content}"
+                    android:text="@={fiveThings.five}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
@@ -250,7 +250,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginEnd="4dp"
-                    android:visibility="@{fiveThings.edited ?  View.VISIBLE : View.GONE}"
+                    android:visibility="@{saving ?  View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/save_button_text"
                     app:layout_constraintEnd_toStartOf="@+id/save_button_text"
                     app:layout_constraintTop_toTopOf="@+id/save_button_text" />
@@ -261,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="32dp"
                     android:layout_marginTop="8dp"
-                    android:text="@{fiveThings.savedString}"
+                    android:text="@{saving ? `Saving` : `Saved`}"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/five"

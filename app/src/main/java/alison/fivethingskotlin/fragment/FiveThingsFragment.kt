@@ -2,29 +2,31 @@ package alison.fivethingskotlin.fragment
 
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.R
-import alison.fivethingskotlin.api.repository.FiveThingsRepositoryImpl
+import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.FiveThings
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
+import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModelFactory
-import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
-import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
+import org.reactivestreams.Subscription
 import java.util.*
-import android.support.v7.app.AlertDialog
-import android.text.Editable
-import android.text.TextWatcher
+import java.util.concurrent.TimeUnit
 
 
 class FiveThingsFragment : Fragment() {
@@ -33,6 +35,8 @@ class FiveThingsFragment : Fragment() {
     private lateinit var binding: FragmentFiveThingsBinding
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
+
+    private var inCloud: Boolean = false
 
     companion object {
 
@@ -53,33 +57,30 @@ class FiveThingsFragment : Fragment() {
 
         binding = FragmentFiveThingsBinding.inflate(inflater, container, false)
         binding.loading = true
+        binding.saving = false
 
-        context?.let {
-            val authorizationService = AuthorizationService(it)
-            val authState = restoreAuthState(it)
+        viewModel = ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
 
-            viewModel = ViewModelProviders.of(this,
-                    FiveThingsViewModelFactory(FiveThingsRepositoryImpl(), authState, authorizationService))
-                    .get(FiveThingsViewModel::class.java)
+        binding.viewModel = viewModel
+        binding.calendarVisible = false
 
-            binding.viewModel = viewModel
+        val passedInDate = arguments?.getString(DATE)
 
-            val passedInDate = arguments?.getString(DATE)
+        currentDate = if (passedInDate != null)
+            getDateFromFullDateFormat(passedInDate) else Date()
 
-            currentDate = if (passedInDate != null)
-                getDateFromFullDateFormat(passedInDate) else Date()
-
-            getFiveThings()
-
-            getWrittenDays()
-        }
-
+        startObserving()
+        getFiveThings()
+        getWrittenDays()
 
         return binding.root
     }
 
+
     override fun onStart() {
         super.onStart()
+
+        setUpTextListeners()
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
@@ -106,92 +107,115 @@ class FiveThingsFragment : Fragment() {
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
         }
-
-        setUpAutoSave()
     }
 
-    private fun saveFiveThings() {
-        viewModel.saveFiveThings(binding.fiveThings!!).observe(this, Observer<Resource<List<Date>>> {
-            when (it?.status) {
-                Status.SUCCESS -> addEventsToCalendar(it.data)
-                Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
-            }
-        })
-    }
-
-    private fun setUpAutoSave() {
-        val delay: Long = 1000 // 1 seconds after user stops typing
-        var lastEditText: Long = 0
-        val handler = Handler()
-
-        val inputFinished = Runnable {
-            if (System.currentTimeMillis() > lastEditText + delay - 500) {
-                if (binding.fiveThings!!.edited)
-                    saveFiveThings()
-            }
-        }
-
-        val textWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int,
-                                           after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int,
-                                       count: Int) {
-                //You need to remove this to run only once
-                handler.removeCallbacks(inputFinished)
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                lastEditText = System.currentTimeMillis()
-                handler.postDelayed(inputFinished, delay)
-            }
-        }
-
-        one.addTextChangedListener(textWatcher)
-        two.addTextChangedListener(textWatcher)
-        three.addTextChangedListener(textWatcher)
-        four.addTextChangedListener(textWatcher)
-        five.addTextChangedListener(textWatcher)
-    }
-
-    private fun getFiveThings() {
-
-        binding.loading = true
-
-        viewModel.getFiveThings(currentDate).observe(this, Observer<Resource<FiveThings>> { fiveThings ->
-            when (fiveThings?.status) {
+    private fun startObserving() {
+        viewModel.datesLiveData().observe(this, Observer<Resource<List<Date>>> { dates ->
+            when (dates?.status) {
                 Status.SUCCESS -> {
-                    binding.fiveThings = fiveThings.data
-                    fiveThings.data?.let {
-                        binding.naguDate = it.date
-                        binding.month = getMonth(it.date) + " " + getYear(it.date)
-                        compactcalendar_view.setCurrentDate(it.date)
-                        binding.loading = false
+                    addEventsToCalendar(dates.data)
+                    if (dates.message == "A day was changed") {
+                        binding.saving = false
+                        inCloud = true
                     }
                 }
                 Status.ERROR -> {
                     binding.loading = false
-                    handleErrorState(fiveThings.message!!.capitalize(), context!!)
-                    //Toast.makeText(context, fiveThings.message, Toast.LENGTH_SHORT).show()
+                    handleErrorState(dates.message!!.capitalize(), context!!)
+                }
+            }
+        })
+
+        viewModel.thingsLiveData().observe(this, Observer<Resource<FiveThings>> { things ->
+            when (things?.status) {
+                Status.SUCCESS -> {
+                    binding.fiveThings = things.data
+                    val date = things.data?.date!!
+                    binding.naguDate = date
+                    binding.month = getMonth(date) + " " + getYear(date)
+                    compactcalendar_view.setCurrentDate(date)
+                    binding.loading = false
+                    inCloud = !things.data.isEmpty //if there's data there it came from the server
+                }
+                Status.ERROR -> {
+                    binding.loading = false
+                    handleErrorState(things.message!!.capitalize(), context!!)
                 }
             }
         })
     }
 
-    private fun getWrittenDays() {
-        //build calendar when days come back from server
-        viewModel.getWrittenDays().observe(this, Observer<Resource<List<Date>>> { days ->
-            days?.let {
-                when (it.status) {
-                    Status.SUCCESS -> addEventsToCalendar(it.data)
-                    Status.ERROR -> handleErrorState(it.message!!.capitalize(), context!!)
-                }
-            }
-        })
+    private var subscription: Subscription? = null
 
-        binding.calendarVisible = false
+    private fun setUpTextListeners() {
+        val authorizationService = AuthorizationService(context!!)
+        val authState = restoreAuthState(context!!)
+
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                binding.loading = false
+                handleErrorState(ex.localizedMessage, context!!)
+            } else {
+                val one = RxTextView.afterTextChangeEvents(one)
+                val two = RxTextView.afterTextChangeEvents(two)
+                val three = RxTextView.afterTextChangeEvents(three)
+                val four = RxTextView.afterTextChangeEvents(four)
+                val five = RxTextView.afterTextChangeEvents(five)
+
+                Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
+                    listOf(Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
+                            Thing(getDatabaseStyleDate(currentDate), twoEvent.view().text.toString(), 2),
+                            Thing(getDatabaseStyleDate(currentDate), threeEvent.view().text.toString(), 3),
+                            Thing(getDatabaseStyleDate(currentDate), fourEvent.view().text.toString(), 4),
+                            Thing(getDatabaseStyleDate(currentDate), fiveEvent.view().text.toString(), 5)) }
+                        .skip(1) //skip the edit text binding
+                        .debounce(1000, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            if (inCloud) {
+                                binding.saving = true
+                                viewModel.updateThings("Bearer $idToken", it.toTypedArray())
+                            } else {
+                                binding.saving = true
+                                viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
+                            }
+                        }
+            }
+        }
+
+    }
+
+    private fun getFiveThings() {
+        binding.loading = true
+        val authorizationService = AuthorizationService(context!!)
+        val authState = restoreAuthState(context!!)
+
+        //TODO if authstate is null show error
+
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                binding.loading = false
+                handleErrorState(ex.localizedMessage, context!!)
+            } else {
+                viewModel.getThings("Bearer $idToken", currentDate)
+            }
+        }
+
+    }
+
+    private fun getWrittenDays() {
+        binding.loading = true
+        val authorizationService = AuthorizationService(context!!)
+        val authState = restoreAuthState(context!!)
+
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                binding.loading = false
+                handleErrorState(ex.localizedMessage, context!!)
+            } else {
+                viewModel.getDays("Bearer $idToken")
+            }
+        }
     }
 
     private fun addEventsToCalendar(dates: List<Date>?) {

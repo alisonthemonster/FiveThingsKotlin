@@ -83,57 +83,6 @@ class FiveThingsTest: FreeSpec( {
         }
     }
 
-    "returns correct string for boolean" - {
-        "with inDatabase and edited" {
-            val things = FiveThings(
-                    Date(),
-                    listOf(Thing("MM-DD-YYYY", "one", 1),
-                            Thing("MM-DD-YYYY", "two", 2),
-                            Thing("MM-DD-YYYY", "three", 3),
-                            Thing("MM-DD-YYYY", "four", 4),
-                            Thing("MM-DD-YYYY", "five", 5)),
-                    true,
-                    true)
-            things.savedString shouldEqual "Saving"
-        }
-        "In the database and not edited" {
-            val things = FiveThings(
-                    Date(),
-                    listOf(Thing("MM-DD-YYYY", "one", 1),
-                            Thing("MM-DD-YYYY", "two", 2),
-                            Thing("MM-DD-YYYY", "three", 3),
-                            Thing("MM-DD-YYYY", "four", 4),
-                            Thing("MM-DD-YYYY", "five", 5)),
-                    false,
-                    true)
-            things.savedString shouldEqual "Saved"
-        }
-        "Not in the database and not edited" {
-            val things = FiveThings(
-                    Date(),
-                    listOf(Thing("MM-DD-YYYY", "one", 1),
-                            Thing("MM-DD-YYYY", "two", 2),
-                            Thing("MM-DD-YYYY", "three", 3),
-                            Thing("MM-DD-YYYY", "four", 4),
-                            Thing("MM-DD-YYYY", "five", 5)),
-                    false,
-                    false)
-            things.savedString shouldEqual "Saved"
-        }
-        "Not in the database but edited" {
-            val things = FiveThings(
-                    Date(),
-                    listOf(Thing("MM-DD-YYYY", "one", 1),
-                            Thing("MM-DD-YYYY", "two", 2),
-                            Thing("MM-DD-YYYY", "three", 3),
-                            Thing("MM-DD-YYYY", "four", 4),
-                            Thing("MM-DD-YYYY", "five", 5)),
-                    true,
-                    false)
-            things.savedString shouldEqual "Saving"
-        }
-    }
-
     "returns correct date string for five things" - {
         "For this date" {
             val cal = Calendar.getInstance()
@@ -191,6 +140,16 @@ class FiveThingsTest: FreeSpec( {
                     false,
                     false)
             completeThings.thingsCount shouldEqual 0
+        }
+        "with less than five things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    listOf(Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "five", 5)),
+                    false,
+                    false)
+            completeThings.thingsCount shouldEqual 3
         }
     }
 
