@@ -6,6 +6,7 @@ import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
+import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.arch.lifecycle.Observer
@@ -20,6 +21,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.jakewharton.rxbinding2.widget.RxTextView
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.Observables
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
@@ -160,34 +163,38 @@ class FiveThingsFragment : Fragment() {
                 binding.loading = false
                 handleErrorState(ex.localizedMessage, context!!)
             } else {
-                buildTextWatcher(1, one, idToken!!)
-                buildTextWatcher(2, two, idToken)
-                buildTextWatcher(3, three, idToken)
-                buildTextWatcher(4, four, idToken)
-                buildTextWatcher(5, five, idToken)
+
+
+                val one = RxTextView.afterTextChangeEvents(one)
+                val two = RxTextView.afterTextChangeEvents(two)
+                val three = RxTextView.afterTextChangeEvents(three)
+                val four = RxTextView.afterTextChangeEvents(four)
+                val five = RxTextView.afterTextChangeEvents(five)
+
+                Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
+                    listOf( Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
+                            Thing(getDatabaseStyleDate(currentDate), twoEvent.view().text.toString(), 2),
+                            Thing(getDatabaseStyleDate(currentDate), threeEvent.view().text.toString(), 3),
+                            Thing(getDatabaseStyleDate(currentDate), fourEvent.view().text.toString(), 4),
+                            Thing(getDatabaseStyleDate(currentDate), fiveEvent.view().text.toString(), 5)) }
+                        .skip(1) //skip the edit text binding
+                        .debounce(1000, TimeUnit.MILLISECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe {
+                            if (inCloud) {
+                                Log.d("blerg", "its in the database so lets update $it")
+                                binding.saving = true
+                                viewModel.updateThings("Bearer $idToken", it.toTypedArray())
+                            } else {
+                                Log.d("blerg", "its NOT in the database so lets write this $it")
+                                binding.saving = true
+                                viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
+                            }
+                        }
+
             }
         }
 
-    }
-
-    private fun buildTextWatcher(order: Int, editText: EditText, idToken: String) {
-        RxTextView.afterTextChangeEvents(editText)
-                .debounce(1000, TimeUnit.MILLISECONDS)
-                .distinctUntilChanged()
-                .observeOn(AndroidSchedulers.mainThread())
-                .skip(1)
-                .subscribe { tvChangeEvent ->
-                    val text = tvChangeEvent.view().text.toString()
-                    if (inCloud) {
-                        Log.d("blerg", "its in the database so lets update $text")
-                        binding.saving = true
-                        viewModel.updateThing("Bearer $idToken", text, order, currentDate)
-                    } else {
-                        Log.d("blerg", "its NOT in the database so lets write this $text")
-                        binding.saving = true
-                        viewModel.saveNewThing("Bearer $idToken", text, order, currentDate)
-                    }
-                }
     }
 
     private fun getFiveThings() {

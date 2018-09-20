@@ -8,10 +8,10 @@ import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import retrofit2.adapter.rxjava2.HttpException
 import java.util.*
 
 
@@ -22,8 +22,9 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
 
     private val disposables = CompositeDisposable()
 
-    fun updateThing(token: String, content: String, order: Int, date: Date) {
-        disposables.add(fiveThingsService.updateFiveThingsRx(token, arrayOf(Thing(getDatabaseStyleDate(date), content, order)))
+    fun updateThings(token: String, things: Array<Thing>) {
+        Log.d("blerg", "attempting to update: $things")
+        disposables.add(fiveThingsService.updateFiveThingsRx(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -37,9 +38,9 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                 ))
     }
 
-    fun saveNewThing(token: String, content: String, order: Int, date: Date) {
+    fun saveNewThings(token: String, things: Array<Thing>) {
         //TODO doOnSubscribe to handle loading
-        disposables.add(fiveThingsService.writeFiveThingsRx(token, arrayOf(Thing(getDatabaseStyleDate(date), content, order)))
+        disposables.add(fiveThingsService.writeFiveThingsRx(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
