@@ -192,6 +192,16 @@ class FiveThingsTest: FreeSpec( {
                     false)
             completeThings.thingsCount shouldEqual 0
         }
+        "with less than five things" {
+            val completeThings = FiveThings(
+                    Date(),
+                    listOf(Thing("MM-DD-YYYY", "two", 2),
+                            Thing("MM-DD-YYYY", "three", 3),
+                            Thing("MM-DD-YYYY", "five", 5)),
+                    false,
+                    false)
+            completeThings.thingsCount shouldEqual 3
+        }
     }
 
 })

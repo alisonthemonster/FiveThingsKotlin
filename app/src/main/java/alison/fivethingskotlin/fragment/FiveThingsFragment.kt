@@ -78,7 +78,7 @@ class FiveThingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
-        //setUpTextListeners()
+        setUpTextListeners()
 
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
@@ -112,9 +112,10 @@ class FiveThingsFragment : Fragment() {
             when (dates?.status) {
                 Status.SUCCESS -> {
                     addEventsToCalendar(dates.data)
-                    Log.d("blergg", "we got an update! ${dates.message}")
                     if (dates.message == "A day was changed") {
                         binding.saving = false
+                        inCloud = true
+                        Log.d("blerg", "update went through")
                     }
                 }
                 Status.ERROR -> {
@@ -161,6 +162,7 @@ class FiveThingsFragment : Fragment() {
                         .debounce(1000, TimeUnit.MILLISECONDS)
                         .distinctUntilChanged()
                         .observeOn(AndroidSchedulers.mainThread())
+                        .skip(1)
                         .subscribe { tvChangeEvent ->
                             val text = tvChangeEvent.view().text.toString()
                             if (inCloud) {

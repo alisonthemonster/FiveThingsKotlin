@@ -153,7 +153,7 @@
                     fontPath="fonts/Larsseit.ttf"
                     style="@style/ThingField"
                     android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[0].content}"
+                    android:text="@={fiveThings.one}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -176,7 +176,7 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[1].content}"
+                    android:text="@={fiveThings.two}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -199,7 +199,7 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[2].content}"
+                    android:text="@={fiveThings.three}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -222,7 +222,7 @@
                     android:layout_height="75dp"
                     style="@style/ThingField"
                     android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[3].content}"
+                    android:text="@={fiveThings.four}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -245,7 +245,7 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:onTextChanged="@{() -> viewModel.onEditText()}"
-                    android:text="@={fiveThings.things[4].content}"
+                    android:text="@={fiveThings.five}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
