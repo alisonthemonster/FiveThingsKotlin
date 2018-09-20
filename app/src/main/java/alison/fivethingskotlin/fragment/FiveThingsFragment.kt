@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -150,34 +151,43 @@ class FiveThingsFragment : Fragment() {
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
+
+        //TODO there's still a race condition for the different edit texts
+            //if its a new day and the user types in two fields quickly
+            //they both are making a post, when really only the first one should
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 binding.loading = false
                 handleErrorState(ex.localizedMessage, context!!)
             } else {
-
-                //when ever the text in the 1st text box changes send an update to server
-                //TODO how to know when to update vs to add an entry
-                RxTextView.afterTextChangeEvents(five)
-                        .debounce(1000, TimeUnit.MILLISECONDS)
-                        .distinctUntilChanged()
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .skip(1)
-                        .subscribe { tvChangeEvent ->
-                            val text = tvChangeEvent.view().text.toString()
-                            if (inCloud) {
-                                Log.d("blerg", "its in the database so lets update $text")
-                                binding.saving = true
-                                viewModel.updateThing("Bearer $idToken", text, 5, currentDate)
-                            } else {
-                                Log.d("blerg", "its NOT in the database so lets write this $text")
-                                binding.saving = true
-                                viewModel.saveNewThing("Bearer $idToken", text, 5, currentDate)
-                            }
-                        }
+                buildTextWatcher(1, one, idToken!!)
+                buildTextWatcher(2, two, idToken)
+                buildTextWatcher(3, three, idToken)
+                buildTextWatcher(4, four, idToken)
+                buildTextWatcher(5, five, idToken)
             }
         }
 
+    }
+
+    private fun buildTextWatcher(order: Int, editText: EditText, idToken: String) {
+        RxTextView.afterTextChangeEvents(editText)
+                .debounce(1000, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .skip(1)
+                .subscribe { tvChangeEvent ->
+                    val text = tvChangeEvent.view().text.toString()
+                    if (inCloud) {
+                        Log.d("blerg", "its in the database so lets update $text")
+                        binding.saving = true
+                        viewModel.updateThing("Bearer $idToken", text, order, currentDate)
+                    } else {
+                        Log.d("blerg", "its NOT in the database so lets write this $text")
+                        binding.saving = true
+                        viewModel.saveNewThing("Bearer $idToken", text, order, currentDate)
+                    }
+                }
     }
 
     private fun getFiveThings() {
