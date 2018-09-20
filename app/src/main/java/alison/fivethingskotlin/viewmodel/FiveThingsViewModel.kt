@@ -29,7 +29,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                 .subscribe(
                         { writtenDates ->
                             val days = writtenDates.map { getDateFromDatabaseStyle(it) }
-                            datesLiveData.postValue(Resource(Status.SUCCESS, "", days))
+                            datesLiveData.postValue(Resource(Status.SUCCESS, "A day was changed", days))
                         },
                         { error ->
                             datesLiveData.postValue(Resource(Status.ERROR, error.message, emptyList()))
@@ -45,7 +45,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                 .subscribe(
                         { writtenDates ->
                             val days = writtenDates.map { getDateFromDatabaseStyle(it) }
-                            datesLiveData.postValue(Resource(Status.SUCCESS, "", days))
+                            datesLiveData.postValue(Resource(Status.SUCCESS, "A day was changed", days))
                         },
                         { error ->
                             datesLiveData.postValue(Resource(Status.ERROR, error.message, emptyList()))
