@@ -21,6 +21,7 @@ import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
@@ -37,6 +38,7 @@ class FiveThingsFragment : Fragment() {
     private lateinit var currentDate: Date
 
     private var inCloud: Boolean = false
+    private val compositeDisposable = CompositeDisposable()
 
     companion object {
 
@@ -109,6 +111,13 @@ class FiveThingsFragment : Fragment() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.dispose()
+        }
+    }
+
     private fun startObserving() {
         viewModel.datesLiveData().observe(this, Observer<Resource<List<Date>>> { dates ->
             when (dates?.status) {
@@ -162,7 +171,7 @@ class FiveThingsFragment : Fragment() {
                 val four = RxTextView.afterTextChangeEvents(four)
                 val five = RxTextView.afterTextChangeEvents(five)
 
-                Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
+                compositeDisposable.add(Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
                     listOf(Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
                             Thing(getDatabaseStyleDate(currentDate), twoEvent.view().text.toString(), 2),
                             Thing(getDatabaseStyleDate(currentDate), threeEvent.view().text.toString(), 3),
@@ -179,7 +188,7 @@ class FiveThingsFragment : Fragment() {
                                 binding.saving = true
                                 viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
                             }
-                        }
+                        })
             }
         }
 
