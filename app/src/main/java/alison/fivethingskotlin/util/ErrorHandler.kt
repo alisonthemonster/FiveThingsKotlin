@@ -13,6 +13,7 @@ import android.support.v7.app.AlertDialog
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.util.Log
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -39,26 +40,27 @@ fun handleErrorState(message: String,
                      buttonText: String = "Ok",
                      buttonAction: DialogInterface.OnClickListener = closeButtonListener) {
 
-    if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
-        openLogInScreen(context)
-        //TODO add analytics to capture this
-    } else {
+    when {
+        message.contains("Log in failed") -> openLogInScreen(context)
+        message.contains("Unable to resolve host") -> openBadNetworkScreen(context)
+        else -> {
 
-        val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)
 
-        dialogBuilder.apply {
-            setTitle("Oh no! Something went wrong!")
+            dialogBuilder.apply {
+                setTitle("Oh no! Something went wrong!")
 
-            val messageSpan = SpannableString(message)
-            messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setMessage(messageSpan)
+                val messageSpan = SpannableString(message)
+                messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                setMessage(messageSpan)
 
-            setNegativeButton(buttonText, buttonAction)
+                setNegativeButton(buttonText, buttonAction)
+            }
+            val alert = dialogBuilder.create()
+            alert.show()
+            val button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
+            button.setTextColor(ContextCompat.getColor(context, R.color.bluegreen))
         }
-        val alert = dialogBuilder.create()
-        alert.show()
-        val button = alert.getButton(DialogInterface.BUTTON_NEGATIVE)
-        button.setTextColor(ContextCompat.getColor(context, R.color.bluegreen))
     }
 }
 
@@ -67,6 +69,15 @@ fun openLogInScreen(context: Context) {
 
     val intent = Intent(context, PromoActivity::class.java)
     intent.putExtra("AUTH_TROUBLE", true)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+    context.startActivity(intent)
+}
+
+fun openBadNetworkScreen(context: Context) {
+    clearAuthState(context) //log user out
+
+    val intent = Intent(context, PromoActivity::class.java)
+    intent.putExtra("NETWORK_TROUBLE", true)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     context.startActivity(intent)
 }

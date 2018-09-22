@@ -30,4 +30,6 @@
     <string name="intro_content_search">Find that time you slam dunked on Kevin</string>
     <string name="auth_problems_header">Do we know you?</string>
     <string name="auth_problems_content">Hmmm looks like you need to sign in again to view this content. Sorry about that!</string>
+    <string name="no_network_content">Check your connection and try again</string>
+    <string name="no_network_header">Uh oh, you lost connection</string>
 </resources>

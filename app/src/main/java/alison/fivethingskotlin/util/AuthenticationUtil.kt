@@ -5,7 +5,7 @@ import android.text.TextUtils
 import net.openid.appauth.AuthState
 import org.json.JSONException
 
-const val SHARED_PREFERENCES_NAME = "AuthStatePreference"
+const val SHARED_PREFERENCES_NAME = "FiveThingsSharedPrefs"
 const val AUTH_STATE = "AUTH_STATE"
 
 fun restoreAuthState(context: Context): AuthState? {

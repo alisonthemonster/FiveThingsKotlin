@@ -48,6 +48,8 @@ class PromoActivity : AppCompatActivity() {
 
         val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
         auth_problems.visibility =  if (havingAuthTrouble) View.VISIBLE else View.GONE
+        val havingNetworkTrouble = intent.getBooleanExtra("NETWORK_TROUBLE", false)
+        network_problems.visibility =  if (havingNetworkTrouble) View.VISIBLE else View.GONE
 
         promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
     }

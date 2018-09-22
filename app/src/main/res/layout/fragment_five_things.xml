@@ -36,6 +36,10 @@
             name="saving"
             type="Boolean" />
 
+        <variable
+            name="inEditMode"
+            type="Boolean" />
+
     </data>
 
     <FrameLayout
@@ -149,10 +153,13 @@
                     android:id="@+id/one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     fontPath="fonts/Larsseit.ttf"
                     style="@style/ThingField"
                     android:text="@={fiveThings.one}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -175,6 +182,10 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:text="@={fiveThings.two}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -197,6 +208,10 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:text="@={fiveThings.three}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -219,6 +234,10 @@
                     android:layout_height="75dp"
                     style="@style/ThingField"
                     android:text="@={fiveThings.four}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -236,37 +255,31 @@
 
                 <EditText
                     android:id="@+id/five"
+                    style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/ThingField"
+                    android:layout_marginBottom="24dp"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     android:text="@={fiveThings.five}"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
 
                 <ProgressBar
                     android:id="@+id/save_spinner"
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_marginEnd="4dp"
-                    android:visibility="@{saving ?  View.VISIBLE : View.GONE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/save_button_text"
-                    app:layout_constraintEnd_toStartOf="@+id/save_button_text"
-                    app:layout_constraintTop_toTopOf="@+id/save_button_text" />
-
-                <TextView
-                    android:id="@+id/save_button_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="@{saving ? `Saving` : `Saved`}"
-                    android:textSize="12sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/five"
-                    app:layout_constraintTop_toBottomOf="@+id/five"
-                    tools:text="Saving" />
+                    android:visibility="@{saving ?  View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
             </android.support.constraint.ConstraintLayout>
 
         </ScrollView>
