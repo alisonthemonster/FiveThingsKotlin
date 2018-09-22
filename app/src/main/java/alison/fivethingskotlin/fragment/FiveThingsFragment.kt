@@ -234,7 +234,10 @@ class FiveThingsFragment : Fragment() {
             }
         }
 
-        //TODO have some sort of message that user has to long press to edit a day
+        setEditTextClickListeners()
+    }
+
+    private fun setEditTextClickListeners() {
         binding.one.setOnLongClickListener { toggleEditMode(binding.one) }
         binding.one.setOnClickListener { editTextClick() }
         binding.two.setOnLongClickListener { toggleEditMode(binding.two) }
