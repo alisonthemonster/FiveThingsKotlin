@@ -270,7 +270,9 @@ class FiveThingsFragment : Fragment() {
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
-        //TODO if authstate is null show error
+        if (authState == null) {
+            handleErrorState("Log in failed", context!!)
+        }
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
@@ -287,6 +289,9 @@ class FiveThingsFragment : Fragment() {
         binding.loading = true
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
+        if (authState == null) {
+            handleErrorState("Log in failed", context!!)
+        }
 
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
