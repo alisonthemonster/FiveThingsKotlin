@@ -254,6 +254,7 @@ class FiveThingsFragment : Fragment() {
         if (binding.inEditMode == false) {
             imm.hideSoftInputFromWindow(editText.windowToken, 0)
         } else {
+            editText.requestFocus()
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
         makeToast(context!!, "Switching ${if (binding.inEditMode!!) "to" else "from"} edit mode")
