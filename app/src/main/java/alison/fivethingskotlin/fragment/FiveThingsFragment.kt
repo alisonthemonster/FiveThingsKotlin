@@ -9,6 +9,7 @@ import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
+import android.animation.ObjectAnimator
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -18,10 +19,12 @@ import android.support.v7.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.crashlytics.android.Crashlytics
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -46,6 +49,7 @@ class FiveThingsFragment : Fragment() {
     companion object {
 
         const val DATE = "date_key"
+        const val HAS_OPENED_CALENDAR = "has_opened_calendar"
 
         fun newInstance(date: String): FiveThingsFragment {
             val fragment = FiveThingsFragment()
@@ -87,6 +91,13 @@ class FiveThingsFragment : Fragment() {
 
         setUpTextListeners()
 
+        val sharedPrefs = context?.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
+        val hasOpenedCal = sharedPrefs?.getBoolean(HAS_OPENED_CALENDAR, false)
+
+        if (!hasOpenedCal!!) {
+            animateDate()
+        }
+
         compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
             override fun onDayClick(dateClicked: Date) {
                 binding.loading = true
@@ -105,6 +116,17 @@ class FiveThingsFragment : Fragment() {
             currentVisibility?.let {
                 binding.calendarVisible = !currentVisibility
             }
+            val hasOpenedCal = sharedPrefs.getBoolean(HAS_OPENED_CALENDAR, false)
+            if (!hasOpenedCal) {
+                //user opened the calendar!
+                sharedPrefs.edit()
+                        .putBoolean(HAS_OPENED_CALENDAR, true)
+                        .apply()
+                val firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+                val bundle = Bundle()
+                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "calendarFirstTime")
+                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+            }
         }
 
         todayButton.setOnClickListener {
@@ -112,6 +134,8 @@ class FiveThingsFragment : Fragment() {
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
         }
+
+
     }
 
     override fun onStop() {
@@ -119,6 +143,14 @@ class FiveThingsFragment : Fragment() {
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
+    }
+
+    private fun animateDate() {
+        val animator = ObjectAnimator.ofFloat(current_date, "translationY", 0f, 20f, 0f)
+        animator.interpolator = BounceInterpolator()
+        animator.startDelay = 2000
+        animator.duration = 1500
+        animator.start()
     }
 
     private fun startObserving() {
