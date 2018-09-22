@@ -46,10 +46,7 @@ class PromoActivity : AppCompatActivity() {
 
         google_auth_button.setOnClickListener { startAuthorizationRequest(it) }
 
-        val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
-        auth_problems.visibility =  if (havingAuthTrouble) View.VISIBLE else View.GONE
-        val havingNetworkTrouble = intent.getBooleanExtra("NETWORK_TROUBLE", false)
-        network_problems.visibility =  if (havingNetworkTrouble) View.VISIBLE else View.GONE
+        readFromIntent()
 
         promo_view_pager.adapter = IntroAdapter(supportFragmentManager)
     }
@@ -57,6 +54,18 @@ class PromoActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         checkIntent(intent)
+    }
+
+    private fun readFromIntent() {
+        if (intent.extras != null) {
+            val havingAuthTrouble = intent.getBooleanExtra("AUTH_TROUBLE", false)
+            auth_problems.visibility = if (havingAuthTrouble) View.VISIBLE else View.GONE
+            val havingNetworkTrouble = intent.getBooleanExtra("NETWORK_TROUBLE", false)
+            network_problems.visibility = if (havingNetworkTrouble) View.VISIBLE else View.GONE
+
+            val cameFromNotification = intent.getBooleanExtra("fromNotification", false)
+            if (cameFromNotification) mFirebaseAnalytics.logEvent("cameFromNotification", null)
+        }
     }
 
     private fun startAuthorizationRequest(view: View) {

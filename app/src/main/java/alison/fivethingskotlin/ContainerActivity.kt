@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
 import org.joda.time.Days
 import org.joda.time.LocalDate
@@ -62,9 +63,11 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
 
+        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         if (isLightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
         } else {
+            firebaseAnalytics.setUserProperty("DarkModeUser", "Dark mode user")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
         }
 
