@@ -264,7 +264,6 @@ class FiveThingsFragment : Fragment() {
             editText.requestFocus()
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
-        makeToast(context!!, "Switching ${if (binding.inEditMode!!) "to" else "from"} edit mode")
         return true
     }
 
