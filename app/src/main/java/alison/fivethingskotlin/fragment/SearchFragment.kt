@@ -85,19 +85,18 @@ class SearchFragment : Fragment() {
             handleErrorState("Log in failed", context!!)
         }
 
-        val query = EmojiParser.removeAllEmojis(textView)
-        if (query.length < textView.length) {
-            Toast.makeText(activity, "Emojis are not searchable", Toast.LENGTH_SHORT).show()
-        }
-        if (query.isNotEmpty()) {
-            authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
-                if (ex != null) {
-                    handleErrorState("Log in failed: ${ex.errorDescription}", context!!)
-                } else {
-                    idToken?.let {
-                        adapter.submitList(null)
+
+        authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
+            if (ex != null) {
+                handleErrorState("Log in failed: ${ex.errorDescription}", context!!)
+            } else {
+                idToken?.let {
+                    adapter.submitList(null)
+                    val query = EmojiParser.removeAllEmojis(textView)
+                    if (query.length < textView.length)
+                        Toast.makeText(activity, "Emojis are not searchable", Toast.LENGTH_SHORT).show()
+                    if (query.isNotEmpty())
                         viewModel.getPaginatedSearchResults("Bearer $it", query, 50, 1)
-                    }
                 }
             }
         }
@@ -109,3 +108,4 @@ class SearchFragment : Fragment() {
         fun selectDate(selectedDate: Date, isASearchResult: Boolean)
     }
 }
+
