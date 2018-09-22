@@ -36,6 +36,10 @@
             name="saving"
             type="Boolean" />
 
+        <variable
+            name="inEditMode"
+            type="Boolean" />
+
     </data>
 
     <FrameLayout
@@ -149,10 +153,13 @@
                     android:id="@+id/one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     fontPath="fonts/Larsseit.ttf"
                     style="@style/ThingField"
                     android:text="@={fiveThings.one}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -175,6 +182,10 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:text="@={fiveThings.two}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -197,6 +208,10 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:text="@={fiveThings.three}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -219,6 +234,10 @@
                     android:layout_height="75dp"
                     style="@style/ThingField"
                     android:text="@={fiveThings.four}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -241,6 +260,10 @@
                     android:layout_height="wrap_content"
                     style="@style/ThingField"
                     android:text="@={fiveThings.five}"
+                    android:clickable="@{inEditMode}"
+                    android:cursorVisible="@{inEditMode}"
+                    android:focusable="@{inEditMode}"
+                    android:focusableInTouchMode="@{inEditMode}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
