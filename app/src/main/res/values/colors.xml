@@ -9,16 +9,15 @@
     <color name="white">#ffffff</color>
     <color name="disabled_white">#969696</color>
 
-
-
     <color name="text_box_color">#ededed</color>
-    <color name="search_result_background">#b9b9b9</color>
+    <color name="text_box_color_enabled">#dadada</color>
+    <color name="search_result_background">#983aafab</color>
+    <color name="search_hint_color">#eaeaea</color>
 
     <color name="primary_text_color">#000000</color>
     <color name="secondary_text_color">#878787</color>
 
     <color name="toolbar_color">#efefef</color>
     <color name="background_color">#ffffff</color>
-    <color name="foreground_material_dark_1">#b72424</color>
 
 </resources>

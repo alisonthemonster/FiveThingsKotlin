@@ -13,7 +13,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/rounded_text_box"
+        android:background="@drawable/search_bar"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,9 +23,8 @@
             android:id="@+id/search_icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:background="@drawable/rounded_text_box"
-            android:tint="@color/primary_text_color"
             android:padding="8dp"
+            android:tint="@color/white"
             app:srcCompat="@drawable/ic_search" />
 
         <EditText
@@ -39,8 +38,8 @@
             android:inputType="text"
             android:padding="12dp"
             android:singleLine="true"
-            android:textColor="@color/primary_text_color"
-            android:textColorHint="@color/secondary_text_color"
+            android:textColor="@color/white"
+            android:textColorHint="@color/search_hint_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

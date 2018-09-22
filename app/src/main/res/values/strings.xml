@@ -32,4 +32,6 @@
     <string name="auth_problems_content">Hmmm looks like you need to sign in again to view this content. Sorry about that!</string>
     <string name="no_network_content">Check your connection and try again</string>
     <string name="no_network_header">Uh oh, you lost connection</string>
+    <string name="beta_tester">Hey lovely beta tester! Go ahead and log in and go crazy. If the app does something weird please take note, screenshot, etc of exactly what you did/happened. Please try to roam around the app and try to use it as you think its intended (everyone writes their five things differently!). \n\nIf you find something weird, have a suggestion, or want to tell me how great I am please message me!! \n\n This is not our production database so me and Nagkumar CAN see your data so dont write anything incriminating or embarrassing (With the real app we won't be able to see production data.). \n \n Thanks again for trying out this app, you are a great human. \n ❤️ Alison</string>
+
 </resources>

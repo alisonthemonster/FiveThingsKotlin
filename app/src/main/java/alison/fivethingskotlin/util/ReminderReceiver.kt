@@ -17,6 +17,7 @@ class ReminderReceiver : BroadcastReceiver() {
 
         val intentToRepeat = Intent(context, PromoActivity::class.java)
         intentToRepeat.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP //set flag to restart/relaunch the app
+        intentToRepeat.putExtra("fromNotification", true)
         val pendingIntent = PendingIntent.getActivity(context, ALARM_TYPE_RTC, intentToRepeat, PendingIntent.FLAG_UPDATE_CURRENT)
 
         //Build notification

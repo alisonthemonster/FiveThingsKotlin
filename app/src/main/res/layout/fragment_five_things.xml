@@ -151,15 +151,16 @@
 
                 <EditText
                     android:id="@+id/one"
+                    style="@style/ThingField"
+                    fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    fontPath="fonts/Larsseit.ttf"
-                    style="@style/ThingField"
-                    android:text="@={fiveThings.one}"
+                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"
                     android:focusable="@{inEditMode}"
                     android:focusableInTouchMode="@{inEditMode}"
+                    android:text="@={fiveThings.one}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -177,15 +178,16 @@
 
                 <EditText
                     android:id="@+id/two"
+                    style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/ThingField"
-                    android:text="@={fiveThings.two}"
+                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"
                     android:focusable="@{inEditMode}"
                     android:focusableInTouchMode="@{inEditMode}"
+                    android:text="@={fiveThings.two}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -203,15 +205,16 @@
 
                 <EditText
                     android:id="@+id/three"
+                    style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/ThingField"
-                    android:text="@={fiveThings.three}"
+                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"
                     android:focusable="@{inEditMode}"
                     android:focusableInTouchMode="@{inEditMode}"
+                    android:text="@={fiveThings.three}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -229,15 +232,16 @@
 
                 <EditText
                     android:id="@+id/four"
+                    style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
-                    style="@style/ThingField"
-                    android:text="@={fiveThings.four}"
+                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"
                     android:focusable="@{inEditMode}"
                     android:focusableInTouchMode="@{inEditMode}"
+                    android:text="@={fiveThings.four}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -260,6 +264,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
+                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"
                     android:focusable="@{inEditMode}"

@@ -9,6 +9,7 @@ import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.viewmodel.SearchViewModel
 import alison.fivethingskotlin.viewmodel.SearchViewModelFactory
 import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.arch.paging.PagedList
@@ -23,6 +24,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.vdurmont.emoji.EmojiParser
 import kotlinx.android.synthetic.main.fragment_search.*
 import net.openid.appauth.AuthState
@@ -37,6 +39,8 @@ class SearchFragment : Fragment() {
     private var authState: AuthState? = null
     private lateinit var authorizationService: AuthorizationService
     private lateinit var adapter: PagedSearchResultAdapter
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -45,6 +49,8 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
 
         context?.let {
             authorizationService = AuthorizationService(it)
@@ -78,6 +84,11 @@ class SearchFragment : Fragment() {
 
         search_results.layoutManager = LinearLayoutManager(context)
         search_results.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalytics.setCurrentScreen(activity as Activity, "SearchScreen", null)
     }
 
     private fun getPaginatedResultsWithFreshToken(textView: String) {

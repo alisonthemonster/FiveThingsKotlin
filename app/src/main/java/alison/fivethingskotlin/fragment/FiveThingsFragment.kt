@@ -10,6 +10,7 @@ import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.animation.ObjectAnimator
+import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
@@ -42,6 +43,7 @@ class FiveThingsFragment : Fragment() {
     private lateinit var binding: FragmentFiveThingsBinding
     private lateinit var yearList: MutableList<String>
     private lateinit var currentDate: Date
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     private var inCloud: Boolean = false
     private val compositeDisposable = CompositeDisposable()
@@ -89,6 +91,8 @@ class FiveThingsFragment : Fragment() {
     override fun onStart() {
         super.onStart()
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+
         setUpTextListeners()
 
         val sharedPrefs = context?.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
@@ -122,10 +126,7 @@ class FiveThingsFragment : Fragment() {
                 sharedPrefs.edit()
                         .putBoolean(HAS_OPENED_CALENDAR, true)
                         .apply()
-                val firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
-                val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "calendarFirstTime")
-                firebaseAnalytics.logEvent(FirebaseAnalytics.Event.VIEW_ITEM, bundle)
+                firebaseAnalytics.logEvent("OpenCalAfterNudge", null)
             }
         }
 
@@ -134,8 +135,11 @@ class FiveThingsFragment : Fragment() {
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
         }
+    }
 
-
+    override fun onResume() {
+        super.onResume()
+        firebaseAnalytics.setCurrentScreen(activity as Activity, "FiveThingsScreen", null)
     }
 
     override fun onStop() {
@@ -260,7 +264,6 @@ class FiveThingsFragment : Fragment() {
             editText.requestFocus()
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0)
         }
-        makeToast(context!!, "Switching ${if (binding.inEditMode!!) "to" else "from"} edit mode")
         return true
     }
 

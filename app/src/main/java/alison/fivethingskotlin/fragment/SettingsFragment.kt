@@ -6,6 +6,7 @@ import alison.fivethingskotlin.WebViewActivity
 import alison.fivethingskotlin.WebViewActivity.Companion.WEBVIEW_URL
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.TimePreference
+import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -14,15 +15,21 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.Preference
 import android.support.v7.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity;
+import com.google.firebase.analytics.FirebaseAnalytics
 
 
 class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPreferenceChangeListener {
+
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.app_preferences)
 
         buildWebViewPreference("privacy_policy", BuildConfig.PRIVACY_POLICY_URL)
         buildWebViewPreference("terms_conditions", BuildConfig.TERMS_CONDITIONS_URL)
         buildOssLiscenceActivity()
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
     }
 
     private fun buildWebViewPreference(preferenceKey: String, webViewUrl: String) {
@@ -87,6 +94,7 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
 
     override fun onResume() {
         super.onResume()
+        firebaseAnalytics.setCurrentScreen(activity as Activity, "SettingsScreen", null)
         preferenceScreen.sharedPreferences.registerOnSharedPreferenceChangeListener(this)
     }
 
