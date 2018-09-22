@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.api
 
+import alison.fivethingskotlin.BuildConfig
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -11,7 +12,7 @@ class RetrofitHelper {
 
     companion object {
 
-        var baseUrl = "https://5things.nagkumar.com/api/"
+        var baseUrl = BuildConfig.BASE_URL
 
         fun build(): Retrofit {
 

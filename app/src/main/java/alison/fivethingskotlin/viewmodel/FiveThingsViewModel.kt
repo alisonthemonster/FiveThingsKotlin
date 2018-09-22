@@ -8,7 +8,6 @@ import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.util.Log
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   build:
     working_directory: ~/repo
@@ -17,6 +18,12 @@ jobs:
           paths:
             - ~/.gradle
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Decrypt Fabric File
+          command: openssl aes-256-cbc -d -md sha256 -in fabric-prop-encrypted -out fabric.properties -k $FABRIC_PROPERTIES_KEY
+      - run:
+          name: Decrypt Google Services File
+          command: openssl aes-256-cbc -d -md sha256 -in app/google-services-enc -out app/google-services.json -k $FABRIC_PROPERTIES_KEY
       - run:
           name: Gradle clean
           command: ./gradlew clean

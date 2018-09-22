@@ -41,6 +41,7 @@ fun handleErrorState(message: String,
 
     if (message.contains("Log in failed") || message.contains("Unable to resolve host")) {
         openLogInScreen(context)
+        //TODO add analytics to capture this
     } else {
 
         val dialogBuilder = AlertDialog.Builder(context, R.style.CustomDialogTheme)

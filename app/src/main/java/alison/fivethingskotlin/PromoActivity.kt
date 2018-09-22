@@ -13,6 +13,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import com.crashlytics.android.Crashlytics
+import com.google.firebase.analytics.FirebaseAnalytics
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -20,12 +23,19 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 
 class PromoActivity : AppCompatActivity() {
 
-    private val USED_INTENT = "USED_INTENT"
+    companion object {
+        const val USED_INTENT = "USED_INTENT"
+        const val HANDLE_AUTHORIZATION_RESPONSE = "HANDLE_AUTHORIZATION_RESPONSE"
+    }
+
     private lateinit var binding: ActivityPromoBinding
+    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Fabric.with(this, Crashlytics())
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         setContentView(R.layout.activity_promo)
 
@@ -66,7 +76,7 @@ class PromoActivity : AppCompatActivity() {
         val request = builder.build()
 
         val authorizationService = AuthorizationService(view.context)
-        val action = "HANDLE_AUTHORIZATION_RESPONSE"
+        val action = HANDLE_AUTHORIZATION_RESPONSE
         val postAuthorizationIntent = Intent(view.context, PromoActivity::class.java)
         postAuthorizationIntent.action = action
         val pendingIntent = PendingIntent.getActivity(view.context, request.hashCode(), postAuthorizationIntent, 0)
@@ -81,7 +91,7 @@ class PromoActivity : AppCompatActivity() {
         intent?.let {
             val action = intent.action
             when (action) {
-                "HANDLE_AUTHORIZATION_RESPONSE" -> {
+                HANDLE_AUTHORIZATION_RESPONSE -> {
                     if (!intent.hasExtra(USED_INTENT)) {
                         handleAuthorizationResponse(intent)
                         intent.putExtra(USED_INTENT, true)
@@ -118,6 +128,7 @@ class PromoActivity : AppCompatActivity() {
                 if (exception != null) {
                     binding.loading = false
                     //Token Exchange failed
+                    Crashlytics.logException(exception)
                 } else {
                     if (tokenResponse != null) {
                         authState.update(tokenResponse, exception)

@@ -1,7 +1,10 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.adapter.FiveThingsAdapter
-import alison.fivethingskotlin.fragment.*
+import alison.fivethingskotlin.fragment.AnalyticsFragment
+import alison.fivethingskotlin.fragment.FiveThingsPagerFragment
+import alison.fivethingskotlin.fragment.SearchFragment
+import alison.fivethingskotlin.fragment.SettingsFragment
 import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.clearAuthState
@@ -38,6 +41,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private lateinit var drawerLayout: DrawerLayout
+
 
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 

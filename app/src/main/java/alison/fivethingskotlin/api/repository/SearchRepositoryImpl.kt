@@ -2,14 +2,13 @@ package alison.fivethingskotlin.api.repository
 
 import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.model.Listing
+import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Status
-import alison.fivethingskotlin.model.Resource
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Transformations
 import android.arch.paging.LivePagedListBuilder
-import android.util.Log
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -20,6 +19,7 @@ import java.util.concurrent.Executor
 class SearchRepositoryImpl(private val fiveThingsService: FiveThingsService,
                            private val networkExecutor: Executor): SearchRepository {
 
+    //TODO delete, no longer in use
     override fun getSearchResults(token: String, keyword: String): LiveData<Resource<List<SearchResult>>> {
         val searchResults = MutableLiveData<Resource<List<SearchResult>>>()
 

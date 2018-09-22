@@ -14,7 +14,6 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,12 +21,14 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.jakewharton.rxbinding2.widget.RxTextView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.Observables
 import kotlinx.android.synthetic.main.fragment_five_things.*
 import net.openid.appauth.AuthorizationService
-import org.reactivestreams.Subscription
+import java.lang.Exception
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.crashlytics.android.Crashlytics
 
 
 class FiveThingsFragment : Fragment() {
@@ -130,7 +131,9 @@ class FiveThingsFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     binding.loading = false
-                    handleErrorState(dates.message!!.capitalize(), context!!)
+                    val message = dates.message!!.capitalize()
+                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date}  Message: $message"))
+                    handleErrorState(message, context!!)
                 }
             }
         })
@@ -148,13 +151,13 @@ class FiveThingsFragment : Fragment() {
                 }
                 Status.ERROR -> {
                     binding.loading = false
-                    handleErrorState(things.message!!.capitalize(), context!!)
+                    val message = things.message!!.capitalize()
+                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date}  Message: $message"))
+                    handleErrorState(message, context!!)
                 }
             }
         })
     }
-
-    private var subscription: Subscription? = null
 
     private fun setUpTextListeners() {
         val authorizationService = AuthorizationService(context!!)
@@ -165,18 +168,18 @@ class FiveThingsFragment : Fragment() {
                 binding.loading = false
                 handleErrorState(ex.localizedMessage, context!!)
             } else {
-                val one = RxTextView.afterTextChangeEvents(one)
-                val two = RxTextView.afterTextChangeEvents(two)
-                val three = RxTextView.afterTextChangeEvents(three)
-                val four = RxTextView.afterTextChangeEvents(four)
-                val five = RxTextView.afterTextChangeEvents(five)
+                val one = RxTextView.afterTextChangeEvents(binding.one)
+                val two = RxTextView.afterTextChangeEvents(binding.two)
+                val three = RxTextView.afterTextChangeEvents(binding.three)
+                val four = RxTextView.afterTextChangeEvents(binding.four)
+                val five = RxTextView.afterTextChangeEvents(binding.five)
 
-                compositeDisposable.add(Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
-                    listOf(Thing(getDatabaseStyleDate(currentDate), oneEvent.view().text.toString(), 1),
-                            Thing(getDatabaseStyleDate(currentDate), twoEvent.view().text.toString(), 2),
-                            Thing(getDatabaseStyleDate(currentDate), threeEvent.view().text.toString(), 3),
-                            Thing(getDatabaseStyleDate(currentDate), fourEvent.view().text.toString(), 4),
-                            Thing(getDatabaseStyleDate(currentDate), fiveEvent.view().text.toString(), 5)) }
+                val disposable = Observables.combineLatest(one, two, three, four, five) { oneEvent, twoEvent, threeEvent, fourEvent, fiveEvent ->
+                    listOf(Thing(getDatabaseStyleDate(currentDate), oneEvent.editable().toString(), 1),
+                            Thing(getDatabaseStyleDate(currentDate), twoEvent.editable().toString(), 2),
+                            Thing(getDatabaseStyleDate(currentDate), threeEvent.editable().toString(), 3),
+                            Thing(getDatabaseStyleDate(currentDate), fourEvent.editable().toString(), 4),
+                            Thing(getDatabaseStyleDate(currentDate), fiveEvent.editable().toString(), 5)) }
                         .skip(1) //skip the edit text binding
                         .debounce(1000, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -188,7 +191,8 @@ class FiveThingsFragment : Fragment() {
                                 binding.saving = true
                                 viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
                             }
-                        })
+                        }
+                compositeDisposable.add(disposable)
             }
         }
 
@@ -220,7 +224,9 @@ class FiveThingsFragment : Fragment() {
         authState?.performActionWithFreshTokens(authorizationService) { accessToken, idToken, ex ->
             if (ex != null) {
                 binding.loading = false
+                Crashlytics.logException(Exception("GET days error, Message: ${ex.localizedMessage}"))
                 handleErrorState(ex.localizedMessage, context!!)
+
             } else {
                 viewModel.getDays("Bearer $idToken")
             }
