@@ -2,5 +2,5 @@
     <corners
         android:radius="3dp" />
     <solid
-        android:color="@color/text_box_color" />
+        android:color="@color/text_box_color_enabled" />
 </shape>
