@@ -235,7 +235,7 @@
                     style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="wrap_content"
                     android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
                     android:clickable="@{inEditMode}"
                     android:cursorVisible="@{inEditMode}"

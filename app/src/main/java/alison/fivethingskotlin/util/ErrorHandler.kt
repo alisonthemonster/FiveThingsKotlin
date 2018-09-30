@@ -42,6 +42,7 @@ fun handleErrorState(message: String,
 
     when {
         message.contains("Log in failed") -> openLogInScreen(context)
+        message.contains("Network error") -> openBadNetworkScreen(context)
         message.contains("Unable to resolve host") -> openBadNetworkScreen(context)
         else -> {
 
@@ -51,7 +52,7 @@ fun handleErrorState(message: String,
                 setTitle("Oh no! Something went wrong!")
 
                 val messageSpan = SpannableString(message)
-                messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.black)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                messageSpan.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.primary_text_color)), 0, message.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                 setMessage(messageSpan)
 
                 setNegativeButton(buttonText, buttonAction)
