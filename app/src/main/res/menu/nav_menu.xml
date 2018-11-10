@@ -1,25 +1,26 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/five_things_item"
             android:icon="@drawable/ic_five_wide"
-            android:title="@string/five_things" />
+            android:title="@string/five_things"
+            app:showAsAction="always"/>
         <item
             android:id="@+id/search_item"
             android:icon="@drawable/ic_search"
-            android:title="@string/search" />
+            android:title="@string/search"
+            app:showAsAction="always"/>
         <item
             android:id="@+id/analytics_item"
             android:icon="@drawable/ic_analytics"
-            android:title="@string/analytics" />
+            android:title="@string/analytics"
+            app:showAsAction="always"/>
         <item
             android:id="@+id/settings_item"
             android:icon="@drawable/ic_settings"
-            android:title="@string/settings" />
-        <item
-            android:id="@+id/logout_item"
-            android:icon="@drawable/ic_signout"
-            android:title="@string/log_out" />
+            android:title="@string/settings"
+            app:showAsAction="always"/>
     </group>
 </menu>

@@ -8,6 +8,7 @@ import alison.fivethingskotlin.fragment.SettingsFragment
 import alison.fivethingskotlin.util.AlarmBootReceiver
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.clearAuthState
+import android.app.ActionBar
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ComponentName
@@ -17,16 +18,19 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.PreferenceManager
+import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.Toolbar
+import android.util.DisplayMetrics
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.ActionMenuView
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
 import org.joda.time.Days
@@ -41,9 +45,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         const val CHANNEL_ID = "FiveThingsChannel"
     }
 
-    private lateinit var drawerLayout: DrawerLayout
-
-
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
@@ -56,7 +57,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             if (isASearchResult) addToBackStack("search results")
             commitAllowingStateLoss()
         }
-        navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -95,22 +95,33 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // The action bar home/up action should open or close the drawer.
-        when (item.itemId) {
-            android.R.id.home -> {
-                drawerLayout.openDrawer(GravityCompat.START)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.nav_menu, menu)
+        return true
     }
 
-    override fun onBackPressed() {
-        when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) -> drawerLayout.closeDrawer(GravityCompat.START)
-            fragmentManager.backStackEntryCount > 0 -> fragmentManager.popBackStack()
-            else -> super.onBackPressed()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.five_things_item -> {
+                selectDate(Date(), false)
+                true
+            }
+            R.id.analytics_item -> {
+                loadFragment(AnalyticsFragment())
+                true
+            }
+            R.id.search_item -> {
+                loadFragment(SearchFragment())
+                true
+            }
+            R.id.settings_item -> {
+                loadFragment(SettingsFragment())
+                true
+            }
+            else -> {
+                true
+            }
         }
     }
 
@@ -118,49 +129,37 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private fun setUpNavigationDrawer() {
-        setSupportActionBar(toolbar)
-        drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawerLayout.addDrawerListener(drawerListener)
+    private fun setUpSpacedToolbar() {
+        val display = windowManager.defaultDisplay
+        val metrics = DisplayMetrics()
+        display.getMetrics(metrics)
 
-        val drawerToggle = ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close)
-        drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
+        bottom_app_bar.inflateMenu(R.menu.nav_menu)
+        bottom_app_bar.setContentInsetsAbsolute(10, 10)
 
-        title = ""
-        navigation_view.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.five_things_item -> {
-                    selectDate(Date(), false)
-                    drawerLayout.closeDrawers()
-                    true
-                }
-                R.id.analytics_item -> {
-                    loadFragment(AnalyticsFragment())
-                    true
-                }
-                R.id.search_item -> {
-                    loadFragment(SearchFragment())
-                    true
-                }
-                R.id.settings_item -> {
-                    loadFragment(SettingsFragment())
-                    true
-                }
-                R.id.logout_item -> {
-                    logOut()
-                    true
-                }
-                else -> {
-                    true
+        val screenWidth = metrics.widthPixels
+        val toolbarParams = Toolbar.LayoutParams(screenWidth, ActionBar.LayoutParams.WRAP_CONTENT)
+
+        for (i in 0..4) {
+            val childView = bottom_app_bar.getChildAt(i)
+            if (childView is ViewGroup) {
+                childView.layoutParams = toolbarParams
+                val innerChildCount = childView.childCount
+                val itemWidth = (screenWidth / innerChildCount)
+                val params = ActionMenuView.LayoutParams(itemWidth, ActionBar.LayoutParams.WRAP_CONTENT)
+                for (j in 0..innerChildCount) {
+                    val grandChild = childView.getChildAt(j)
+                    if (grandChild is ActionMenuItemView) {
+                        grandChild.layoutParams = params
+                    }
                 }
             }
         }
-        navigation_view.setCheckedItem(R.id.five_things_item)
+    }
+
+    private fun setUpNavigationDrawer() {
+        setSupportActionBar(bottom_app_bar)
+        setUpSpacedToolbar()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -169,7 +168,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 android.R.anim.fade_out)
         fragmentTransaction.replace(R.id.content_frame, fragment)
         fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
     }
 
     private fun logOut() {
