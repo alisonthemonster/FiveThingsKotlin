@@ -5,15 +5,15 @@ import alison.fivethingskotlin.model.NetworkState
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.getDateFromFullDateFormat
-import android.arch.paging.PagedListAdapter
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.item_search_result.view.*
 
-class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<SearchResult, RecyclerView.ViewHolder>(POST_COMPARATOR) {
+class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedListAdapter<SearchResult, androidx.recyclerview.widget.RecyclerView.ViewHolder>(POST_COMPARATOR) {
 
     private var networkState: NetworkState? = null
 
@@ -28,7 +28,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): androidx.recyclerview.widget.RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.item_search_result -> PagedResultViewHolder.create(parent)
             R.layout.item_last -> NetworkStateItemViewHolder.create(parent, retryCallback)
@@ -37,7 +37,7 @@ class PagedSearchResultAdapter(private val retryCallback: () -> Unit) : PagedLis
     }
 
     override fun onBindViewHolder(
-            holder: RecyclerView.ViewHolder,
+            holder: androidx.recyclerview.widget.RecyclerView.ViewHolder,
             position: Int,
             payloads: MutableList<Any>) {
         if (payloads.isNotEmpty()) {

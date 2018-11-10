@@ -3,7 +3,7 @@ package alison.fivethingskotlin.api.repository
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Resource
-import android.arch.lifecycle.LiveData
+import androidx.lifecycle.LiveData
 
 interface SearchRepository {
 

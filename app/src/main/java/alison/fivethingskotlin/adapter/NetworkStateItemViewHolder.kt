@@ -3,7 +3,7 @@ package alison.fivethingskotlin.adapter
 import alison.fivethingskotlin.model.NetworkState
 import alison.fivethingskotlin.model.NetworkStatus
 import alison.fivethingskotlin.R
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

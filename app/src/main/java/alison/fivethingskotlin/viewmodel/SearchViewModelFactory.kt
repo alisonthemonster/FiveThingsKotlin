@@ -2,8 +2,8 @@ package alison.fivethingskotlin.viewmodel
 
 
 import alison.fivethingskotlin.api.repository.SearchRepository
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 class SearchViewModelFactory(private val repository: SearchRepository) : ViewModelProvider.NewInstanceFactory() {
 

@@ -1,9 +1,9 @@
 package alison.fivethingskotlin.adapter
 
 import alison.fivethingskotlin.fragment.IntroFragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 
 
 class IntroAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {

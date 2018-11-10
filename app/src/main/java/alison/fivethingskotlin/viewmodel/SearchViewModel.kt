@@ -4,10 +4,10 @@ import alison.fivethingskotlin.api.repository.SearchRepository
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Resource
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations.switchMap
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.switchMap
+import androidx.lifecycle.ViewModel
 
 class SearchViewModel(val repository: SearchRepository): ViewModel() {
 

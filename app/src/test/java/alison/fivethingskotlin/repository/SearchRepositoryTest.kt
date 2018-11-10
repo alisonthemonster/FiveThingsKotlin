@@ -6,9 +6,9 @@ import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
-import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.Observer
-import android.arch.paging.PagedList
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.Observer
+import androidx.paging.PagedList
 import com.nhaarman.mockito_kotlin.any
 import io.kotlintest.mock.mock
 import org.hamcrest.CoreMatchers.`is`

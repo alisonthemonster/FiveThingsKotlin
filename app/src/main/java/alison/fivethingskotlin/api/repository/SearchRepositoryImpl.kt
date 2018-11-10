@@ -5,10 +5,10 @@ import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Status
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Transformations
-import android.arch.paging.LivePagedListBuilder
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.paging.LivePagedListBuilder
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback

@@ -6,8 +6,8 @@ import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.util.getDateFromDatabaseStyle
 import alison.fivethingskotlin.util.getFullDateFormat
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.PageKeyedDataSource
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.PageKeyedDataSource
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback

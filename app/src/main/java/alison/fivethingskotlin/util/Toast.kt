@@ -3,7 +3,7 @@ package alison.fivethingskotlin.util
 import alison.fivethingskotlin.R
 import android.content.Context
 import android.graphics.PorterDuff
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.widget.TextView
 import android.widget.Toast
 

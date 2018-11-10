@@ -6,7 +6,7 @@ import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.model.NetworkState
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
-import android.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockito_kotlin.any
 import io.kotlintest.matchers.shouldEqual
 import io.kotlintest.mock.mock

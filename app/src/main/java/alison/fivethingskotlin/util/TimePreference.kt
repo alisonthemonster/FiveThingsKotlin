@@ -3,8 +3,8 @@ package alison.fivethingskotlin.util
 import alison.fivethingskotlin.R
 import android.content.Context
 import android.content.res.TypedArray
-import android.support.v4.content.ContextCompat
-import android.support.v7.preference.DialogPreference
+import androidx.core.content.ContextCompat
+import androidx.preference.DialogPreference
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan

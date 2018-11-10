@@ -4,7 +4,7 @@ import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.TimePreference
 import alison.fivethingskotlin.util.timeToString
 import android.content.Context
-import android.support.v7.preference.PreferenceDialogFragmentCompat
+import androidx.preference.PreferenceDialogFragmentCompat
 import android.view.View
 import android.widget.TimePicker
 

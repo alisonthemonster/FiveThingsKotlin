@@ -2,8 +2,8 @@ package alison.fivethingskotlin.api.repository
 
 import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.model.SearchResult
-import android.arch.lifecycle.MutableLiveData
-import android.arch.paging.DataSource
+import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
 import java.util.concurrent.Executor
 
 class SearchDataSourceFactory(private val service: FiveThingsService,
