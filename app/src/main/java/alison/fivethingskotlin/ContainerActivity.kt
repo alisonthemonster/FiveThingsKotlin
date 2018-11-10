@@ -41,9 +41,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         const val CHANNEL_ID = "FiveThingsChannel"
     }
 
-    private lateinit var drawerLayout: androidx.drawerlayout.widget.DrawerLayout
-
-
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 
         val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
@@ -94,25 +91,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // The action bar home/up action should open or close the drawer.
-        when (item.itemId) {
-            android.R.id.home -> {
-                drawerLayout.openDrawer(GravityCompat.START)
-                return true
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-    override fun onBackPressed() {
-        when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) -> drawerLayout.closeDrawer(GravityCompat.START)
-            fragmentManager.backStackEntryCount > 0 -> fragmentManager.popBackStack()
-            else -> super.onBackPressed()
-        }
-    }
-
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
@@ -149,7 +127,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 android.R.anim.fade_out)
         fragmentTransaction.replace(R.id.content_frame, fragment)
         fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
     }
 
     private fun logOut() {
