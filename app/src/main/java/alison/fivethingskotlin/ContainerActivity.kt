@@ -5,9 +5,7 @@ import alison.fivethingskotlin.fragment.AnalyticsFragment
 import alison.fivethingskotlin.fragment.FiveThingsPagerFragment
 import alison.fivethingskotlin.fragment.SearchFragment
 import alison.fivethingskotlin.fragment.SettingsFragment
-import alison.fivethingskotlin.util.AlarmBootReceiver
-import alison.fivethingskotlin.util.NotificationScheduler
-import alison.fivethingskotlin.util.clearAuthState
+import alison.fivethingskotlin.util.*
 import android.app.ActionBar
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -31,8 +29,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ActionMenuView
+import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
+import kotlinx.android.synthetic.main.fragment_five_things.*
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -76,6 +76,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         setContentView(R.layout.activity_container)
 
         setUpNavigationDrawer()
+
+        setUpCalendar()
 
         if (savedInstanceState == null) {
             selectDate(Date(), false)
@@ -127,6 +129,26 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+    }
+
+    private fun setUpCalendar() {
+        compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
+            override fun onDayClick(dateClicked: Date) {
+                binding.loading = true
+                selectDate(dateClicked, false)
+            }
+
+            override fun onMonthScroll(firstDayOfNewMonth: Date) {
+                currentDate = firstDayOfNewMonth
+                binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
+            }
+        })
+
+        todayButton.setOnClickListener {
+            binding.loading = true
+            val activity = context as ContainerActivity
+            activity.selectDate(Date(), false)
+        }
     }
 
     private fun setUpSpacedToolbar() {

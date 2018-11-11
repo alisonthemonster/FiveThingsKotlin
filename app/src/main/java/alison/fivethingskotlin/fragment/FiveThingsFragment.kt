@@ -94,47 +94,6 @@ class FiveThingsFragment : Fragment() {
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
 
         setUpTextListeners()
-
-        val sharedPrefs = context?.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
-        val hasOpenedCal = sharedPrefs?.getBoolean(HAS_OPENED_CALENDAR, false)
-
-        if (!hasOpenedCal!!) {
-            animateDate()
-        }
-
-        compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
-            override fun onDayClick(dateClicked: Date) {
-                binding.loading = true
-                val activity = context as ContainerActivity
-                activity.selectDate(dateClicked, false)
-            }
-
-            override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                currentDate = firstDayOfNewMonth
-                binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
-            }
-        })
-
-        current_date.setOnClickListener {
-            val currentVisibility = binding.calendarVisible
-            currentVisibility?.let {
-                binding.calendarVisible = !currentVisibility
-            }
-            val hasOpenedCal = sharedPrefs.getBoolean(HAS_OPENED_CALENDAR, false)
-            if (!hasOpenedCal) {
-                //user opened the calendar!
-                sharedPrefs.edit()
-                        .putBoolean(HAS_OPENED_CALENDAR, true)
-                        .apply()
-                firebaseAnalytics.logEvent("OpenCalAfterNudge", null)
-            }
-        }
-
-        todayButton.setOnClickListener {
-            binding.loading = true
-            val activity = context as ContainerActivity
-            activity.selectDate(Date(), false)
-        }
     }
 
     override fun onResume() {
@@ -183,7 +142,6 @@ class FiveThingsFragment : Fragment() {
                     val date = things.data?.date!!
                     binding.naguDate = date
                     binding.month = getMonth(date) + " " + getYear(date)
-                    compactcalendar_view.setCurrentDate(date)
                     binding.loading = false
                     inCloud = !things.data.isEmpty //if there's data there it came from the server
                 }
