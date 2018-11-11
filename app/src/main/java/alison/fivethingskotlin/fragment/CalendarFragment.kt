@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
+import kotlinx.android.synthetic.main.activity_container.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import net.openid.appauth.AuthorizationService
 import java.lang.Exception
@@ -44,6 +45,7 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.closeCalendarEvent.observe(this, android.arch.lifecycle.Observer {
+
             fragmentManager?.popBackStack()
         })
 

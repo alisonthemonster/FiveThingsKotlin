@@ -15,6 +15,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
@@ -126,12 +127,19 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private fun setUpFab() {
 
+        var isCalOpen = false
+
         fab.setOnClickListener {
-            //TODO why isn't this working with databinding
-            viewModel.openCalendar()
+            if (isCalOpen) {
+                viewModel.closeCalendar()
+            } else {
+                viewModel.openCalendar()
+            }
+            isCalOpen = !isCalOpen
         }
 
         viewModel.calendarOpenEvent.observe(this, android.arch.lifecycle.Observer {
+
             Log.d("blerg", "open event in activity")
             supportFragmentManager.beginTransaction().apply {
                 val fragment = CalendarFragment.newInstance()
@@ -178,6 +186,12 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     private fun loadFragment(fragment: Fragment) {
+        val backStackCount = supportFragmentManager.backStackEntryCount
+        for (i in 0 until backStackCount) {
+            val backStackId = supportFragmentManager.getBackStackEntryAt(i).id
+            supportFragmentManager.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out)
