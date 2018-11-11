@@ -122,11 +122,10 @@ class CalendarFragment : Fragment() {
                 dialogBuilder
                         .setTitle("Select a year")
                         .setItems(yearList.toTypedArray()) { _, year ->
-                            //TODO
-//                            val newDate = getDateInAYear(currentDate, yearList[year].toInt())
-//                            currentDate = newDate
-//                            binding.month = getMonth(newDate) + " " + getYear(newDate)
-//                            compactcalendar_view.setCurrentDate(newDate)
+                            val currentDate = getDateFromFullDateFormat(viewModel.dateString.get() ?: "")
+                            val newDate = getDateInAYear(currentDate, yearList[year].toInt())
+                            viewModel.month.set(getMonth(newDate) + " " + getYear(newDate))
+                            compactcalendar_view.setCurrentDate(newDate)
                         }
                         .create()
                         .show()

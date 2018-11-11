@@ -28,7 +28,6 @@ class FiveThingsFragment : Fragment() {
 
     private lateinit var viewModel: FiveThingsViewModel
     private lateinit var binding: FragmentFiveThingsBinding
-    private lateinit var yearList: MutableList<String> //TODO move and fix
     private lateinit var currentDate: Date
     private lateinit var firebaseAnalytics: FirebaseAnalytics
 
