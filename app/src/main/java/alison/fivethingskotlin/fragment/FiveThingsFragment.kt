@@ -57,6 +57,7 @@ class FiveThingsFragment : Fragment() {
         } ?: throw Exception("Invalid Activity")
 
         binding.viewModel = viewModel
+        viewModel.isLoading.set(true)
 
         val passedInDate = arguments?.getString(DATE)
 

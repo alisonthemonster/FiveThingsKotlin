@@ -45,4 +45,10 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory>
+        <Preference
+            android:key="sign_out"
+            android:title="Sign out" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

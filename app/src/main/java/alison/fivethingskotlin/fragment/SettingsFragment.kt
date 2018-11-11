@@ -1,11 +1,13 @@
 package alison.fivethingskotlin.fragment
 
 import alison.fivethingskotlin.BuildConfig
+import alison.fivethingskotlin.PromoActivity
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.WebViewActivity
 import alison.fivethingskotlin.WebViewActivity.Companion.WEBVIEW_URL
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.TimePreference
+import alison.fivethingskotlin.util.clearAuthState
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,7 +31,21 @@ class SettingsFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedP
         buildWebViewPreference("terms_conditions", BuildConfig.TERMS_CONDITIONS_URL)
         buildOssLiscenceActivity()
 
+        buildLogOutPreference("sign_out")
+
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
+    }
+
+    private fun buildLogOutPreference(preferenceKey: String) {
+        val preference = findPreference(preferenceKey)
+        preference.setOnPreferenceClickListener {
+            clearAuthState(activity!!)
+
+            val intent = Intent(context, PromoActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            true
+        }
     }
 
     private fun buildWebViewPreference(preferenceKey: String, webViewUrl: String) {
