@@ -24,18 +24,16 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     private val datesLiveData = MutableLiveData<Resource<List<Date>>>()
 
     val calendarOpenEvent = SingleLiveEvent<Void>()
+    val closeCalendarEvent = SingleLiveEvent<Void>()
+
 
     val month = ObservableField<String>()
 
     private val disposables = CompositeDisposable()
 
-    private var calendarVisible = false
-
     init {
         month.set(getMonth(Date()) + " " + getYear(Date()))
     }
-
-
 
     fun updateThings(token: String, things: Array<Thing>) {
         disposables.add(fiveThingsService.updateFiveThings(token, things)
@@ -113,33 +111,13 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     }
 
     fun openCalendar() {
-        Log.d("blerg", "open in viewModel")
         calendarOpenEvent.call()
     }
 
     fun closeCalendar() {
-        //TODO
+        closeCalendarEvent.call()
     }
 
-//    fun setMonth(date: String) {
-//        Log.d("Blerg", "setting the month")
-//        calendarMonth = date
-//    }
-//
-//    fun getMonth(): String {
-//        Log.d("Blerg", "getting the latest month")
-//        return calendarMonth
-//    }
-
-    @Visibility
-    fun calendarVisibility(): Int {
-        return if (calendarVisible) {
-            View.VISIBLE
-        } else {
-            calendarVisible = true
-            View.GONE
-        }
-    }
 
     fun thingsLiveData(): MutableLiveData<Resource<FiveThings>> {
         return fiveThingsData

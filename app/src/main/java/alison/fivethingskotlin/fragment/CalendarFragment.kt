@@ -43,6 +43,10 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.closeCalendarEvent.observe(this, android.arch.lifecycle.Observer {
+            fragmentManager?.popBackStack()
+        })
+
 
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
