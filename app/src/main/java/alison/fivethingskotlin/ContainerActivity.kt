@@ -124,21 +124,18 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private fun setUpFab() {
 
-        var isCalOpen = false //TODO this fails when fab is closed with back button
-        //TODO or when they click a date
-
         fab.setOnClickListener {
-            if (isCalOpen) {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame)
+            if (currentFragment is CalendarFragment) {
+                Log.d("blerg", "closing calendar")
                 viewModel.closeCalendar()
             } else {
+                Log.d("blerg", "opening calendar")
                 viewModel.openCalendar()
             }
-            isCalOpen = !isCalOpen
         }
 
         viewModel.calendarOpenEvent.observe(this, android.arch.lifecycle.Observer {
-
-            Log.d("blerg", "open event in activity")
             supportFragmentManager.beginTransaction().apply {
                 val fragment = CalendarFragment.newInstance()
                 setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
