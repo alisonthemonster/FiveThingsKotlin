@@ -32,6 +32,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     val five = ObservableField<String>()
 
     val saved = ObservableField<Boolean>()
+    val isSaving = ObservableField<Boolean>()
     val isLoading = ObservableField<Boolean>()
 
     private val disposables = CompositeDisposable()
@@ -40,7 +41,20 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
         month.set(getMonth(Date()) + " " + getYear(Date()))
     }
 
-    fun updateThings(token: String, things: Array<Thing>) {
+    fun saveDay(token: String, things: Array<Thing>) {
+        val savedValue = saved.get() ?: false
+        if (savedValue) {
+            saved.set(false) //really it should be saving = true
+            isSaving.set(true)
+            updateThings(token, things)
+        } else {
+            saved.set(false)
+            isSaving.set(true)
+            saveNewThings(token, things)
+        }
+    }
+
+    private fun updateThings(token: String, things: Array<Thing>) {
         disposables.add(fiveThingsService.updateFiveThings(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -48,14 +62,18 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                         { writtenDates ->
                             val days = writtenDates.map { getDateFromDatabaseStyle(it) }
                             datesLiveData.postValue(Resource(Status.SUCCESS, "A day was changed", days))
+                            saved.set(true)
+                            isSaving.set(false)
                         },
                         { error ->
+                            saved.set(false)
+                            isSaving.set(false)
                             datesLiveData.postValue(Resource(Status.ERROR, error.message, emptyList()))
                         }
                 ))
     }
 
-    fun saveNewThings(token: String, things: Array<Thing>) {
+    private fun saveNewThings(token: String, things: Array<Thing>) {
         disposables.add(fiveThingsService.writeFiveThings(token, things)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -63,8 +81,12 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                         { writtenDates ->
                             val days = writtenDates.map { getDateFromDatabaseStyle(it) }
                             datesLiveData.postValue(Resource(Status.SUCCESS, "A day was changed", days))
+                            saved.set(true)
+                            isSaving.set(false)
                         },
                         { error ->
+                            saved.set(false)
+                            isSaving.set(false)
                             datesLiveData.postValue(Resource(Status.ERROR, error.message, emptyList()))
                         }
                 ))

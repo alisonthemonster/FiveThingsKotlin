@@ -46,7 +46,6 @@ class CalendarFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.closeCalendarEvent.observe(this, android.arch.lifecycle.Observer {
-            Log.d("blerg", "popping the backstack")
             fragmentManager?.popBackStack()
         })
 

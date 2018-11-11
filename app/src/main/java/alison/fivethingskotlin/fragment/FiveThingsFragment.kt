@@ -9,6 +9,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,7 +52,6 @@ class FiveThingsFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         binding = FragmentFiveThingsBinding.inflate(inflater, container, false)
-        binding.saving = false
 
         viewModel = activity?.run {
             ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
@@ -75,11 +75,13 @@ class FiveThingsFragment : Fragment() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(context!!)
 
-        setUpTextListeners()
     }
 
     override fun onResume() {
         super.onResume()
+
+        setUpTextListeners()
+
         firebaseAnalytics.setCurrentScreen(activity as Activity, "FiveThingsScreen", null)
     }
 
@@ -125,14 +127,7 @@ class FiveThingsFragment : Fragment() {
                         .debounce(1000, TimeUnit.MILLISECONDS)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe {
-                            Toast.makeText(context, "Saving", Toast.LENGTH_SHORT).show()
-//                            if (inCloud) {
-//                                binding.saving = true
-//                                viewModel.updateThings("Bearer $idToken", it.toTypedArray())
-//                            } else {
-//                                binding.saving = true
-//                                viewModel.saveNewThings("Bearer $idToken", it.toTypedArray())
-//                            }
+                            viewModel.saveDay("Bearer $idToken", it.toTypedArray())
                         }
                 compositeDisposable.add(disposable)
             }
