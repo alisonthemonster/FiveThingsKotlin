@@ -1,17 +1,13 @@
 package alison.fivethingskotlin.viewmodel
 
-import alison.fivethingskotlin.adapter.Visibility
 import alison.fivethingskotlin.api.FiveThingsService
-import alison.fivethingskotlin.model.FiveThings
 import alison.fivethingskotlin.model.Resource
 import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.model.Thing
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.databinding.*
-import android.util.Log
-import android.view.View
+import android.databinding.ObservableField
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -20,14 +16,23 @@ import java.util.*
 
 class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = FiveThingsService.create()) : ViewModel() {
 
-    private val fiveThingsData = MutableLiveData<Resource<FiveThings>>()
     private val datesLiveData = MutableLiveData<Resource<List<Date>>>()
 
     val calendarOpenEvent = SingleLiveEvent<Void>()
     val closeCalendarEvent = SingleLiveEvent<Void>()
-
+    val errorLiveEvent = SingleLiveEvent<String>()
 
     val month = ObservableField<String>()
+    val dateString = ObservableField<String>()
+
+    val one = ObservableField<String>()
+    val two = ObservableField<String>()
+    val three = ObservableField<String>()
+    val four = ObservableField<String>()
+    val five = ObservableField<String>()
+
+    val saved = ObservableField<Boolean>()
+    val isLoading = ObservableField<Boolean>()
 
     private val disposables = CompositeDisposable()
 
@@ -66,6 +71,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     }
 
     fun getThings(token: String, date: Date) {
+        isLoading.set(true)
         disposables.add(fiveThingsService.getFiveThings(token, getYear(date).toString(),
                 String.format("%02d", getMonthNumber(date)),
                 String.format("%02d", getDay(date)))
@@ -73,22 +79,32 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { things ->
-                            val fiveThings = FiveThings(date, things, false, true)
-                            fiveThingsData.postValue(Resource(Status.SUCCESS, "", fiveThings))
+                            for (thing in things) {
+                                when (thing.order) {
+                                    1 -> one.set(thing.content)
+                                    2 -> two.set(thing.content)
+                                    3 -> three.set(thing.content)
+                                    4 -> four.set(thing.content)
+                                    5 -> five.set(thing.content)
+                                }
+                            }
+                            saved.set(true)
+                            dateString.set(getFullDateFormat(date))
+                            isLoading.set(false)
                         },
                         { error ->
                             if (error is retrofit2.HttpException && error.code() == 404) {
-                                val things = FiveThings(date, listOf(
-                                        Thing(getDatabaseStyleDate(date), "", 1),
-                                        Thing(getDatabaseStyleDate(date), "", 2),
-                                        Thing(getDatabaseStyleDate(date), "", 3),
-                                        Thing(getDatabaseStyleDate(date), "", 4),
-                                        Thing(getDatabaseStyleDate(date), "", 5)),
-                                        false,
-                                        false)
-                                fiveThingsData.value = Resource(Status.SUCCESS, "Unwritten Day", things)
+                                saved.set(false)
+                                dateString.set(getFullDateFormat(date))
+                                one.set("")
+                                two.set("")
+                                three.set("")
+                                four.set("")
+                                five.set("")
+                                isLoading.set(false)
                             } else {
-                                datesLiveData.postValue(Resource(Status.ERROR, error.message, null))
+                                errorLiveEvent.postValue(error.localizedMessage)
+                                isLoading.set(false)
                             }
                         }
                 ))
@@ -116,11 +132,6 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
 
     fun closeCalendar() {
         closeCalendarEvent.call()
-    }
-
-
-    fun thingsLiveData(): MutableLiveData<Resource<FiveThings>> {
-        return fiveThingsData
     }
 
     override fun onCleared() {

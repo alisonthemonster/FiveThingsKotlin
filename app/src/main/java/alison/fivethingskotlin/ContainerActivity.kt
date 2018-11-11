@@ -48,10 +48,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
 
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
-
-        val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
-        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
-        val fragment = FiveThingsPagerFragment.newInstance(newDateIndex)
+        val fragment = FiveThingsFragment.newInstance(getFullDateFormat(selectedDate))
 
         supportFragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -127,7 +124,8 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
     private fun setUpFab() {
 
-        var isCalOpen = false
+        var isCalOpen = false //TODO this fails when fab is closed with back button
+        //TODO or when they click a date
 
         fab.setOnClickListener {
             if (isCalOpen) {
@@ -199,6 +197,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         fragmentTransaction.commitAllowingStateLoss()
     }
 
+    //TODO move to settings
     private fun logOut() {
         clearAuthState(this)
 
