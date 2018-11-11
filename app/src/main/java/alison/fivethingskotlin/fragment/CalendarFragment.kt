@@ -7,6 +7,7 @@ import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.ObservableField
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -15,7 +16,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.github.sundeepk.compactcalendarview.CompactCalendarView
-import kotlinx.android.synthetic.main.activity_container.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import net.openid.appauth.AuthorizationService
 import java.lang.Exception
@@ -50,6 +50,10 @@ class CalendarFragment : Fragment() {
             fragmentManager?.popBackStack()
         })
 
+        val passedInDate = arguments?.getString(CalendarFragment.DATE)
+        val currentDate = if (passedInDate != null)
+            getDateFromFullDateFormat(passedInDate) else Date()
+        compactcalendar_view.setCurrentDate(currentDate)
 
         //TODO modal for other years
 
@@ -133,12 +137,19 @@ class CalendarFragment : Fragment() {
 
 
     companion object {
-        const val DATE = "date_key"
+        const val DATE = "cal_date_key"
 
         val TAG = CalendarFragment::class.java.simpleName
 
-        fun newInstance(): CalendarFragment {
-            return CalendarFragment()
+        fun newInstance(date: String): CalendarFragment {
+            val fragment = CalendarFragment()
+
+            val bundle = Bundle()
+            bundle.putString(CalendarFragment.DATE, date)
+            fragment.arguments = bundle
+
+            return fragment
+
         }
     }
 

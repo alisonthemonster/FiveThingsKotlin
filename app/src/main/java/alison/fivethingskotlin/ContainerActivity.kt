@@ -1,6 +1,5 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.adapter.FiveThingsAdapter
 import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.*
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
@@ -16,24 +15,15 @@ import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.app.AppCompatDelegate
-import android.support.v7.preference.PreferenceManager
 import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ActionMenuView
-import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
-import org.joda.time.Days
-import org.joda.time.LocalDate
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.*
 
@@ -127,17 +117,16 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         fab.setOnClickListener {
             val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame)
             if (currentFragment is CalendarFragment) {
-                Log.d("blerg", "closing calendar")
                 viewModel.closeCalendar()
             } else {
-                Log.d("blerg", "opening calendar")
                 viewModel.openCalendar()
             }
         }
 
         viewModel.calendarOpenEvent.observe(this, android.arch.lifecycle.Observer {
             supportFragmentManager.beginTransaction().apply {
-                val fragment = CalendarFragment.newInstance()
+                val currentDate = viewModel.dateString.get() ?: getFullDateFormat(Date())
+                val fragment = CalendarFragment.newInstance(currentDate)
                 setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                 add(R.id.content_frame, fragment)
                 addToBackStack(CalendarFragment.TAG)
