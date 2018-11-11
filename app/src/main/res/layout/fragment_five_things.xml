@@ -29,10 +29,6 @@
             type="Boolean" />
 
         <variable
-            name="month"
-            type="String" />
-
-        <variable
             name="saving"
             type="Boolean" />
 
@@ -73,7 +69,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Wednesday September 24th, 2018" />
-
 
 
                 <TextView

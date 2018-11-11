@@ -1,14 +1,13 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.adapter.FiveThingsAdapter
-import alison.fivethingskotlin.fragment.AnalyticsFragment
-import alison.fivethingskotlin.fragment.FiveThingsPagerFragment
-import alison.fivethingskotlin.fragment.SearchFragment
-import alison.fivethingskotlin.fragment.SettingsFragment
+import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.*
+import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.app.ActionBar
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -23,16 +22,15 @@ import android.support.v7.preference.PreferenceManager
 import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ActionMenuView
-import com.github.sundeepk.compactcalendarview.CompactCalendarView
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_container.*
-import kotlinx.android.synthetic.main.fragment_five_things.*
 import org.joda.time.Days
 import org.joda.time.LocalDate
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
@@ -44,6 +42,9 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     companion object {
         const val CHANNEL_ID = "FiveThingsChannel"
     }
+
+    lateinit var viewModel: FiveThingsViewModel
+
 
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
 
@@ -60,41 +61,19 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
-        val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
-
-        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-        if (isLightMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
-        } else {
-            firebaseAnalytics.setUserProperty("DarkModeUser", "Dark mode user")
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
-        }
-
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_container)
 
-        setUpNavigationDrawer()
+        viewModel = ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
 
-        setUpCalendar()
+        setUpBottomNav()
 
         if (savedInstanceState == null) {
             selectDate(Date(), false)
         }
 
-        createNotificationChannel()
-
-        val receiver = ComponentName(this, AlarmBootReceiver::class.java)
-
-        packageManager.setComponentEnabledSetting(
-                receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP
-        )
-
-        NotificationScheduler().setReminderNotification(this)
-
+        handleNotifications()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -131,24 +110,37 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
     }
 
-    private fun setUpCalendar() {
-        compactcalendar_view.setListener(object : CompactCalendarView.CompactCalendarViewListener {
-            override fun onDayClick(dateClicked: Date) {
-                binding.loading = true
-                selectDate(dateClicked, false)
-            }
+    private fun handleNotifications() {
+        createNotificationChannel()
 
-            override fun onMonthScroll(firstDayOfNewMonth: Date) {
-                currentDate = firstDayOfNewMonth
-                binding.month = getMonth(firstDayOfNewMonth) + " " + getYear(firstDayOfNewMonth)
+        val receiver = ComponentName(this, AlarmBootReceiver::class.java)
+
+        packageManager.setComponentEnabledSetting(
+                receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        )
+
+        NotificationScheduler().setReminderNotification(this)
+    }
+
+    private fun setUpFab() {
+
+        fab.setOnClickListener {
+            //TODO why isn't this working with databinding
+            viewModel.openCalendar()
+        }
+
+        viewModel.calendarOpenEvent.observe(this, android.arch.lifecycle.Observer {
+            Log.d("blerg", "open event in activity")
+            supportFragmentManager.beginTransaction().apply {
+                val fragment = CalendarFragment.newInstance()
+                setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                add(R.id.content_frame, fragment)
+                addToBackStack(CalendarFragment.TAG)
+                commitAllowingStateLoss()
             }
         })
-
-        todayButton.setOnClickListener {
-            binding.loading = true
-            val activity = context as ContainerActivity
-            activity.selectDate(Date(), false)
-        }
     }
 
     private fun setUpSpacedToolbar() {
@@ -179,9 +171,10 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         }
     }
 
-    private fun setUpNavigationDrawer() {
+    private fun setUpBottomNav() {
         setSupportActionBar(bottom_app_bar)
         setUpSpacedToolbar()
+        setUpFab()
     }
 
     private fun loadFragment(fragment: Fragment) {
@@ -215,31 +208,4 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             notificationManager.createNotificationChannel(channel)
         }
     }
-
-    private val drawerListener = object : DrawerLayout.DrawerListener {
-
-        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            //Called when a drawer's position changes.
-        }
-
-        override fun onDrawerOpened(drawerView: View) {
-            //Called when a drawer has settled in a completely open state.
-            //The drawer is interactive at this point.
-            // If you have 2 drawers (left and right) you can distinguish
-            // them by using id of the drawerView. int id = drawerView.getId();
-            // id will be your layout's id: for example R.id.left_drawer
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            // Called when a drawer has settled in a completely closed state.
-        }
-
-        override fun onDrawerStateChanged(newState: Int) {
-            //possibly change to lose focus on all edit texts?
-            // Called when the drawer motion state changes. The new state will be one of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
-    }
-
 }

@@ -71,10 +71,11 @@ class FiveThingsFragment : Fragment() {
         binding.saving = false
         binding.inEditMode = false
 
-        viewModel = ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
+        viewModel = activity?.run {
+            ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
+        } ?: throw Exception("Invalid Activity")
 
         binding.viewModel = viewModel
-        binding.calendarVisible = false
 
         val passedInDate = arguments?.getString(DATE)
 
@@ -117,23 +118,8 @@ class FiveThingsFragment : Fragment() {
     }
 
     private fun startObserving() {
-        viewModel.datesLiveData().observe(this, Observer<Resource<List<Date>>> { dates ->
-            when (dates?.status) {
-                Status.SUCCESS -> {
-                    addEventsToCalendar(dates.data)
-                    if (dates.message == "A day was changed") {
-                        binding.saving = false
-                        inCloud = true
-                    }
-                }
-                Status.ERROR -> {
-                    binding.loading = false
-                    val message = dates.message!!.capitalize()
-                    Crashlytics.logException(Exception("Saving error, date: ${binding.fiveThings?.date}  Message: $message"))
-                    handleErrorState(message, context!!)
-                }
-            }
-        })
+
+        //TODO inCloud is broken
 
         viewModel.thingsLiveData().observe(this, Observer<Resource<FiveThings>> { things ->
             when (things?.status) {
@@ -141,7 +127,7 @@ class FiveThingsFragment : Fragment() {
                     binding.fiveThings = things.data
                     val date = things.data?.date!!
                     binding.naguDate = date
-                    binding.month = getMonth(date) + " " + getYear(date)
+                    //binding.month = getMonth(date) + " " + getYear(date)
                     binding.loading = false
                     inCloud = !things.data.isEmpty //if there's data there it came from the server
                 }
@@ -247,7 +233,6 @@ class FiveThingsFragment : Fragment() {
                 viewModel.getThings("Bearer $idToken", currentDate)
             }
         }
-
     }
 
     private fun getWrittenDays() {
@@ -266,42 +251,6 @@ class FiveThingsFragment : Fragment() {
 
             } else {
                 viewModel.getDays("Bearer $idToken")
-            }
-        }
-    }
-
-    private fun addEventsToCalendar(dates: List<Date>?) {
-        compactcalendar_view.removeAllEvents()
-        dates?.let {
-            val events = it.map { convertDateToEvent(it) }
-            compactcalendar_view.addEvents(events)
-            if (it.isNotEmpty()) {
-                buildYearDialog(it)
-            }
-        }
-        binding.loading = false
-    }
-
-    private fun buildYearDialog(dates: List<Date>) {
-        yearList = mutableListOf()
-        val minYear = getYear(Collections.min(dates))
-        val maxYear = getYear(Collections.max(dates))
-        (minYear..maxYear).mapTo(yearList) { it.toString() }
-
-        if (yearList.size > 1) {
-            //only show dialog if users have multiple years to choose from
-            month_year.setOnClickListener {
-                val dialogBuilder = AlertDialog.Builder(context!!, R.style.CustomDialogTheme)
-                dialogBuilder
-                        .setTitle("Select a year")
-                        .setItems(yearList.toTypedArray()) { _, year ->
-                            val newDate = getDateInAYear(currentDate, yearList[year].toInt())
-                            currentDate = newDate
-                            binding.month = getMonth(newDate) + " " + getYear(newDate)
-                            compactcalendar_view.setCurrentDate(newDate)
-                        }
-                        .create()
-                        .show()
             }
         }
     }
