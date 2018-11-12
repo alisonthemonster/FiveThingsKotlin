@@ -5,22 +5,18 @@
         <item
             android:id="@+id/five_things_item"
             android:icon="@drawable/ic_five_wide"
-            android:title="@string/five_things"
-            app:showAsAction="always"/>
+            android:title="@string/five_things" />
         <item
             android:id="@+id/search_item"
             android:icon="@drawable/ic_search"
-            android:title="@string/search"
-            app:showAsAction="always"/>
+            android:title="@string/search" />
         <item
             android:id="@+id/analytics_item"
             android:icon="@drawable/anim_analytics"
-            android:title="@string/analytics"
-            app:showAsAction="always"/>
+            android:title="@string/analytics" />
         <item
             android:id="@+id/settings_item"
             android:icon="@drawable/anim_account"
-            android:title="@string/settings"
-            app:showAsAction="always"/>
+            android:title="@string/settings" />
     </group>
 </menu>

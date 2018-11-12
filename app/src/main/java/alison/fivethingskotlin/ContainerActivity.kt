@@ -2,6 +2,7 @@ package alison.fivethingskotlin
 
 import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.AlarmBootReceiver
+import alison.fivethingskotlin.util.CustomTypefaceSpan
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.getFullDateFormat
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
@@ -21,10 +22,13 @@ import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.PreferenceManager
 import android.view.Menu
 import android.view.MenuItem
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_container.*
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.*
-import android.support.design.widget.BottomNavigationView
+import android.text.SpannableStringBuilder
+import android.graphics.Typeface
+
+
 
 
 
@@ -109,7 +113,7 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
     private fun handleNotifications() {
@@ -149,40 +153,19 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         })
     }
 
-//    private fun setUpSpacedToolbar() {
-//        val display = windowManager.defaultDisplay
-//        val metrics = DisplayMetrics()
-//        display.getMetrics(metrics)
-//
-//        bottom_app_bar.inflateMenu(R.menu.nav_menu)
-//        bottom_app_bar.setContentInsetsAbsolute(10, 10)
-//
-//        val screenWidth = metrics.widthPixels
-//        val toolbarParams = Toolbar.LayoutParams(screenWidth, ActionBar.LayoutParams.WRAP_CONTENT)
-//
-//        for (i in 0..4) {
-//            val childView = bottom_app_bar.getChildAt(i)
-//            if (childView is ViewGroup) {
-//                childView.layoutParams = toolbarParams
-//                val innerChildCount = childView.childCount
-//                val itemWidth = (screenWidth / innerChildCount)
-//                val params = ActionMenuView.LayoutParams(itemWidth, ActionBar.LayoutParams.WRAP_CONTENT)
-//                for (j in 0..innerChildCount) {
-//                    val grandChild = childView.getChildAt(j)
-//                    if (grandChild is ActionMenuItemView) {
-//                        grandChild.layoutParams = params
-//                    }
-//                }
-//            }
-//        }
-//    }
-
     private fun setUpBottomNav() {
+
+        val font = Typeface.createFromAsset(assets, "fonts/Larsseit-Medium.ttf")
+        val typefaceSpan = CustomTypefaceSpan("", font)
+
+        for (i in 0 until bottom_app_bar.menu.size()) {
+            val menuItem = bottom_app_bar.menu.getItem(i)
+            val spannableTitle = SpannableStringBuilder(menuItem.title)
+            spannableTitle.setSpan(typefaceSpan, 0, spannableTitle.length, 0)
+            menuItem.title = spannableTitle
+        }
+
         bottom_app_bar.setOnNavigationItemSelectedListener { item ->
-            val drawable = item.icon
-            if (drawable is Animatable) {
-                drawable.start()
-            }
 
             when (item.itemId) {
                 R.id.five_things_item -> {

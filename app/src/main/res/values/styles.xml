@@ -10,6 +10,12 @@
         <item name="android:alertDialogTheme">@style/CustomDialogTheme</item>
     </style>
 
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="android:textSize">5sp</item>
+        <item name="fontPath">fonts/Larsseit-Medium.ttf</item>
+    </style>
+
     <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:background">@color/background_color</item>
         <item name="textColorAlertDialogListItem">@color/primary_text_color</item>
