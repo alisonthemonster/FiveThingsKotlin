@@ -54,8 +54,6 @@ class CalendarFragment : Fragment() {
             getDateFromFullDateFormat(passedInDate) else Date()
         compactcalendar_view.setCurrentDate(currentDate)
 
-        //TODO modal for other years
-
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
@@ -92,6 +90,7 @@ class CalendarFragment : Fragment() {
         })
 
         todayButton.setOnClickListener {
+            viewModel.month.set(getMonth(Date()) + " " + getYear(Date()))
             val activity = context as ContainerActivity
             activity.selectDate(Date(), false)
         }

@@ -20,17 +20,6 @@
         android:layout_height="match_parent"
         tools:context="alison.fivethingskotlin.fragment.FiveThingsFragment">
 
-        <ImageView
-            android:id="@+id/saved_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="top|right"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:tint="@color/bluegreen"
-            android:visibility="@{viewModel.saved ?  View.VISIBLE : View.GONE}"
-            app:srcCompat="@drawable/ic_checkmark" />
-
         <ProgressBar
             android:id="@+id/save_spinner"
             android:layout_width="20dp"
@@ -188,6 +177,17 @@
             </android.support.constraint.ConstraintLayout>
 
         </android.support.v4.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/saved_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:tint="@color/bluegreen"
+            android:visibility="@{viewModel.saved ?  View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_checkmark" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
