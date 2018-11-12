@@ -1,5 +1,4 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
         <item
@@ -8,7 +7,7 @@
             android:title="@string/five_things" />
         <item
             android:id="@+id/search_item"
-            android:icon="@drawable/ic_search"
+            android:icon="@drawable/anim_search"
             android:title="@string/search" />
         <item
             android:id="@+id/analytics_item"

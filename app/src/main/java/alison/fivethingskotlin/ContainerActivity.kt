@@ -29,10 +29,6 @@ import android.text.SpannableStringBuilder
 import android.graphics.Typeface
 
 
-
-
-
-
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
 
     companion object {
