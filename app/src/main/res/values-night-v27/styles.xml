@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#3AAFAB</item>
         <item name="colorPrimaryDark">#277976</item>
@@ -12,5 +11,4 @@
         <item name="android:windowLightNavigationBar">false</item>
 
     </style>
-
 </resources>

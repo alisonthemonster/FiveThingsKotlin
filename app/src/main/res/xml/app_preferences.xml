@@ -25,7 +25,7 @@
             android:defaultValue="true"
             android:key="dark_light_mode"
             android:summaryOff="Switch to the light mode"
-            android:summaryOn="Switch to the dark mode"
+            android:summaryOn="Switch to the dark mode to save battery"
             android:title="Toggle Light/Dark Mode" />
     </PreferenceCategory>
 

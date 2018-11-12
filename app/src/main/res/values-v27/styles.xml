@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#3AAFAB</item>
         <item name="colorPrimaryDark">#277976</item>
         <item name="colorAccent">#3aafab</item>
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
         <item name="colorControlNormal">@color/primary_text_color</item>
-        <item name="android:windowLightNavigationBar">false</item>
-
+        <item name="android:alertDialogTheme">@style/CustomDialogTheme</item>
+        <item name="android:navigationBarColor">@android:color/background_light</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
-
 </resources>

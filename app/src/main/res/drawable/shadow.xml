@@ -1,6 +1,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <gradient
-        android:startColor="#cfcece"
-        android:endColor="@android:color/transparent"
-        android:angle="90" />
+
+    <solid
+        android:color="@color/nav_border_color" />
 </shape>

@@ -4,6 +4,9 @@
     <color name="text_box_color">#484747</color>
     <color name="text_box_color_enabled">#3e3e3e</color>
 
+    <color name="nav_border_color">#252525</color>
+
+
     <color name="search_result_background">#282828</color>
 
     <color name="primary_text_color">#ffffff</color>

@@ -16,6 +16,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.app.AppCompatDelegate
+import android.support.v7.preference.PreferenceManager
 import android.support.v7.view.menu.ActionMenuItemView
 import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
@@ -49,6 +51,14 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+        val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
+        if (isLightMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
+        }
+
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_container)
@@ -181,15 +191,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                 android.R.anim.fade_out)
         fragmentTransaction.replace(R.id.content_frame, fragment)
         fragmentTransaction.commitAllowingStateLoss()
-    }
-
-    //TODO move to settings
-    private fun logOut() {
-        clearAuthState(this)
-
-        val intent = Intent(applicationContext, PromoActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
     }
 
     private fun createNotificationChannel() {
