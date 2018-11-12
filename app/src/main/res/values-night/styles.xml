@@ -9,7 +9,6 @@
         <item name="android:textColor">@color/primary_text_color</item>
         <item name="preferenceTheme">@style/PrefTheme</item>
         <item name="colorControlNormal">@color/primary_text_color</item>
-        <item name="android:windowLightNavigationBar">false</item>
 
     </style>
 

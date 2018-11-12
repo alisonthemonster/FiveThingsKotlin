@@ -1,16 +1,17 @@
 package alison.fivethingskotlin
 
 import alison.fivethingskotlin.fragment.*
-import alison.fivethingskotlin.util.*
+import alison.fivethingskotlin.util.AlarmBootReceiver
+import alison.fivethingskotlin.util.NotificationScheduler
+import alison.fivethingskotlin.util.getFullDateFormat
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
-import android.app.ActionBar
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -18,16 +19,14 @@ import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.PreferenceManager
-import android.support.v7.view.menu.ActionMenuItemView
-import android.support.v7.widget.Toolbar
-import android.util.DisplayMetrics
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.ActionMenuView
 import kotlinx.android.synthetic.main.activity_container.*
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.*
+import android.support.design.widget.BottomNavigationView
+
+
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
@@ -81,6 +80,11 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val drawable = item.icon
+        if (drawable is Animatable) {
+            drawable.start()
+        }
+
         return when (item.itemId) {
             R.id.five_things_item -> {
                 selectDate(Date(), false)
@@ -145,37 +149,64 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         })
     }
 
-    private fun setUpSpacedToolbar() {
-        val display = windowManager.defaultDisplay
-        val metrics = DisplayMetrics()
-        display.getMetrics(metrics)
+//    private fun setUpSpacedToolbar() {
+//        val display = windowManager.defaultDisplay
+//        val metrics = DisplayMetrics()
+//        display.getMetrics(metrics)
+//
+//        bottom_app_bar.inflateMenu(R.menu.nav_menu)
+//        bottom_app_bar.setContentInsetsAbsolute(10, 10)
+//
+//        val screenWidth = metrics.widthPixels
+//        val toolbarParams = Toolbar.LayoutParams(screenWidth, ActionBar.LayoutParams.WRAP_CONTENT)
+//
+//        for (i in 0..4) {
+//            val childView = bottom_app_bar.getChildAt(i)
+//            if (childView is ViewGroup) {
+//                childView.layoutParams = toolbarParams
+//                val innerChildCount = childView.childCount
+//                val itemWidth = (screenWidth / innerChildCount)
+//                val params = ActionMenuView.LayoutParams(itemWidth, ActionBar.LayoutParams.WRAP_CONTENT)
+//                for (j in 0..innerChildCount) {
+//                    val grandChild = childView.getChildAt(j)
+//                    if (grandChild is ActionMenuItemView) {
+//                        grandChild.layoutParams = params
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-        bottom_app_bar.inflateMenu(R.menu.nav_menu)
-        bottom_app_bar.setContentInsetsAbsolute(10, 10)
+    private fun setUpBottomNav() {
+        bottom_app_bar.setOnNavigationItemSelectedListener { item ->
+            val drawable = item.icon
+            if (drawable is Animatable) {
+                drawable.start()
+            }
 
-        val screenWidth = metrics.widthPixels
-        val toolbarParams = Toolbar.LayoutParams(screenWidth, ActionBar.LayoutParams.WRAP_CONTENT)
-
-        for (i in 0..4) {
-            val childView = bottom_app_bar.getChildAt(i)
-            if (childView is ViewGroup) {
-                childView.layoutParams = toolbarParams
-                val innerChildCount = childView.childCount
-                val itemWidth = (screenWidth / innerChildCount)
-                val params = ActionMenuView.LayoutParams(itemWidth, ActionBar.LayoutParams.WRAP_CONTENT)
-                for (j in 0..innerChildCount) {
-                    val grandChild = childView.getChildAt(j)
-                    if (grandChild is ActionMenuItemView) {
-                        grandChild.layoutParams = params
-                    }
+            when (item.itemId) {
+                R.id.five_things_item -> {
+                    selectDate(Date(), false)
+                    true
+                }
+                R.id.analytics_item -> {
+                    loadFragment(AnalyticsFragment())
+                    true
+                }
+                R.id.search_item -> {
+                    loadFragment(SearchFragment())
+                    true
+                }
+                R.id.settings_item -> {
+                    loadFragment(SettingsFragment())
+                    true
+                }
+                else -> {
+                    true
                 }
             }
         }
-    }
 
-    private fun setUpBottomNav() {
-        setSupportActionBar(bottom_app_bar)
-        setUpSpacedToolbar()
         setUpFab()
     }
 

@@ -62,7 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <android.support.design.bottomappbar.BottomAppBar
+            <android.support.design.widget.BottomNavigationView
                 android:id="@+id/bottom_app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -70,6 +70,8 @@
                 android:backgroundTint="@color/background_color"
                 app:fabCradleMargin="0dp"
                 app:hideOnScroll="true"
+                app:itemIconTint="@color/bluegreen"
+                app:menu="@menu/nav_menu"
                 app:layout_scrollFlags="scroll|enterAlways" />
 
         </android.support.design.widget.CoordinatorLayout>

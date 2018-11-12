@@ -14,12 +14,12 @@
             app:showAsAction="always"/>
         <item
             android:id="@+id/analytics_item"
-            android:icon="@drawable/ic_analytics"
+            android:icon="@drawable/anim_analytics"
             android:title="@string/analytics"
             app:showAsAction="always"/>
         <item
             android:id="@+id/settings_item"
-            android:icon="@drawable/ic_settings"
+            android:icon="@drawable/anim_account"
             android:title="@string/settings"
             app:showAsAction="always"/>
     </group>
