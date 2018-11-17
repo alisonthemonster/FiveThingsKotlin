@@ -44,7 +44,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
     fun saveDay(token: String, things: Array<Thing>) {
         val savedValue = saved.get() ?: false
         if (savedValue) {
-            saved.set(false) //really it should be saving = true
+            saved.set(false)
             isSaving.set(true)
             updateThings(token, things)
         } else {
@@ -126,6 +126,7 @@ class FiveThingsViewModel(private val fiveThingsService: FiveThingsService = Fiv
                                 isLoading.set(false)
                             } else {
                                 errorLiveEvent.postValue(error.localizedMessage)
+                                saved.set(false)
                                 isLoading.set(false)
                             }
                         }

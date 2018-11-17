@@ -2,18 +2,19 @@ package alison.fivethingskotlin.fragment
 
 import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.Thing
-import alison.fivethingskotlin.util.*
+import alison.fivethingskotlin.util.getDatabaseStyleDate
+import alison.fivethingskotlin.util.getDateFromFullDateFormat
+import alison.fivethingskotlin.util.handleErrorState
+import alison.fivethingskotlin.util.restoreAuthState
 import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.jakewharton.rxbinding2.widget.RxTextView
@@ -66,6 +67,7 @@ class FiveThingsFragment : Fragment() {
 
         observeErrors()
         getFiveThings()
+        setUpTextListeners()
 
         return binding.root
     }
@@ -80,13 +82,11 @@ class FiveThingsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        setUpTextListeners()
-
         firebaseAnalytics.setCurrentScreen(activity as Activity, "FiveThingsScreen", null)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         if (!compositeDisposable.isDisposed) {
             compositeDisposable.dispose()
         }
