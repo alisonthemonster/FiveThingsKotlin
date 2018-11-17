@@ -14,6 +14,8 @@
     <color name="primary_text_color">#ffffff</color>
     <color name="secondary_text_color">#969696</color>
 
+    <color name="search_hint_color">#ffffff</color>
+    
     <color name="toolbar_color">#282828</color>
 
     <color name="background_color">#333333</color>
