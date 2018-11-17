@@ -79,35 +79,6 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val drawable = item.icon
-        if (drawable is Animatable) {
-            drawable.start()
-        }
-
-        return when (item.itemId) {
-            R.id.five_things_item -> {
-                selectDate(Date(), false)
-                true
-            }
-            R.id.analytics_item -> {
-                loadFragment(AnalyticsFragment())
-                true
-            }
-            R.id.search_item -> {
-                loadFragment(SearchFragment())
-                true
-            }
-            R.id.settings_item -> {
-                loadFragment(SettingsFragment())
-                true
-            }
-            else -> {
-                true
-            }
-        }
-    }
-
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
