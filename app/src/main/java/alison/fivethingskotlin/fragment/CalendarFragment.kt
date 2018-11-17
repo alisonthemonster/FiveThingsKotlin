@@ -54,6 +54,8 @@ class CalendarFragment : Fragment() {
             getDateFromFullDateFormat(passedInDate) else Date()
         compactcalendar_view.setCurrentDate(currentDate)
 
+        viewModel.month.set(getMonth(currentDate) + " " + getYear(currentDate))
+
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
