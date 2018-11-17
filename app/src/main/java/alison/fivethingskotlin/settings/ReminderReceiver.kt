@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.util
+package alison.fivethingskotlin.settings
 
 import alison.fivethingskotlin.ContainerActivity.Companion.CHANNEL_ID
 import alison.fivethingskotlin.PromoActivity

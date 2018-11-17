@@ -1,6 +1,5 @@
-package alison.fivethingskotlin.adapter
+package alison.fivethingskotlin.intro
 
-import alison.fivethingskotlin.fragment.IntroFragment
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager

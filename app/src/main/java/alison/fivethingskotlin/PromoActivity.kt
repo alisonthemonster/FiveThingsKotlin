@@ -1,6 +1,6 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.adapter.IntroAdapter
+import alison.fivethingskotlin.intro.IntroAdapter
 import alison.fivethingskotlin.databinding.ActivityPromoBinding
 import alison.fivethingskotlin.util.AUTH_STATE
 import alison.fivethingskotlin.util.SHARED_PREFERENCES_NAME

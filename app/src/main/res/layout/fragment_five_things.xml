@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="alison.fivethingskotlin.viewmodel.FiveThingsViewModel" />
+            type="alison.fivethingskotlin.fivethings.FiveThingsViewModel" />
 
     </data>
 
@@ -18,7 +18,7 @@
         android:id="@+id/five_things_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="alison.fivethingskotlin.fragment.FiveThingsFragment">
+        tools:context="alison.fivethingskotlin.fivethings.FiveThingsFragment">
 
         <ProgressBar
             android:id="@+id/save_spinner"

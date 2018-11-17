@@ -1,8 +1,8 @@
 package alison.fivethingskotlin.repository
 
 import alison.fivethingskotlin.api.FiveThingsService
-import alison.fivethingskotlin.api.repository.SearchRepository
-import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
+import alison.fivethingskotlin.search.SearchRepository
+import alison.fivethingskotlin.search.SearchRepositoryImpl
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult

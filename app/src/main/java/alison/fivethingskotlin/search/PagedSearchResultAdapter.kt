@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.adapter
+package alison.fivethingskotlin.search
 
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.model.NetworkState

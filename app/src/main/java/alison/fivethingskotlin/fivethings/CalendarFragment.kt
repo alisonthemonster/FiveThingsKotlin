@@ -1,17 +1,14 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.fivethings
 
 import alison.fivethingskotlin.ContainerActivity
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.databinding.FragmentCalendarBinding
 import alison.fivethingskotlin.model.Status
 import alison.fivethingskotlin.util.*
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.ObservableField
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +46,7 @@ class CalendarFragment : Fragment() {
             fragmentManager?.popBackStack()
         })
 
-        val passedInDate = arguments?.getString(CalendarFragment.DATE)
+        val passedInDate = arguments?.getString(DATE)
         val currentDate = if (passedInDate != null)
             getDateFromFullDateFormat(passedInDate) else Date()
         compactcalendar_view.setCurrentDate(currentDate)
@@ -144,7 +141,7 @@ class CalendarFragment : Fragment() {
             val fragment = CalendarFragment()
 
             val bundle = Bundle()
-            bundle.putString(CalendarFragment.DATE, date)
+            bundle.putString(DATE, date)
             fragment.arguments = bundle
 
             return fragment

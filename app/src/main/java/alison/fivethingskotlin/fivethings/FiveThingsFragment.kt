@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.fivethings
 
 import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.model.Thing
@@ -6,7 +6,6 @@ import alison.fivethingskotlin.util.getDatabaseStyleDate
 import alison.fivethingskotlin.util.getDateFromFullDateFormat
 import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.util.restoreAuthState
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders

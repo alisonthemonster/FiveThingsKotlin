@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.viewmodel
+package alison.fivethingskotlin.fivethings
 
 import alison.fivethingskotlin.api.FiveThingsService
 import alison.fivethingskotlin.model.Resource

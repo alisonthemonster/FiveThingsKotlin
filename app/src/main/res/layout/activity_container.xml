@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="alison.fivethingskotlin.viewmodel.FiveThingsViewModel" />
+            type="alison.fivethingskotlin.fivethings.FiveThingsViewModel" />
 
     </data>
 

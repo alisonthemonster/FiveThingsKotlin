@@ -1,5 +1,6 @@
-package alison.fivethingskotlin.util
+package alison.fivethingskotlin.settings
 
+import alison.fivethingskotlin.util.NotificationScheduler
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent

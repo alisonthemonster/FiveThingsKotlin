@@ -10,7 +10,7 @@
             android:summaryOn="Daily reminder notifications are on"
             android:title="Daily Reminder Notifications" />
 
-        <alison.fivethingskotlin.util.TimePreference
+        <alison.fivethingskotlin.settings.TimePreference
             android:defaultValue="22:00"
             android:dependency="notif_parent"
             android:dialogTitle="Daily Reminder Time"

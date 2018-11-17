@@ -1,6 +1,8 @@
-package alison.fivethingskotlin.util
+package alison.fivethingskotlin.settings
 
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.util.parseHour
+import alison.fivethingskotlin.util.parseMinute
 import android.content.Context
 import android.content.res.TypedArray
 import android.support.v4.content.ContextCompat

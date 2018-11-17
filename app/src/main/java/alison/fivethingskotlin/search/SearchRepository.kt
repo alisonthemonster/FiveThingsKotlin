@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.api.repository
+package alison.fivethingskotlin.search
 
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.SearchResult

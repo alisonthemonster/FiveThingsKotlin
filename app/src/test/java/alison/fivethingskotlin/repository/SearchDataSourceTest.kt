@@ -1,7 +1,7 @@
 package alison.fivethingskotlin.repository
 
 import alison.fivethingskotlin.api.FiveThingsService
-import alison.fivethingskotlin.api.repository.SearchDataSource
+import alison.fivethingskotlin.search.SearchDataSource
 import alison.fivethingskotlin.LiveDataTestUtil
 import alison.fivethingskotlin.model.NetworkState
 import alison.fivethingskotlin.model.PaginatedSearchResults

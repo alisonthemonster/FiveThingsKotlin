@@ -1,7 +1,6 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.settings
 
 import alison.fivethingskotlin.util.NotificationScheduler
-import alison.fivethingskotlin.util.TimePreference
 import alison.fivethingskotlin.util.timeToString
 import android.content.Context
 import android.support.v7.preference.PreferenceDialogFragmentCompat
