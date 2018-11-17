@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">#3AAFAB</item>
         <item name="colorPrimaryDark">#277976</item>
         <item name="colorAccent">#3aafab</item>
@@ -8,6 +8,12 @@
         <item name="preferenceTheme">@style/PrefTheme</item>
         <item name="colorControlNormal">@color/primary_text_color</item>
         <item name="android:alertDialogTheme">@style/CustomDialogTheme</item>
+    </style>
+
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="android:textSize">5sp</item>
+        <item name="fontPath">fonts/Larsseit-Medium.ttf</item>
     </style>
 
     <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog.Alert">

@@ -12,34 +12,6 @@
             name="viewModel"
             type="alison.fivethingskotlin.viewmodel.FiveThingsViewModel" />
 
-        <variable
-            name="fiveThings"
-            type="alison.fivethingskotlin.model.FiveThings" />
-
-        <variable
-            name="naguDate"
-            type="java.util.Date" />
-
-        <variable
-            name="calendarVisible"
-            type="Boolean" />
-
-        <variable
-            name="loading"
-            type="Boolean" />
-
-        <variable
-            name="month"
-            type="String" />
-
-        <variable
-            name="saving"
-            type="Boolean" />
-
-        <variable
-            name="inEditMode"
-            type="Boolean" />
-
     </data>
 
     <FrameLayout
@@ -48,10 +20,19 @@
         android:layout_height="match_parent"
         tools:context="alison.fivethingskotlin.fragment.FiveThingsFragment">
 
-        <ScrollView
+        <ProgressBar
+            android:id="@+id/save_spinner"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="@{viewModel.isSaving ?  View.VISIBLE : View.GONE}" />
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loading ?  View.GONE : View.VISIBLE}">
+            android:visibility="@{viewModel.isLoading() ?  View.GONE : View.VISIBLE}">
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -66,7 +47,7 @@
                     android:layout_marginStart="20dp"
                     android:layout_marginTop="16dp"
                     android:layout_weight="1"
-                    android:text="@{fiveThings.fullDateString}"
+                    android:text="@{viewModel.dateString}"
                     android:textAlignment="center"
                     android:textSize="23sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -74,80 +55,17 @@
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Wednesday September 24th, 2018" />
 
-                <android.support.constraint.ConstraintLayout
-                    android:id="@+id/calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
-                    android:background="@drawable/rounded_button"
-                    android:visibility="@{calendarVisible ?  View.VISIBLE : View.GONE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/current_date"
-                    tools:visibility="gone">
-
-                    <TextView
-                        android:id="@+id/todayButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="20dp"
-                        android:layout_marginTop="10dp"
-                        android:text="Today"
-                        android:textColor="@color/white"
-                        app:layout_constraintBottom_toBottomOf="@+id/month_year"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/month_year"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center_horizontal"
-                        android:text="@{month}"
-                        android:textColor="@color/white"
-                        android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Month YEAR" />
-
-                    <com.github.sundeepk.compactcalendarview.CompactCalendarView
-                        android:id="@+id/compactcalendar_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        app:compactCalendarBackgroundColor="@color/bluegreen"
-                        app:compactCalendarCurrentDayBackgroundColor="@color/another_grey"
-                        app:compactCalendarCurrentSelectedDayBackgroundColor="@color/grey"
-                        app:compactCalendarMultiEventIndicatorColor="@color/white"
-                        app:compactCalendarTargetHeight="250dp"
-                        app:compactCalendarTextColor="@color/white"
-                        app:compactCalendarTextSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/month_year" />
-                </android.support.constraint.ConstraintLayout>
 
                 <TextView
                     android:id="@+id/one_label"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
-                    android:layout_marginTop="8dp"
                     android:text="@string/one"
                     android:textSize="17sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/calendar" />
+                    app:layout_constraintTop_toBottomOf="@+id/current_date" />
 
                 <EditText
                     android:id="@+id/one"
@@ -155,12 +73,8 @@
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
-                    android:clickable="@{inEditMode}"
-                    android:cursorVisible="@{inEditMode}"
-                    android:focusable="@{inEditMode}"
-                    android:focusableInTouchMode="@{inEditMode}"
-                    android:text="@={fiveThings.one}"
+                    android:background="@drawable/rounded_text_box_disabled"
+                    android:text="@={viewModel.one}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/one_label" />
@@ -182,12 +96,8 @@
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
-                    android:clickable="@{inEditMode}"
-                    android:cursorVisible="@{inEditMode}"
-                    android:focusable="@{inEditMode}"
-                    android:focusableInTouchMode="@{inEditMode}"
-                    android:text="@={fiveThings.two}"
+                    android:background="@drawable/rounded_text_box_disabled"
+                    android:text="@={viewModel.two}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/two_label" />
@@ -209,12 +119,8 @@
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
-                    android:clickable="@{inEditMode}"
-                    android:cursorVisible="@{inEditMode}"
-                    android:focusable="@{inEditMode}"
-                    android:focusableInTouchMode="@{inEditMode}"
-                    android:text="@={fiveThings.three}"
+                    android:background="@drawable/rounded_text_box_disabled"
+                    android:text="@={viewModel.three}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/three_label" />
@@ -235,13 +141,9 @@
                     style="@style/ThingField"
                     fontPath="fonts/Larsseit.ttf"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
-                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
-                    android:clickable="@{inEditMode}"
-                    android:cursorVisible="@{inEditMode}"
-                    android:focusable="@{inEditMode}"
-                    android:focusableInTouchMode="@{inEditMode}"
-                    android:text="@={fiveThings.four}"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_text_box_disabled"
+                    android:text="@={viewModel.four}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/four_label" />
@@ -264,35 +166,33 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
-                    android:background="@{inEditMode ? @drawable/rounded_text_box : @drawable/rounded_text_box_disabled}"
-                    android:clickable="@{inEditMode}"
-                    android:cursorVisible="@{inEditMode}"
-                    android:focusable="@{inEditMode}"
-                    android:focusableInTouchMode="@{inEditMode}"
-                    android:text="@={fiveThings.five}"
+                    android:background="@drawable/rounded_text_box_disabled"
+                    android:text="@={viewModel.five}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/five_label" />
 
-                <ProgressBar
-                    android:id="@+id/save_spinner"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginTop="8dp"
-                    android:visibility="@{saving ?  View.VISIBLE : View.GONE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
             </android.support.constraint.ConstraintLayout>
 
-        </ScrollView>
+        </android.support.v4.widget.NestedScrollView>
+
+        <ImageView
+            android:id="@+id/saved_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|right"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:tint="@color/bluegreen"
+            android:visibility="@{viewModel.saved ?  View.VISIBLE : View.GONE}"
+            app:srcCompat="@drawable/ic_checkmark" />
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="@{loading ?  View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.isLoading() ?  View.VISIBLE : View.GONE}"
             tools:visibility="gone">
 
             <TextView

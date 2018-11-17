@@ -18,7 +18,9 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.activity_promo.*
 import net.openid.appauth.*
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
+
+
 
 
 class PromoActivity : AppCompatActivity() {
@@ -116,7 +118,7 @@ class PromoActivity : AppCompatActivity() {
     }
 
     override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 
     private fun handleAuthorizationResponse(intent: Intent) {

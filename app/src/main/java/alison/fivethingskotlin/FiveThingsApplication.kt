@@ -1,7 +1,10 @@
 package alison.fivethingskotlin
 
 import android.app.Application
-import uk.co.chrisjenx.calligraphy.CalligraphyConfig
+import io.github.inflationx.calligraphy3.CalligraphyConfig
+import io.github.inflationx.calligraphy3.CalligraphyInterceptor
+import io.github.inflationx.viewpump.ViewPump
+
 
 class FiveThingsApplication : Application() {
 
@@ -9,11 +12,13 @@ class FiveThingsApplication : Application() {
 
         super.onCreate()
 
-        CalligraphyConfig.initDefault(CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Larsseit-Medium.ttf")
-                .setFontAttrId(R.attr.fontPath)
-                .build()
-        )
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(CalligraphyInterceptor(
+                        CalligraphyConfig.Builder()
+                                .setDefaultFontPath("fonts/Larsseit-Medium.ttf")
+                                .setFontAttrId(R.attr.fontPath)
+                                .build()))
+                .build())
 
     }
 

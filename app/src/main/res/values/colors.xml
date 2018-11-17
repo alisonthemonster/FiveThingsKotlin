@@ -9,6 +9,10 @@
     <color name="white">#ffffff</color>
     <color name="disabled_white">#969696</color>
 
+    <color name="nav_border_color">#e7e7e7</color>
+    <color name="nav_icon_color">#646464</color>
+    <color name="nav_icon_selected_color">#983aafab</color>
+
     <color name="text_box_color">#ededed</color>
     <color name="text_box_color_enabled">#dadada</color>
     <color name="search_result_background">#983aafab</color>
@@ -19,5 +23,7 @@
 
     <color name="toolbar_color">#efefef</color>
     <color name="background_color">#ffffff</color>
+
+    <color name="modal_background">#80000000</color>
 
 </resources>

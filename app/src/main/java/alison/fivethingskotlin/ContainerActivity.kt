@@ -1,38 +1,32 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.adapter.FiveThingsAdapter
-import alison.fivethingskotlin.fragment.AnalyticsFragment
-import alison.fivethingskotlin.fragment.FiveThingsPagerFragment
-import alison.fivethingskotlin.fragment.SearchFragment
-import alison.fivethingskotlin.fragment.SettingsFragment
+import alison.fivethingskotlin.fragment.*
 import alison.fivethingskotlin.util.AlarmBootReceiver
+import alison.fivethingskotlin.util.CustomTypefaceSpan
 import alison.fivethingskotlin.util.NotificationScheduler
-import alison.fivethingskotlin.util.clearAuthState
+import alison.fivethingskotlin.util.getFullDateFormat
+import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.arch.lifecycle.ViewModelProviders
 import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.PreferenceManager
-import android.support.v7.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import com.google.firebase.analytics.FirebaseAnalytics
+import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_container.*
-import org.joda.time.Days
-import org.joda.time.LocalDate
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper
 import java.util.*
+import android.text.SpannableStringBuilder
+import android.graphics.Typeface
 
 
 class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedListener {
@@ -41,14 +35,11 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         const val CHANNEL_ID = "FiveThingsChannel"
     }
 
-    private lateinit var drawerLayout: DrawerLayout
+    lateinit var viewModel: FiveThingsViewModel
 
 
     override fun selectDate(selectedDate: Date, isASearchResult: Boolean) {
-
-        val daysBetween = Days.daysBetween(LocalDate(Date()), LocalDate(selectedDate)).days
-        val newDateIndex = daysBetween + FiveThingsAdapter.STARTING_DAY
-        val fragment = FiveThingsPagerFragment.newInstance(newDateIndex)
+        val fragment = FiveThingsFragment.newInstance(getFullDateFormat(selectedDate))
 
         supportFragmentManager.beginTransaction().apply {
             setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -56,18 +47,14 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             if (isASearchResult) addToBackStack("search results")
             commitAllowingStateLoss()
         }
-        navigation_view.setCheckedItem(R.id.five_things_item)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
         val isLightMode = sharedPref.getBoolean("dark_light_mode", true) //default is light mode
-
-        val firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         if (isLightMode) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO) //LIGHT MODE
         } else {
-            firebaseAnalytics.setUserProperty("DarkModeUser", "Dark mode user")
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) //DARK MODE
         }
 
@@ -75,12 +62,28 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
 
         setContentView(R.layout.activity_container)
 
-        setUpNavigationDrawer()
+        viewModel = ViewModelProviders.of(this).get(FiveThingsViewModel::class.java)
+
+        setUpBottomNav()
 
         if (savedInstanceState == null) {
             selectDate(Date(), false)
         }
 
+        handleNotifications()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.nav_menu, menu)
+        return true
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
+    }
+
+    private fun handleNotifications() {
         createNotificationChannel()
 
         val receiver = ComponentName(this, AlarmBootReceiver::class.java)
@@ -92,51 +95,48 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
         )
 
         NotificationScheduler().setReminderNotification(this)
-
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // The action bar home/up action should open or close the drawer.
-        when (item.itemId) {
-            android.R.id.home -> {
-                drawerLayout.openDrawer(GravityCompat.START)
-                return true
+    private fun setUpFab() {
+
+        fab.setOnClickListener {
+            val currentFragment = supportFragmentManager.findFragmentById(R.id.content_frame)
+            if (currentFragment is CalendarFragment) {
+                viewModel.closeCalendar()
+            } else {
+                viewModel.openCalendar()
             }
         }
-        return super.onOptionsItemSelected(item)
+
+        viewModel.calendarOpenEvent.observe(this, android.arch.lifecycle.Observer {
+            supportFragmentManager.beginTransaction().apply {
+                val currentDate = viewModel.dateString.get() ?: getFullDateFormat(Date())
+                val fragment = CalendarFragment.newInstance(currentDate)
+                setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
+                add(R.id.content_frame, fragment)
+                addToBackStack(CalendarFragment.TAG)
+                commitAllowingStateLoss()
+            }
+        })
     }
 
-    override fun onBackPressed() {
-        when {
-            drawerLayout.isDrawerOpen(GravityCompat.START) -> drawerLayout.closeDrawer(GravityCompat.START)
-            fragmentManager.backStackEntryCount > 0 -> fragmentManager.popBackStack()
-            else -> super.onBackPressed()
+    private fun setUpBottomNav() {
+
+        val font = Typeface.createFromAsset(assets, "fonts/Larsseit-Medium.ttf")
+        val typefaceSpan = CustomTypefaceSpan("", font)
+
+        for (i in 0 until bottom_app_bar.menu.size()) {
+            val menuItem = bottom_app_bar.menu.getItem(i)
+            val spannableTitle = SpannableStringBuilder(menuItem.title)
+            spannableTitle.setSpan(typefaceSpan, 0, spannableTitle.length, 0)
+            menuItem.title = spannableTitle
         }
-    }
 
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase))
-    }
+        bottom_app_bar.setOnNavigationItemSelectedListener { item ->
 
-    private fun setUpNavigationDrawer() {
-        setSupportActionBar(toolbar)
-        drawerLayout = findViewById<View>(R.id.drawer_layout) as DrawerLayout
-        drawerLayout.addDrawerListener(drawerListener)
-
-        val drawerToggle = ActionBarDrawerToggle(this,
-                drawerLayout,
-                toolbar,
-                R.string.drawer_open,
-                R.string.drawer_close)
-        drawerLayout.addDrawerListener(drawerToggle)
-        drawerToggle.syncState()
-
-        title = ""
-        navigation_view.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
+            when (item.itemId) {
                 R.id.five_things_item -> {
                     selectDate(Date(), false)
-                    drawerLayout.closeDrawers()
                     true
                 }
                 R.id.analytics_item -> {
@@ -151,33 +151,27 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
                     loadFragment(SettingsFragment())
                     true
                 }
-                R.id.logout_item -> {
-                    logOut()
-                    true
-                }
                 else -> {
                     true
                 }
             }
         }
-        navigation_view.setCheckedItem(R.id.five_things_item)
+
+        setUpFab()
     }
 
     private fun loadFragment(fragment: Fragment) {
+        val backStackCount = supportFragmentManager.backStackEntryCount
+        for (i in 0 until backStackCount) {
+            val backStackId = supportFragmentManager.getBackStackEntryAt(i).id
+            supportFragmentManager.popBackStack(backStackId, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+
         val fragmentTransaction = supportFragmentManager.beginTransaction()
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in,
                 android.R.anim.fade_out)
         fragmentTransaction.replace(R.id.content_frame, fragment)
         fragmentTransaction.commitAllowingStateLoss()
-        drawerLayout.closeDrawers()
-    }
-
-    private fun logOut() {
-        clearAuthState(this)
-
-        val intent = Intent(applicationContext, PromoActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
     }
 
     private fun createNotificationChannel() {
@@ -195,31 +189,4 @@ class ContainerActivity : AppCompatActivity(), SearchFragment.OnDateSelectedList
             notificationManager.createNotificationChannel(channel)
         }
     }
-
-    private val drawerListener = object : DrawerLayout.DrawerListener {
-
-        override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-            //Called when a drawer's position changes.
-        }
-
-        override fun onDrawerOpened(drawerView: View) {
-            //Called when a drawer has settled in a completely open state.
-            //The drawer is interactive at this point.
-            // If you have 2 drawers (left and right) you can distinguish
-            // them by using id of the drawerView. int id = drawerView.getId();
-            // id will be your layout's id: for example R.id.left_drawer
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            // Called when a drawer has settled in a completely closed state.
-        }
-
-        override fun onDrawerStateChanged(newState: Int) {
-            //possibly change to lose focus on all edit texts?
-            // Called when the drawer motion state changes. The new state will be one of STATE_IDLE, STATE_DRAGGING or STATE_SETTLING.
-            val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        }
-    }
-
 }

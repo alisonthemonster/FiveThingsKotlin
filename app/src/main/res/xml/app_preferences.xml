@@ -25,7 +25,7 @@
             android:defaultValue="true"
             android:key="dark_light_mode"
             android:summaryOff="Switch to the light mode"
-            android:summaryOn="Switch to the dark mode"
+            android:summaryOn="Switch to the dark mode to save battery"
             android:title="Toggle Light/Dark Mode" />
     </PreferenceCategory>
 
@@ -43,6 +43,12 @@
             android:key="open_source"
             android:title="Open Source Licenses" />
 
+    </PreferenceCategory>
+
+    <PreferenceCategory>
+        <Preference
+            android:key="sign_out"
+            android:title="Sign out" />
     </PreferenceCategory>
 
 </PreferenceScreen>
