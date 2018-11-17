@@ -1,6 +1,6 @@
-package alison.fivethingskotlin.viewmodel
+package alison.fivethingskotlin.search
 
-import alison.fivethingskotlin.api.repository.SearchRepository
+import alison.fivethingskotlin.search.SearchRepository
 import alison.fivethingskotlin.model.Listing
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Resource

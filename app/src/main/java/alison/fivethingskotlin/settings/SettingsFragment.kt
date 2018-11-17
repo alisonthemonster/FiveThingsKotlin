@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.settings
 
 import alison.fivethingskotlin.BuildConfig
 import alison.fivethingskotlin.PromoActivity
@@ -6,7 +6,6 @@ import alison.fivethingskotlin.R
 import alison.fivethingskotlin.WebViewActivity
 import alison.fivethingskotlin.WebViewActivity.Companion.WEBVIEW_URL
 import alison.fivethingskotlin.util.NotificationScheduler
-import alison.fivethingskotlin.util.TimePreference
 import alison.fivethingskotlin.util.clearAuthState
 import android.app.Activity
 import android.content.Intent

@@ -1,14 +1,10 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.search
 
 import alison.fivethingskotlin.api.FiveThingsService
-import alison.fivethingskotlin.api.repository.SearchRepositoryImpl
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.restoreAuthState
 import alison.fivethingskotlin.util.handleErrorState
-import alison.fivethingskotlin.viewmodel.SearchViewModel
-import alison.fivethingskotlin.viewmodel.SearchViewModelFactory
-import alison.fivethingskotlin.adapter.PagedSearchResultAdapter
 import android.app.Activity
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
@@ -17,7 +13,6 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

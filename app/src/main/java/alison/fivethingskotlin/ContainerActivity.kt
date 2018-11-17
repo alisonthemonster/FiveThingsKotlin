@@ -1,18 +1,21 @@
 package alison.fivethingskotlin
 
-import alison.fivethingskotlin.fragment.*
-import alison.fivethingskotlin.util.AlarmBootReceiver
+import alison.fivethingskotlin.fivethings.FiveThingsFragment
+import alison.fivethingskotlin.analytics.AnalyticsFragment
+import alison.fivethingskotlin.fivethings.CalendarFragment
+import alison.fivethingskotlin.settings.AlarmBootReceiver
 import alison.fivethingskotlin.util.CustomTypefaceSpan
 import alison.fivethingskotlin.util.NotificationScheduler
 import alison.fivethingskotlin.util.getFullDateFormat
-import alison.fivethingskotlin.viewmodel.FiveThingsViewModel
+import alison.fivethingskotlin.fivethings.FiveThingsViewModel
+import alison.fivethingskotlin.search.SearchFragment
+import alison.fivethingskotlin.settings.SettingsFragment
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ComponentName
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -21,7 +24,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.app.AppCompatDelegate
 import android.support.v7.preference.PreferenceManager
 import android.view.Menu
-import android.view.MenuItem
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_container.*
 import java.util.*

@@ -44,9 +44,9 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".util.ReminderReceiver" />
+        <receiver android:name=".settings.ReminderReceiver" />
         <receiver
-            android:name=".util.AlarmBootReceiver"
+            android:name=".settings.AlarmBootReceiver"
             android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

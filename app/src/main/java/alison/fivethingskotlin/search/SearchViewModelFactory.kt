@@ -1,7 +1,6 @@
-package alison.fivethingskotlin.viewmodel
+package alison.fivethingskotlin.search
 
 
-import alison.fivethingskotlin.api.repository.SearchRepository
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 

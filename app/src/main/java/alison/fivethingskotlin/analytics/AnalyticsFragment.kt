@@ -1,4 +1,4 @@
-package alison.fivethingskotlin.fragment
+package alison.fivethingskotlin.analytics
 
 import alison.fivethingskotlin.R
 import android.os.Bundle
