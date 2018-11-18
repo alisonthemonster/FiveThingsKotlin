@@ -59,7 +59,7 @@ class ContainerActivityInstrumentedTest {
         onView(withId(R.id.drawer_layout)).perform(DrawerActions.open())
         onView(withId(R.id.drawer_layout)).check(matches(DrawerMatchers.isOpen()))
         onView(withId(R.id.navigation_view)).perform(NavigationViewActions.navigateTo(R.id.templates_item))
-        onView(withId(R.id.designs_container)).check(matches(isDisplayed()))
+        onView(withId(R.id.analytics_container)).check(matches(isDisplayed()))
     }
 
     @Test

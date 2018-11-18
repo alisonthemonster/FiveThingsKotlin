@@ -3,6 +3,7 @@ package alison.fivethingskotlin.api
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Thing
+import com.jjoe64.graphview.series.DataPoint
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.*
@@ -35,5 +36,10 @@ interface FiveThingsService {
                @Path("keyword") keyword: String,
                @Query("page_size") pageSize: Int,
                @Query("page") page: Int): Call<PaginatedSearchResults>
+
+    @GET("sentiment_over_time")
+    fun getSentimentOverTime(@Header("Authorization") token: String,
+                             @Header("start_date") startDate: String,
+                             @Header("end_date") endDate: String): Observable<List<DataPoint>> //TODO change this
 
 }
