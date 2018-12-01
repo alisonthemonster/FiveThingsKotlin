@@ -5,6 +5,7 @@ import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Thing
 import com.jjoe64.graphview.series.DataPoint
 import io.reactivex.Observable
+import lecho.lib.hellocharts.model.PointValue
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -40,6 +41,6 @@ interface FiveThingsService {
     @GET("sentiment_over_time")
     fun getSentimentOverTime(@Header("Authorization") token: String,
                              @Header("start_date") startDate: String,
-                             @Header("end_date") endDate: String): Observable<List<DataPoint>> //TODO change this
+                             @Header("end_date") endDate: String): Observable<List<PointValue>>
 
 }

@@ -1,12 +1,15 @@
 package alison.fivethingskotlin.util
 
 import android.graphics.Color
-import java.text.SimpleDateFormat
-import java.util.*
 import com.github.sundeepk.compactcalendarview.domain.Event
 import org.joda.time.DateTime
+import org.joda.time.Days
+import java.text.SimpleDateFormat
+import java.util.*
+
 
 private val monthNames = arrayOf("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
+private val monthNamesShort = arrayOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 
 //TODO convert all NaguDate objects to be something else like JodaTime or DateTime
@@ -22,6 +25,12 @@ fun getDayOfWeek(date: Date): String {
     val newDateFormat = SimpleDateFormat("dd/MM/yyyy")
     newDateFormat.applyPattern("EEEE")
     return newDateFormat.format(date)
+}
+
+fun getDayOfWeekShort(date: Date): String {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
 }
 
 fun getOrdinalDate(day: Int): String{
@@ -47,9 +56,29 @@ fun getPreviousDate(date: Date): Date {
 }
 
 fun getNextDate(date: Date): Date {
+    return addXDaysToDate(date, 1)
+}
+
+fun getNextMonth(date: Date): Date {
     val cal = Calendar.getInstance()
     cal.time = date
-    cal.add(Calendar.DATE, 1)
+    cal.add(Calendar.MONTH, 1)
+    return cal.time
+}
+
+fun getFirstOfMonth(monthNumber: Int, year: Int): Date {
+    val cal = Calendar.getInstance()
+    cal.set(Calendar.YEAR, year)
+    cal.set(Calendar.MONTH, monthNumber)
+    cal.set(Calendar.DAY_OF_MONTH, 1)
+
+    return cal.time
+}
+
+fun addXDaysToDate(date:Date, x: Int): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, x)
     return cal.time
 }
 
@@ -88,6 +117,13 @@ fun getMonth(date: Date): String {
     return monthNames[monthNumber]
 }
 
+fun getShortMonth(date: Date): String {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    val monthNumber = cal.get(Calendar.MONTH)
+    return monthNamesShort[monthNumber]
+}
+
 fun getMonthNumber(date: Date): Int {
     val cal = Calendar.getInstance()
     cal.time = date
@@ -120,5 +156,9 @@ fun getDateInAYear(currentYear: Date, year: Int): Date {
 
 fun convertDateToEvent(date: Date): Event  {
     return Event(Color.WHITE, date.time)
+}
+
+fun getDaysBetween(one: Date, two: Date): Int {
+    return Days.daysBetween(DateTime(one), DateTime(two)).days
 }
 

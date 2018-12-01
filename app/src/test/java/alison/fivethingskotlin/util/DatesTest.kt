@@ -100,6 +100,17 @@ class DatesTest: FreeSpec( {
         }
     }
 
+    "gets short day of week" - {
+        "from a date object" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.JANUARY)
+            cal.set(Calendar.DAY_OF_MONTH, 22)
+            val date = cal.time
+            getDayOfWeek(date) shouldEqual "Sun"
+        }
+    }
+
     "ordinals" {
         forAll(table(
                 headers("raw", "formatted"),
@@ -169,5 +180,42 @@ class DatesTest: FreeSpec( {
         convertDateToEvent(date) shouldEqual event
     }
 
-
+    "Calculates the days between two dates" - {
+        "for different days" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 12)
+            val date1 = cal.time
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 1)
+            val date2 = cal.time
+            getDaysBetween(date2, date1) shouldEqual 11
+        }
+        "for the same day" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 12)
+            val date1 = cal.time
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 12)
+            val date2 = cal.time
+            getDaysBetween(date2, date1) shouldEqual 0
+        }
+        "for days in the past" {
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 1)
+            val date1 = cal.time
+            cal.set(Calendar.YEAR, 2017)
+            cal.set(Calendar.MONTH, Calendar.DECEMBER)
+            cal.set(Calendar.DAY_OF_MONTH, 12)
+            val date2 = cal.time
+            getDaysBetween(date2, date1) shouldEqual -11
+        }
+    }
 })
