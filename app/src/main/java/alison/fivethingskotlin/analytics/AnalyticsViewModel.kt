@@ -95,32 +95,32 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
         values.add(PointValue(d3.time.toFloat(), .2f))
         values.add(PointValue(d4.time.toFloat(), .11f))
         values.add(PointValue(d5.time.toFloat(), -.1f))
-//        values.add(PointValue(d6.time.toFloat(),  .8f))
+        values.add(PointValue(d6.time.toFloat(),  .8f))
         values.add(PointValue(d7.time.toFloat(), 0f))
-        values.add(PointValue(d8.time.toFloat(), -.2f))
-        values.add(PointValue(d9.time.toFloat(), -.2f))
-        values.add(PointValue(d10.time.toFloat(), .2f))
-        values.add(PointValue(d11.time.toFloat(), .2f))
-        values.add(PointValue(d12.time.toFloat(), .2f))
-        values.add(PointValue(d13.time.toFloat(), .2f))
-        values.add(PointValue(d14.time.toFloat(), .2f))
-        values.add(PointValue(d15.time.toFloat(), .2f))
-        values.add(PointValue(d16.time.toFloat(), .2f))
-        values.add(PointValue(d17.time.toFloat(), .2f))
-        values.add(PointValue(d18.time.toFloat(), .2f))
-        values.add(PointValue(d19.time.toFloat(), .2f))
-        values.add(PointValue(d20.time.toFloat(), .2f))
-        values.add(PointValue(d21.time.toFloat(), .2f))
-        values.add(PointValue(d22.time.toFloat(), .2f))
-        values.add(PointValue(d23.time.toFloat(), .2f))
-        values.add(PointValue(d24.time.toFloat(), .2f))
-        values.add(PointValue(d25.time.toFloat(), .2f))
-        values.add(PointValue(d26.time.toFloat(), .2f))
-        values.add(PointValue(d27.time.toFloat(), .2f))
-        values.add(PointValue(d28.time.toFloat(), .2f))
-        values.add(PointValue(d29.time.toFloat(), .2f))
-        values.add(PointValue(d30.time.toFloat(), .2f))
-        values.add(PointValue(d31.time.toFloat(), .2f))
+//        values.add(PointValue(d8.time.toFloat(), -.2f))
+//        values.add(PointValue(d9.time.toFloat(), -.2f))
+//        values.add(PointValue(d10.time.toFloat(), .2f))
+//        values.add(PointValue(d11.time.toFloat(), .2f))
+//        values.add(PointValue(d12.time.toFloat(), .2f))
+//        values.add(PointValue(d13.time.toFloat(), .2f))
+//        values.add(PointValue(d14.time.toFloat(), .2f))
+//        values.add(PointValue(d15.time.toFloat(), .2f))
+//        values.add(PointValue(d16.time.toFloat(), .2f))
+//        values.add(PointValue(d17.time.toFloat(), .2f))
+//        values.add(PointValue(d18.time.toFloat(), .2f))
+//        values.add(PointValue(d19.time.toFloat(), .2f))
+//        values.add(PointValue(d20.time.toFloat(), .2f))
+//        values.add(PointValue(d21.time.toFloat(), .2f))
+//        values.add(PointValue(d22.time.toFloat(), .2f))
+//        values.add(PointValue(d23.time.toFloat(), .2f))
+//        values.add(PointValue(d24.time.toFloat(), .2f))
+//        values.add(PointValue(d25.time.toFloat(), .2f))
+//        values.add(PointValue(d26.time.toFloat(), .2f))
+//        values.add(PointValue(d27.time.toFloat(), .2f))
+//        values.add(PointValue(d28.time.toFloat(), .2f))
+//        values.add(PointValue(d29.time.toFloat(), .2f))
+//        values.add(PointValue(d30.time.toFloat(), .2f))
+//        values.add(PointValue(d31.time.toFloat(), .2f))
 //        values.add(PointValue(d32.time.toFloat(), .2f))
 
         chartData.postValue(buildChart(values))
@@ -144,7 +144,8 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
     }
 
     private fun buildChart(values: List<PointValue>): LineChartData {
-        val line = Line(values).setColor(Color.BLUE).setCubic(true)
+        val line = Line(values)
+                .setColor(Color.WHITE)
         val lines = ArrayList<Line>()
         lines.add(line)
 
@@ -166,7 +167,7 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
             getAxisForAllDays(values)
         }
 
-        axis.name = "Date"
+        axis.textColor = Color.WHITE
         data.axisXBottom = axis
 
         return data
