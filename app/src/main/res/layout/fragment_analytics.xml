@@ -1,167 +1,210 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/analytics_container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_marginTop="10dp">
 
-    <View
-        android:id="@+id/sentiment_background"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <View
-        android:id="@+id/zero_line"
-        android:layout_width="0dp"
-        android:layout_height="3dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/shape_dashed"
-        app:layout_constraintBottom_toBottomOf="@+id/chart"
-        app:layout_constraintEnd_toEndOf="@+id/chart"
-        app:layout_constraintStart_toStartOf="@+id/chart"
-        app:layout_constraintTop_toTopOf="@+id/chart" />
+        <import type="android.view.View" />
 
-    <lecho.lib.hellocharts.view.LineChartView
-        android:id="@+id/chart"
-        android:layout_width="0dp"
-        android:layout_height="250dp"
-        android:layout_marginEnd="8dp"
-        android:padding="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/sentiment_detail" />
+        <variable
+            name="viewModel"
+            type="alison.fivethingskotlin.analytics.AnalyticsViewModel" />
 
-    <TextView
-        android:id="@+id/graph_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="Sentiment"
-        android:textColor="@color/white"
-        android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/sentiment_background" />
+    </data>
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/sentiment_background"
-        app:layout_constraintTop_toTopOf="@+id/chart"
-        app:layout_constraintVertical_chainStyle="spread_inside"
-        app:srcCompat="@drawable/ic_positive" />
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/analytics_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/imageView3"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:srcCompat="@drawable/ic_neutral" />
+        <View
+            android:id="@+id/sentiment_background"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="24dp"
-        android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/chart"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        app:srcCompat="@drawable/ic_negative" />
+        <View
+            android:id="@+id/zero_line"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_dashed"
+            app:layout_constraintBottom_toBottomOf="@+id/chart"
+            app:layout_constraintEnd_toEndOf="@+id/chart"
+            app:layout_constraintStart_toStartOf="@+id/chart"
+            app:layout_constraintTop_toTopOf="@+id/chart" />
 
-    <TextView
-        android:id="@+id/sentiment_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Average sentiment scores for your Five Things"
-        android:textColor="@color/white"
-        app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/graph_title"
-        app:layout_constraintTop_toBottomOf="@+id/graph_title" />
+        <lecho.lib.hellocharts.view.LineChartView
+            android:id="@+id/chart"
+            android:layout_width="0dp"
+            android:layout_height="250dp"
+            android:layout_marginEnd="8dp"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
+            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/sentiment_detail" />
 
-
-    <HorizontalScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chart">
-
-        <android.support.design.chip.ChipGroup
-            android:id="@+id/chip_group"
+        <TextView
+            android:id="@+id/graph_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleLine="true"
-            app:singleSelection="true">
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="Sentiment"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="@+id/sentiment_background" />
 
-            <android.support.design.chip.Chip
-                android:id="@+id/week_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@+id/sentiment_background"
+            app:layout_constraintTop_toTopOf="@+id/chart"
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:srcCompat="@drawable/ic_positive" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView"
+            app:srcCompat="@drawable/ic_neutral" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/chart"
+            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:srcCompat="@drawable/ic_negative" />
+
+        <TextView
+            android:id="@+id/sentiment_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="Average sentiment scores for your Five Things"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/graph_title"
+            app:layout_constraintTop_toBottomOf="@+id/graph_title" />
+
+        <View
+            android:id="@+id/loading_background"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            android:visibility="@{viewModel.isLoading() ?  View.VISIBLE : View.GONE}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/sentiment_over_time_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:indeterminateTint="@color/white"
+            android:visibility="@{viewModel.isLoading() ?  View.VISIBLE : View.GONE}"
+            app:layout_constraintBottom_toBottomOf="@+id/loading_background"
+            app:layout_constraintEnd_toEndOf="@+id/loading_background"
+            app:layout_constraintStart_toStartOf="@+id/loading_background"
+            app:layout_constraintTop_toTopOf="@+id/loading_background" />
+
+
+        <HorizontalScrollView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chart">
+
+            <android.support.design.chip.ChipGroup
+                android:id="@+id/chip_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Last 7 days"
-                android:textColor="@color/chip_text_color"
-                app:chipBackgroundColor="@color/chip_color"
-                app:chipStrokeColor="@color/bluegreen"
-                app:chipStrokeWidth="2dp" />
+                app:singleLine="true"
+                app:singleSelection="true">
 
-            <android.support.design.chip.Chip
-                android:id="@+id/month_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last 30 days"
-                android:textColor="@color/chip_text_color"
-                app:chipBackgroundColor="@color/chip_color"
-                app:chipStrokeColor="@color/bluegreen"
-                app:chipStrokeWidth="2dp" />
+                <android.support.design.chip.Chip
+                    android:id="@+id/week_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 7 days"
+                    android:textColor="@color/chip_text_color"
+                    app:chipBackgroundColor="@color/chip_color"
+                    app:chipStrokeColor="@color/bluegreen"
+                    app:chipStrokeWidth="2dp" />
 
-            <android.support.design.chip.Chip
-                android:id="@+id/three_month_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last 90 days"
-                android:textColor="@color/chip_text_color"
-                app:chipBackgroundColor="@color/chip_color"
-                app:chipStrokeColor="@color/bluegreen"
-                app:chipStrokeWidth="2dp" />
+                <android.support.design.chip.Chip
+                    android:id="@+id/month_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 30 days"
+                    android:textColor="@color/chip_text_color"
+                    app:chipBackgroundColor="@color/chip_color"
+                    app:chipStrokeColor="@color/bluegreen"
+                    app:chipStrokeWidth="2dp" />
 
-            <android.support.design.chip.Chip
-                android:id="@+id/year_chip"
-                style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Last 365 days"
-                android:textColor="@color/chip_text_color"
-                app:chipBackgroundColor="@color/chip_color"
-                app:chipStrokeColor="@color/bluegreen"
-                app:chipStrokeWidth="2dp" />
+                <android.support.design.chip.Chip
+                    android:id="@+id/three_month_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 90 days"
+                    android:textColor="@color/chip_text_color"
+                    app:chipBackgroundColor="@color/chip_color"
+                    app:chipStrokeColor="@color/bluegreen"
+                    app:chipStrokeWidth="2dp" />
 
-        </android.support.design.chip.ChipGroup>
-    </HorizontalScrollView>
-</android.support.constraint.ConstraintLayout>
+                <android.support.design.chip.Chip
+                    android:id="@+id/year_chip"
+                    style="@style/Widget.MaterialComponents.Chip.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Last 365 days"
+                    android:textColor="@color/chip_text_color"
+                    app:chipBackgroundColor="@color/chip_color"
+                    app:chipStrokeColor="@color/bluegreen"
+                    app:chipStrokeWidth="2dp" />
+
+            </android.support.design.chip.ChipGroup>
+        </HorizontalScrollView>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

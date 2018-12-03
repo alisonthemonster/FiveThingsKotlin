@@ -1,6 +1,8 @@
 package alison.fivethingskotlin.analytics
 
 import alison.fivethingskotlin.R
+import alison.fivethingskotlin.databinding.FragmentAnalyticsBinding
+import alison.fivethingskotlin.databinding.FragmentFiveThingsBinding
 import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.util.restoreAuthState
 import alison.fivethingskotlin.util.subtractXDaysFromDate
@@ -21,16 +23,21 @@ import java.util.*
 class AnalyticsFragment : Fragment() {
 
     private lateinit var viewModel: AnalyticsViewModel
+    private lateinit var binding: FragmentAnalyticsBinding
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+
+        binding = FragmentAnalyticsBinding.inflate(inflater, container, false)
+
 
         viewModel = activity?.run {
             ViewModelProviders.of(this).get(AnalyticsViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
 
-
-        return inflater.inflate(R.layout.fragment_analytics, container, false)
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

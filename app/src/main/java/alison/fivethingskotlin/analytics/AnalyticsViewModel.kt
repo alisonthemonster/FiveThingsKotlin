@@ -5,8 +5,11 @@ import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.databinding.ObservableField
 import android.graphics.Color
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import lecho.lib.hellocharts.model.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -19,6 +22,8 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
     private val chartData = MutableLiveData<LineChartData>()
 
     val errorLiveEvent = SingleLiveEvent<String>()
+    val isLoading = ObservableField<Boolean>()
+
 
     fun getSentimentOverTime(token: String, startDate: Date, endDate: Date) {
 
@@ -121,20 +126,26 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 //        values.add(PointValue(d31.time.toFloat(), .22f))
 //        values.add(PointValue(d32.time.toFloat(), .56f))
 
-        chartData.postValue(buildChart(values))
+//        chartData.postValue(buildChart(values))
 
-//        //TODO find out the format of the strings in request
-//        disposables.add(fiveThingsService.getSentimentOverTime(token, startDateString, endDateString)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        { sentimentPoints ->
-//                            chartData.postValue(buildChart(sentimentPoints))
-//                        },
-//                        { error ->
-//                            errorLiveEvent.postValue(error.localizedMessage)
-//                        }
-//                ))
+        isLoading.set(true)
+
+        val startDateString = getDatabaseStyleDate(startDate)
+        val endDateString = getDatabaseStyleDate(endDate)
+
+        disposables.add(fiveThingsService.getSentimentOverTime(token, startDateString, endDateString)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { sentimentPoints ->
+                            isLoading.set(false)
+                            chartData.postValue(buildChart(sentimentPoints))
+                        },
+                        { error ->
+                            isLoading.set(false)
+                            errorLiveEvent.postValue(error.localizedMessage)
+                        }
+                ))
     }
 
     fun getChartData(): LiveData<LineChartData> {
