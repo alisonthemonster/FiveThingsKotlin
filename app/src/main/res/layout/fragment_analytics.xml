@@ -6,26 +6,41 @@
     android:layout_height="match_parent">
 
     <View
-        android:id="@+id/view"
+        android:id="@+id/sentiment_background"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="315dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button"
-        app:layout_constraintBottom_toBottomOf="@id/chart"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <View
+        android:id="@+id/zero_line"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/chart"
+        app:layout_constraintEnd_toEndOf="@+id/chart"
+        app:layout_constraintStart_toStartOf="@+id/chart"
+        app:layout_constraintTop_toTopOf="@+id/chart" />
+
     <lecho.lib.hellocharts.view.LineChartView
         android:id="@+id/chart"
-        android:layout_width="379dp"
-        android:layout_height="200dp"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:padding="16dp"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="56dp" />
+        app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
+        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintTop_toBottomOf="@+id/graph_title" />
 
     <TextView
         android:id="@+id/graph_title"
@@ -36,31 +51,8 @@
         android:text="Sentiment"
         android:textColor="@color/white"
         android:textSize="24sp"
-        app:layout_constraintStart_toStartOf="@+id/view"
-        app:layout_constraintTop_toTopOf="@+id/view" />
-
-    <View
-        android:id="@+id/view3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/rounded_button"
-        app:layout_constraintBottom_toBottomOf="@id/mp_chart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/mp_chart" />
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/mp_chart"
-        android:layout_width="0dp"
-        android:layout_height="300dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toEndOf="@+id/view3"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/chart" />
+        app:layout_constraintStart_toStartOf="@+id/imageView2"
+        app:layout_constraintTop_toTopOf="@+id/sentiment_background" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -70,8 +62,8 @@
         android:layout_marginTop="8dp"
         android:tint="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/view3"
-        app:layout_constraintTop_toTopOf="@+id/view3"
+        app:layout_constraintStart_toStartOf="@+id/sentiment_background"
+        app:layout_constraintTop_toTopOf="@+id/chart"
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:srcCompat="@drawable/ic_positive" />
 
@@ -91,8 +83,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="24dp"
         android:tint="@color/white"
-        app:layout_constraintBottom_toBottomOf="@+id/view3"
+        app:layout_constraintBottom_toBottomOf="@+id/chart"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/ic_negative" />

@@ -6,16 +6,10 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.graphics.Color
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
 import io.reactivex.disposables.CompositeDisposable
 import lecho.lib.hellocharts.model.*
 import java.util.*
 import kotlin.collections.ArrayList
-import android.graphics.Typeface
-
-
 
 
 class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = FiveThingsService.create()) : ViewModel() {
@@ -23,7 +17,6 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
     private val disposables = CompositeDisposable()
 
     private val chartData = MutableLiveData<LineChartData>()
-    private val mpChartData = MutableLiveData<LineData>()
 
     val errorLiveEvent = SingleLiveEvent<String>()
 
@@ -96,37 +89,37 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 
         val values = ArrayList<PointValue>()
         values.add(PointValue(d1.time.toFloat(), -.5f))
-        values.add(PointValue(d2.time.toFloat(), -.4f))
+        values.add(PointValue(d2.time.toFloat(), -1f))
         values.add(PointValue(d3.time.toFloat(), .2f))
-        values.add(PointValue(d4.time.toFloat(), .11f))
+        values.add(PointValue(d4.time.toFloat(), 1f))
         values.add(PointValue(d5.time.toFloat(), -.1f))
         values.add(PointValue(d6.time.toFloat(),  .8f))
         values.add(PointValue(d7.time.toFloat(), 0f))
 //        values.add(PointValue(d8.time.toFloat(), -.2f))
 //        values.add(PointValue(d9.time.toFloat(), -.2f))
-//        values.add(PointValue(d10.time.toFloat(), .2f))
+//        values.add(PointValue(d10.time.toFloat(), -.1f))
 //        values.add(PointValue(d11.time.toFloat(), .2f))
-//        values.add(PointValue(d12.time.toFloat(), .2f))
-//        values.add(PointValue(d13.time.toFloat(), .2f))
-//        values.add(PointValue(d14.time.toFloat(), .2f))
-//        values.add(PointValue(d15.time.toFloat(), .2f))
-//        values.add(PointValue(d16.time.toFloat(), .2f))
-//        values.add(PointValue(d17.time.toFloat(), .2f))
+//        values.add(PointValue(d12.time.toFloat(), .3f))
+//        values.add(PointValue(d13.time.toFloat(), -.6f))
+//        values.add(PointValue(d14.time.toFloat(), -.3f))
+//        values.add(PointValue(d15.time.toFloat(), .14f))
+//        values.add(PointValue(d16.time.toFloat(), .47f))
+//        values.add(PointValue(d17.time.toFloat(), .23f))
 //        values.add(PointValue(d18.time.toFloat(), .2f))
-//        values.add(PointValue(d19.time.toFloat(), .2f))
-//        values.add(PointValue(d20.time.toFloat(), .2f))
-//        values.add(PointValue(d21.time.toFloat(), .2f))
-//        values.add(PointValue(d22.time.toFloat(), .2f))
-//        values.add(PointValue(d23.time.toFloat(), .2f))
-//        values.add(PointValue(d24.time.toFloat(), .2f))
-//        values.add(PointValue(d25.time.toFloat(), .2f))
-//        values.add(PointValue(d26.time.toFloat(), .2f))
-//        values.add(PointValue(d27.time.toFloat(), .2f))
-//        values.add(PointValue(d28.time.toFloat(), .2f))
-//        values.add(PointValue(d29.time.toFloat(), .2f))
-//        values.add(PointValue(d30.time.toFloat(), .2f))
-//        values.add(PointValue(d31.time.toFloat(), .2f))
-//        values.add(PointValue(d32.time.toFloat(), .2f))
+//        values.add(PointValue(d19.time.toFloat(), -.42f))
+//        values.add(PointValue(d20.time.toFloat(), .82f))
+//        values.add(PointValue(d21.time.toFloat(), .22f))
+//        values.add(PointValue(d22.time.toFloat(), .12f))
+//        values.add(PointValue(d23.time.toFloat(), .32f))
+//        values.add(PointValue(d24.time.toFloat(), -.12f))
+//        values.add(PointValue(d25.time.toFloat(), .09f))
+//        values.add(PointValue(d26.time.toFloat(), .3f))
+//        values.add(PointValue(d27.time.toFloat(), -.7f))
+//        values.add(PointValue(d28.time.toFloat(), -.1f))
+//        values.add(PointValue(d29.time.toFloat(), 0f))
+//        values.add(PointValue(d30.time.toFloat(), .34f))
+//        values.add(PointValue(d31.time.toFloat(), .22f))
+//        values.add(PointValue(d32.time.toFloat(), .56f))
 
         chartData.postValue(buildChart(values))
 
@@ -144,138 +137,8 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 //                ))
     }
 
-    fun getMPSentimentOverTime(token: String, startDate: Date, endDate: Date) {
-
-        val calendar = Calendar.getInstance()
-        val d1 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d2 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d3 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d4 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d5 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d6 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d7 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d8 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d9 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d10 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d11 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d12 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d13 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d14 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d15 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d16 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d17 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d18 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d19 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d20 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d21 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d22 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d23 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d24 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d25 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d26 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d27 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d28 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d29 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d30 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d31 = calendar.time
-        calendar.add(Calendar.HOUR, 24)
-        val d32 = calendar.time
-
-        val values = ArrayList<Entry>()
-        values.add(Entry(d1.time.toFloat(), -.5f))
-        values.add(Entry(d2.time.toFloat(), -.4f))
-        values.add(Entry(d3.time.toFloat(), .2f))
-        values.add(Entry(d4.time.toFloat(), .11f))
-        values.add(Entry(d5.time.toFloat(), -.1f))
-        values.add(Entry(d6.time.toFloat(),  .8f))
-        values.add(Entry(d7.time.toFloat(), 0f))
-        values.add(Entry(d8.time.toFloat(), -.2f))
-        values.add(Entry(d9.time.toFloat(), -.2f))
-        values.add(Entry(d10.time.toFloat(), .2f))
-//        values.add(Entry(d11.time.toFloat(), .2f))
-//        values.add(Entry(d12.time.toFloat(), .2f))
-//        values.add(Entry(d13.time.toFloat(), .2f))
-//        values.add(Entry(d14.time.toFloat(), .2f))
-//        values.add(Entry(d15.time.toFloat(), .2f))
-//        values.add(Entry(d16.time.toFloat(), .2f))
-//        values.add(Entry(d17.time.toFloat(), .2f))
-//        values.add(Entry(d18.time.toFloat(), .2f))
-//        values.add(Entry(d19.time.toFloat(), .2f))
-//        values.add(Entry(d20.time.toFloat(), .2f))
-//        values.add(Entry(d21.time.toFloat(), .2f))
-//        values.add(Entry(d22.time.toFloat(), .2f))
-//        values.add(Entry(d23.time.toFloat(), .2f))
-//        values.add(Entry(d24.time.toFloat(), .2f))
-//        values.add(Entry(d25.time.toFloat(), .2f))
-//        values.add(Entry(d26.time.toFloat(), .2f))
-//        values.add(Entry(d27.time.toFloat(), .2f))
-//        values.add(Entry(d28.time.toFloat(), .2f))
-//        values.add(Entry(d29.time.toFloat(), .2f))
-//        values.add(Entry(d30.time.toFloat(), .2f))
-//        values.add(Entry(d31.time.toFloat(), .2f))
-//        values.add(Entry(d32.time.toFloat(), .2f))
-
-        mpChartData.postValue(buildMpChart(values))
-
-//        //TODO find out the format of the strings in request
-//        disposables.add(fiveThingsService.getSentimentOverTime(token, startDateString, endDateString)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(
-//                        { sentimentPoints ->
-//                            chartData.postValue(buildChart(sentimentPoints))
-//                        },
-//                        { error ->
-//                            errorLiveEvent.postValue(error.localizedMessage)
-//                        }
-//                ))
-    }
-
     fun getChartData(): LiveData<LineChartData> {
         return chartData
-    }
-
-    fun getMpChartData(): LiveData<LineData> {
-        return mpChartData
-    }
-
-    private fun buildMpChart(entries: ArrayList<Entry>): LineData {
-        val dataSet = LineDataSet(entries, "Label")
-        dataSet.color = Color.WHITE
-        dataSet.setDrawCircles(false)
-        dataSet.valueTextSize = 0f //hide labels
-        dataSet.lineWidth = 3f
-        return LineData(dataSet)
     }
 
     private fun buildChart(values: List<PointValue>): LineChartData {
