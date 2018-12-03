@@ -3,7 +3,6 @@ package alison.fivethingskotlin.api
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Thing
-import com.jjoe64.graphview.series.DataPoint
 import io.reactivex.Observable
 import lecho.lib.hellocharts.model.PointValue
 import retrofit2.Call
