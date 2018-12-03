@@ -8,23 +8,22 @@
     <View
         android:id="@+id/sentiment_background"
         android:layout_width="0dp"
-        android:layout_height="315dp"
+        android:layout_height="300dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/rounded_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <View
         android:id="@+id/zero_line"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginStart="10dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@color/white"
+        android:background="@drawable/shape_dashed"
         app:layout_constraintBottom_toBottomOf="@+id/chart"
         app:layout_constraintEnd_toEndOf="@+id/chart"
         app:layout_constraintStart_toStartOf="@+id/chart"
@@ -34,13 +33,11 @@
         android:id="@+id/chart"
         android:layout_width="0dp"
         android:layout_height="250dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/graph_title" />
+        app:layout_constraintTop_toBottomOf="@+id/sentiment_detail" />
 
     <TextView
         android:id="@+id/graph_title"
@@ -90,5 +87,81 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2"
         app:srcCompat="@drawable/ic_negative" />
 
+    <TextView
+        android:id="@+id/sentiment_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Average sentiment scores for your Five Things"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="@+id/sentiment_background"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/graph_title"
+        app:layout_constraintTop_toBottomOf="@+id/graph_title" />
 
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart">
+
+        <android.support.design.chip.ChipGroup
+            android:id="@+id/chip_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleLine="true"
+            app:singleSelection="true">
+
+            <android.support.design.chip.Chip
+                android:id="@+id/week_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last 7 days"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_color"
+                app:chipStrokeColor="@color/bluegreen"
+                app:chipStrokeWidth="2dp" />
+
+            <android.support.design.chip.Chip
+                android:id="@+id/month_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last 30 days"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_color"
+                app:chipStrokeColor="@color/bluegreen"
+                app:chipStrokeWidth="2dp" />
+
+            <android.support.design.chip.Chip
+                android:id="@+id/three_month_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last 90 days"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_color"
+                app:chipStrokeColor="@color/bluegreen"
+                app:chipStrokeWidth="2dp" />
+
+            <android.support.design.chip.Chip
+                android:id="@+id/year_chip"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Last 365 days"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_color"
+                app:chipStrokeColor="@color/bluegreen"
+                app:chipStrokeWidth="2dp" />
+
+        </android.support.design.chip.ChipGroup>
+    </HorizontalScrollView>
 </android.support.constraint.ConstraintLayout>

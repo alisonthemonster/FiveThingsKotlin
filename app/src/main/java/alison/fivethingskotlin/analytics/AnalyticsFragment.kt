@@ -3,9 +3,10 @@ package alison.fivethingskotlin.analytics
 import alison.fivethingskotlin.R
 import alison.fivethingskotlin.util.handleErrorState
 import alison.fivethingskotlin.util.restoreAuthState
+import alison.fivethingskotlin.util.subtractXDaysFromDate
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -15,11 +16,6 @@ import com.crashlytics.android.Crashlytics
 import kotlinx.android.synthetic.main.fragment_analytics.*
 import net.openid.appauth.AuthorizationService
 import java.util.*
-import com.github.mikephil.charting.components.LimitLine
-import com.github.mikephil.charting.components.XAxis
-import android.graphics.Typeface
-
-
 
 
 class AnalyticsFragment : Fragment() {
@@ -42,7 +38,18 @@ class AnalyticsFragment : Fragment() {
 
         observeErrors()
         observeSentimentOverTime()
-        getSentimentOverTime()
+        getSentimentOverTime(Date(), subtractXDaysFromDate(Date(), 7)) //default to last seven days
+
+        week_chip.isChecked = true
+
+        chip_group.setOnCheckedChangeListener { group, checkedId ->
+            when (checkedId) {
+                R.id.week_chip -> getSentimentOverTime(subtractXDaysFromDate(Date(), 7), Date())
+                R.id.month_chip -> getSentimentOverTime(subtractXDaysFromDate(Date(), 30), Date())
+                R.id.three_month_chip -> getSentimentOverTime(subtractXDaysFromDate(Date(), 90), Date())
+                R.id.year_chip -> getSentimentOverTime(subtractXDaysFromDate(Date(), 365), Date())
+            }
+        }
     }
 
     private fun observeSentimentOverTime() {
@@ -65,7 +72,7 @@ class AnalyticsFragment : Fragment() {
         })
     }
 
-    private fun getSentimentOverTime() {
+    private fun getSentimentOverTime(startDate: Date, endDate: Date) {
         val authorizationService = AuthorizationService(context!!)
         val authState = restoreAuthState(context!!)
 
@@ -77,7 +84,7 @@ class AnalyticsFragment : Fragment() {
             if (ex != null) {
                 handleErrorState(ex.localizedMessage, context!!)
             } else {
-                viewModel.getSentimentOverTime("Bearer $idToken", Date(), Date())
+                viewModel.getSentimentOverTime("Bearer $idToken", startDate, endDate)
             }
         }
     }

@@ -33,26 +33,23 @@ fun getDayOfWeekShort(date: Date): String {
     return cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)
 }
 
-fun getOrdinalDate(day: Int): String{
-        val j = day % 10
-        val k = day % 100
-        if (j == 1 && k != 11) {
-            return day.toString() + "st"
-        }
-        if (j == 2 && k != 12) {
-            return day.toString() + "nd"
-        }
-        if (j == 3 && k != 13) {
-            return day.toString() + "rd"
-        }
-        return day.toString() + "th"
+fun getOrdinalDate(day: Int): String {
+    val j = day % 10
+    val k = day % 100
+    if (j == 1 && k != 11) {
+        return day.toString() + "st"
+    }
+    if (j == 2 && k != 12) {
+        return day.toString() + "nd"
+    }
+    if (j == 3 && k != 13) {
+        return day.toString() + "rd"
+    }
+    return day.toString() + "th"
 }
 
 fun getPreviousDate(date: Date): Date {
-    val cal = Calendar.getInstance()
-    cal.time = date
-    cal.add(Calendar.DATE, -1)
-    return cal.time
+    return subtractXDaysFromDate(date, 1)
 }
 
 fun getNextDate(date: Date): Date {
@@ -75,10 +72,17 @@ fun getFirstOfMonth(monthNumber: Int, year: Int): Date {
     return cal.time
 }
 
-fun addXDaysToDate(date:Date, x: Int): Date {
+fun addXDaysToDate(date: Date, x: Int): Date {
     val cal = Calendar.getInstance()
     cal.time = date
     cal.add(Calendar.DATE, x)
+    return cal.time
+}
+
+fun subtractXDaysFromDate(date: Date, x: Int): Date {
+    val cal = Calendar.getInstance()
+    cal.time = date
+    cal.add(Calendar.DATE, -x)
     return cal.time
 }
 
@@ -154,7 +158,7 @@ fun getDateInAYear(currentYear: Date, year: Int): Date {
     return DateTime(currentYear).minusYears(yearDifference).toDate()
 }
 
-fun convertDateToEvent(date: Date): Event  {
+fun convertDateToEvent(date: Date): Event {
     return Event(Color.WHITE, date.time)
 }
 
