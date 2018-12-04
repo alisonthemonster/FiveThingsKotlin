@@ -20,9 +20,24 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
     private val disposables = CompositeDisposable()
 
     private val chartData = MutableLiveData<LineChartData>()
+    private val pieChartData = MutableLiveData<PieChartData>()
 
     val errorLiveEvent = SingleLiveEvent<String>()
     val isLoading = ObservableField<Boolean>()
+
+    fun getEmotionsCount(token: String, startDate: Date, endDate: Date) {
+        val values = mutableListOf<SliceValue>()
+        values.add(SliceValue(10f, Color.DKGRAY))
+        values.add(SliceValue(40f, Color.CYAN))
+        values.add(SliceValue(50f, Color.GRAY))
+
+
+        val data = PieChartData(values)
+        data.setHasLabels(false)
+        data.setHasCenterCircle(true)
+
+        pieChartData.postValue(data)
+    }
 
 
     fun getSentimentOverTime(token: String, startDate: Date, endDate: Date) {
@@ -126,30 +141,34 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 //        values.add(PointValue(d31.time.toFloat(), .22f))
 //        values.add(PointValue(d32.time.toFloat(), .56f))
 
-//        chartData.postValue(buildChart(values))
+        chartData.postValue(buildChart(values))
 
-        isLoading.set(true)
-
-        val startDateString = getDatabaseStyleDate(startDate)
-        val endDateString = getDatabaseStyleDate(endDate)
-
-        disposables.add(fiveThingsService.getSentimentOverTime(token, startDateString, endDateString)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { sentimentPoints ->
-                            isLoading.set(false)
-                            chartData.postValue(buildChart(sentimentPoints))
-                        },
-                        { error ->
-                            isLoading.set(false)
-                            errorLiveEvent.postValue(error.localizedMessage)
-                        }
-                ))
+//        isLoading.set(true)
+//
+//        val startDateString = getDatabaseStyleDate(startDate)
+//        val endDateString = getDatabaseStyleDate(endDate)
+//
+//        disposables.add(fiveThingsService.getSentimentOverTime(token, startDateString, endDateString)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        { sentimentPoints ->
+//                            isLoading.set(false)
+//                            chartData.postValue(buildChart(sentimentPoints))
+//                        },
+//                        { error ->
+//                            isLoading.set(false)
+//                            errorLiveEvent.postValue(error.localizedMessage)
+//                        }
+//                ))
     }
 
     fun getChartData(): LiveData<LineChartData> {
         return chartData
+    }
+
+    fun getPieChartData(): LiveData<PieChartData> {
+        return pieChartData
     }
 
     private fun buildChart(values: List<PointValue>): LineChartData {

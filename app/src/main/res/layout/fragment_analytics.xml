@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="10dp">
 
     <data>
@@ -23,12 +24,13 @@
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
         <View
             android:id="@+id/zero_line"
@@ -117,13 +119,12 @@
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/rounded_button"
             android:visibility="@{viewModel.isLoading() ?  View.VISIBLE : View.GONE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/sentiment_background" />
 
         <ProgressBar
             android:id="@+id/sentiment_over_time_spinner"
@@ -140,15 +141,16 @@
 
 
         <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chart">
+            app:layout_constraintTop_toTopOf="parent">
 
             <android.support.design.chip.ChipGroup
                 android:id="@+id/chip_group"
@@ -203,6 +205,108 @@
 
             </android.support.design.chip.ChipGroup>
         </HorizontalScrollView>
+
+        <lecho.lib.hellocharts.view.PieChartView
+            android:id="@+id/pie_chart"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/sentiment_background" />
+
+        <View
+            android:id="@+id/happy_legend"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_button"
+            app:layout_constraintEnd_toStartOf="@+id/sad_legend"
+            app:layout_constraintStart_toStartOf="@+id/pie_chart"
+            app:layout_constraintTop_toBottomOf="@+id/pie_chart" />
+
+        <View
+            android:id="@+id/sad_legend"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/rounded_button"
+            app:layout_constraintEnd_toStartOf="@+id/angry_legend"
+            app:layout_constraintStart_toEndOf="@+id/happy_legend"
+            app:layout_constraintTop_toBottomOf="@+id/pie_chart" />
+
+        <View
+            android:id="@+id/angry_legend"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/rounded_button"
+            app:layout_constraintEnd_toEndOf="@+id/pie_chart"
+            app:layout_constraintStart_toEndOf="@+id/sad_legend"
+            app:layout_constraintTop_toBottomOf="@+id/pie_chart" />
+
+        <TextView
+            android:id="@+id/happy_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Happy"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/happy_legend"
+            app:layout_constraintStart_toStartOf="@+id/happy_legend"
+            app:layout_constraintTop_toBottomOf="@+id/happy_legend" />
+
+        <TextView
+            android:id="@+id/happy_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/happy_legend"
+            app:layout_constraintStart_toStartOf="@+id/happy_legend"
+            app:layout_constraintTop_toBottomOf="@+id/happy_desc"
+            tools:text="80%" />
+
+        <TextView
+            android:id="@+id/sad_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sad"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/sad_legend"
+            app:layout_constraintStart_toStartOf="@+id/sad_legend"
+            app:layout_constraintTop_toBottomOf="@+id/sad_legend" />
+
+        <TextView
+            android:id="@+id/sad_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/sad_legend"
+            app:layout_constraintStart_toStartOf="@+id/sad_legend"
+            app:layout_constraintTop_toBottomOf="@+id/sad_desc"
+            tools:text="15%" />
+
+        <TextView
+            android:id="@+id/angry_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Angry"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/angry_legend"
+            app:layout_constraintStart_toStartOf="@+id/angry_legend"
+            app:layout_constraintTop_toBottomOf="@+id/sad_legend" />
+
+        <TextView
+            android:id="@+id/angry_percent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/angry_legend"
+            app:layout_constraintHorizontal_bias="0.476"
+            app:layout_constraintStart_toStartOf="@+id/angry_legend"
+            app:layout_constraintTop_toBottomOf="@+id/angry_desc"
+            tools:text="5%" />
 
 
     </android.support.constraint.ConstraintLayout>
