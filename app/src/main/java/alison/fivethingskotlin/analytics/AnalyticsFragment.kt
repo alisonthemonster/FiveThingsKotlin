@@ -7,9 +7,11 @@ import alison.fivethingskotlin.util.restoreAuthState
 import alison.fivethingskotlin.util.subtractXDaysFromDate
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,6 +59,7 @@ class AnalyticsFragment : Fragment() {
                 R.id.year_chip -> fetchAnalytics(subtractXDaysFromDate(Date(), 365), Date())
             }
         }
+
     }
 
     private fun fetchAnalytics(startDate: Date, endDate: Date) {
@@ -89,6 +92,10 @@ class AnalyticsFragment : Fragment() {
             if (data == null) {
                 handleErrorState("Chart data was null", context!!)
             } else {
+                data.values[0].color = ContextCompat.getColor(context!!, R.color.bluegreen)
+                data.values[1].color = ContextCompat.getColor(context!!, R.color.bluegreen1)
+                data.values[2].color = ContextCompat.getColor(context!!, R.color.bluegreen2)
+
                 pie_chart.pieChartData = data
             }
         })

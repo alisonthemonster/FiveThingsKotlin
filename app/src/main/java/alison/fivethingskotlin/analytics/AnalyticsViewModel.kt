@@ -1,6 +1,7 @@
 package alison.fivethingskotlin.analytics
 
 import alison.fivethingskotlin.api.FiveThingsService
+import alison.fivethingskotlin.model.EmotionCount
 import alison.fivethingskotlin.util.*
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -24,19 +25,35 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 
     val errorLiveEvent = SingleLiveEvent<String>()
     val isLoading = ObservableField<Boolean>()
+    val firstEmotion = ObservableField<Pair<String, String>>()
+    val secondEmotion = ObservableField<Pair<String, String>>()
+    val thirdEmotion = ObservableField<Pair<String, String>>()
+
 
     fun getEmotionsCount(token: String, startDate: Date, endDate: Date) {
-        val values = mutableListOf<SliceValue>()
-        values.add(SliceValue(10f, Color.DKGRAY))
-        values.add(SliceValue(40f, Color.CYAN))
-        values.add(SliceValue(50f, Color.GRAY))
+
+        parseEmotions(listOf(EmotionCount("Happy", 11f),
+                EmotionCount("Sad", 6f),
+                EmotionCount("Angry", 3f)))
 
 
-        val data = PieChartData(values)
-        data.setHasLabels(false)
-        data.setHasCenterCircle(true)
-
-        pieChartData.postValue(data)
+//        isLoading.set(true)
+//
+//        val startDateString = getDatabaseStyleDate(startDate)
+//        val endDateString = getDatabaseStyleDate(endDate)
+//
+//        disposables.add(fiveThingsService.getEmotionCounts(token, startDateString, endDateString)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                        { emotions ->
+//                            parseEmotions(emotions)
+//                        },
+//                        { error ->
+//                            isLoading.set(false)
+//                            errorLiveEvent.postValue(error.localizedMessage)
+//                        }
+//                ))
     }
 
 
@@ -113,7 +130,7 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
         values.add(PointValue(d3.time.toFloat(), .2f))
         values.add(PointValue(d4.time.toFloat(), 1f))
         values.add(PointValue(d5.time.toFloat(), -.1f))
-        values.add(PointValue(d6.time.toFloat(),  .8f))
+        values.add(PointValue(d6.time.toFloat(), .8f))
         values.add(PointValue(d7.time.toFloat(), 0f))
 //        values.add(PointValue(d8.time.toFloat(), -.2f))
 //        values.add(PointValue(d9.time.toFloat(), -.2f))
@@ -171,6 +188,28 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
         return pieChartData
     }
 
+    private fun parseEmotions(emotions: List<EmotionCount>) {
+        isLoading.set(false) //TODO have loading for pie chart
+        val values = mutableListOf<SliceValue>()
+
+        var total = 0f
+        for (index in 0..2) { //graph the first three responses
+            val emotion = emotions[index]
+            total += emotion.count
+            values.add(SliceValue(emotion.count))
+        }
+
+        firstEmotion.set(Pair(emotions[0].emotion, String.format("%.0f", emotions[0].count / total * 100) + "%"))
+        secondEmotion.set(Pair(emotions[1].emotion, String.format("%.0f", emotions[1].count / total * 100) + "%"))
+        thirdEmotion.set(Pair(emotions[2].emotion, String.format("%.0f", emotions[2].count / total * 100) + "%"))
+
+        val data = PieChartData(values)
+        data.setHasLabels(false)
+        data.setHasCenterCircle(true)
+
+        pieChartData.postValue(data)
+    }
+
     private fun buildChart(values: List<PointValue>): LineChartData {
         val line = Line(values)
                 .setColor(Color.WHITE)
@@ -200,7 +239,6 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
 
         return data
     }
-
 
     private fun getAxisForSevenDays(startDay: Date): Axis {
         val axis = Axis()
@@ -274,4 +312,5 @@ class AnalyticsViewModel(private val fiveThingsService: FiveThingsService = Five
         axis.values = values
         return axis
     }
+
 }

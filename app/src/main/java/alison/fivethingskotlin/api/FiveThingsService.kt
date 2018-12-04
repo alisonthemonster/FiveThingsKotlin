@@ -1,5 +1,6 @@
 package alison.fivethingskotlin.api
 
+import alison.fivethingskotlin.model.EmotionCount
 import alison.fivethingskotlin.model.PaginatedSearchResults
 import alison.fivethingskotlin.model.SearchResult
 import alison.fivethingskotlin.model.Thing
@@ -41,5 +42,10 @@ interface FiveThingsService {
     fun getSentimentOverTime(@Header("Authorization") token: String,
                              @Header("start_date") startDate: String,
                              @Header("end_date") endDate: String): Observable<List<PointValue>>
+
+    @GET("count_emotion")
+    fun getEmotionCounts(@Header("Authorization") token: String,
+                         @Header("start_date") startDate: String,
+                         @Header("end_date") endDate: String): Observable<List<EmotionCount>>
 
 }

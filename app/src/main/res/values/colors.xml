@@ -9,6 +9,10 @@
     <color name="white">#ffffff</color>
     <color name="disabled_white">#969696</color>
 
+    <color name="bluegreen1">#1f7673</color>
+    <color name="bluegreen2">#194645</color>
+
+
     <color name="transparent">#00ffffff</color>
 
     <color name="nav_border_color">#e7e7e7</color>
